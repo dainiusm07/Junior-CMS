@@ -1,3 +1,4 @@
+import { NativeAuthInput } from "@generator";
 import { Injectable } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 
@@ -17,6 +18,11 @@ export class UserResolver {
   @Query()
   users(): Promise<UserEntity[]> {
     return this.userService.findMany();
+  }
+
+  @Mutation()
+  loginUser(@Args("input") input: NativeAuthInput) {
+    return this.userService.login(input);
   }
 
   @Mutation()
