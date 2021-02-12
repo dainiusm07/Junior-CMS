@@ -1,0 +1,12 @@
+# Third-party custom scalars
+scalar Date
+scalar Upload
+
+# interface PaginatedList {
+#   items: [Node!]!
+#   totalItems: Int!
+# }
+
+# interface Node {
+#   id: ID!
+# }

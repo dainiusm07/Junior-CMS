@@ -1,0 +1,17 @@
+{
+  "name": "junior-cms",
+  "version": "0.0.1",
+  "private": true,
+  "author": "Dainius Masevicius",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "clean": "lerna clean --yes && rm -rf node_modules",
+    "fresh": "yarn clean && yarn"
+  },
+  "dependencies": {
+    "lerna": "^3.22.1"
+  }
+}
