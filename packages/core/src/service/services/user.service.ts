@@ -1,9 +1,11 @@
+import * as bcrypt from "bcrypt";
 import { Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 import { UserEntity } from "src/entities/user/user.entity";
 import createBaseService from "../helpers/create-base-service";
+import { NativeAuthInput } from "@generator";
 
 Injectable();
 export class UserService extends createBaseService(UserEntity) {
@@ -11,6 +13,22 @@ export class UserService extends createBaseService(UserEntity) {
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>
   ) {
     super(userRepo);
+  }
+
+  async login({ email, password }: NativeAuthInput) {
+    const user = await this.userRepo.findOne({ where: { email } });
+
+    if (!user) {
+      return null;
+    }
+
+    const passwordIsValid = await bcrypt.compare(password, user.password);
+
+    if (!passwordIsValid) {
+      return null;
+    }
+
+    return user;
   }
 
   findMany() {

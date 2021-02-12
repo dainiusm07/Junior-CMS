@@ -4,8 +4,9 @@ type Query {
 }
 
 type Mutation {
-  createUser(input: CreateUserInput): User
-  updateUser(id: Int!, input: UpdateUserInput): User
+  loginUser(input: NativeAuthInput): User
+  createUser(input: CreateUserInput): User!
+  updateUser(id: Int!, input: UpdateUserInput): User!
 }
 
 type User {
@@ -13,7 +14,6 @@ type User {
   email: String!
   firstname: String!
   lastname: String!
-  password: String!
   updatedAt: Date!
   createdAt: Date!
   deletedAt: Date

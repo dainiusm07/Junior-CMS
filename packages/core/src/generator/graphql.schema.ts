@@ -6,6 +6,11 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export class NativeAuthInput {
+    email: string;
+    password: string;
+}
+
 export class CreateUserInput {
     firstname: string;
     lastname: string;
@@ -27,6 +32,8 @@ export abstract class IQuery {
 }
 
 export abstract class IMutation {
+    abstract loginUser(input?: NativeAuthInput): User | Promise<User>;
+
     abstract createUser(input?: CreateUserInput): User | Promise<User>;
 
     abstract updateUser(id: number, input?: UpdateUserInput): User | Promise<User>;
@@ -37,7 +44,6 @@ export class User {
     email: string;
     firstname: string;
     lastname: string;
-    password: string;
     updatedAt: Date;
     createdAt: Date;
     deletedAt?: Date;
