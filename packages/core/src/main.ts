@@ -1,14 +1,10 @@
 import { NestFactory } from "@nestjs/core";
-import {
-  NestFastifyApplication,
-  FastifyAdapter,
-} from "@nestjs/platform-fastify";
 import { Logger } from "@nestjs/common";
 import * as chalk from "chalk";
 import { getConnection } from "typeorm";
-import * as helmet from "fastify-helmet";
-// import * as bodyParser from "body-parser";
-import * as rateLimit from "fastify-rate-limit";
+import * as helmet from "helmet";
+import * as bodyParser from "body-parser";
+import * as rateLimit from "express-rate-limit";
 
 import { AppModule } from "./app.module";
 import {
@@ -31,12 +27,9 @@ declare const module: any;
 
 async function bootstrap() {
   try {
-    const app = await NestFactory.create<NestFastifyApplication>(
-      AppModule,
-      new FastifyAdapter()
-    );
+    const app = await NestFactory.create(AppModule);
 
-    // NOTE: database connect
+    // Database connection
     const connection = getConnection("default");
     const { isConnected } = connection;
     // connection.runMigrations();
@@ -47,30 +40,32 @@ async function bootstrap() {
     // NOTE: adapter for e2e testing
     app.getHttpAdapter();
 
-    // NOTE: added security
-    /**
-     * Helmet default configuration
-     * doesn't allow apollo-server-fastify to do it's job
-     */
-    app
-      .getHttpAdapter()
-      .getInstance()
-      .register(helmet, {
-        contentSecurityPolicy: {
-          directives: {
-            defaultSrc: [`'self'`],
-            styleSrc: [
-              `'self'`,
-              `'unsafe-inline'`,
-              "cdn.jsdelivr.net",
-              "fonts.googleapis.com",
-            ],
-            fontSrc: [`'self'`, "fonts.gstatic.com"],
-            imgSrc: [`'self'`, "data:", "cdn.jsdelivr.net"],
-            scriptSrc: [`'self'`, `https: 'unsafe-inline'`, `cdn.jsdelivr.net`],
-          },
-        },
-      });
+    // Additional Security
+    app.use(
+      helmet({
+        contentSecurityPolicy: NODE_ENV === "production" ? undefined : false,
+      })
+    );
+
+    // Body Parser
+    app.use(bodyParser.json({ limit: "50mb" }));
+    app.use(
+      bodyParser.urlencoded({
+        limit: "50mb",
+        extended: true,
+        parameterLimit: 50000,
+      })
+    );
+
+    // Rate Limit
+    app.use(
+      rateLimit({
+        windowMs: 1000 * 60 * 60, // an hour
+        max: RATE_LIMIT_MAX, // limit each IP to 100 requests per windowMs
+        message:
+          "⚠️  Too many request created from this IP, please try again after an hour",
+      })
+    );
 
     // NOTE:loggerMiddleware
     NODE_ENV !== "testing" && app.use(LoggerMiddleware);
