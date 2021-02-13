@@ -5,6 +5,9 @@ import { getConnection } from "typeorm";
 import * as helmet from "helmet";
 import * as bodyParser from "body-parser";
 import * as rateLimit from "express-rate-limit";
+import * as session from "express-session";
+import * as connectRedis from "connect-redis";
+import Redis from "ioredis";
 
 import { AppModule } from "./app.module";
 import {
@@ -14,6 +17,8 @@ import {
   RATE_LIMIT_MAX,
   PRIMARY_COLOR,
   END_POINT,
+  SESSION_SECRET,
+  SESSION_TTL,
 } from "@environments";
 import { MyLogger } from "@config";
 import {
@@ -54,6 +59,23 @@ async function bootstrap() {
         limit: "50mb",
         extended: true,
         parameterLimit: 50000,
+      })
+    );
+
+    // Session
+    const RedisStore = connectRedis(session);
+
+    app.use(
+      session({
+        secret: SESSION_SECRET,
+        store: new RedisStore({ ttl: SESSION_TTL, client: new Redis() }),
+        name: "sid",
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+          secure: NODE_ENV === "production",
+          maxAge: SESSION_TTL,
+        },
       })
     );
 

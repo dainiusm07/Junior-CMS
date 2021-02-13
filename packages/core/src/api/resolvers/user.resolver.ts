@@ -1,4 +1,3 @@
-import { NativeAuthInput } from "@generator";
 import { Injectable } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 
@@ -21,20 +20,19 @@ export class UserResolver {
   }
 
   @Mutation()
-  loginUser(@Args("input") input: NativeAuthInput) {
-    return this.userService.login(input);
-  }
-
-  @Mutation()
   createUser(@Args("input") input: UserEntity): Promise<UserEntity> {
     return this.userService.create(input);
   }
 
   @Mutation()
-  updateUser(
+  async updateUser(
     @Args("id") id: UserEntity["id"],
     @Args("input") input: Partial<UserEntity>
   ): Promise<UserEntity> {
-    return this.userService.update(id, input);
+    const user = await this.userService.update(id, input);
+    if (!user) {
+      throw Error("No user");
+    }
+    return user;
   }
 }

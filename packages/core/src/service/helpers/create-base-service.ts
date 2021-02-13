@@ -8,7 +8,7 @@ const createBaseService = <T extends ObjectLiteral>(
   abstract class BaseService {
     constructor(private repo: Repository<T>) {}
 
-    async update(id: Id, input: DeepPartial<T>): Promise<T> {
+    async update(id: Id, input: DeepPartial<T>): Promise<T | undefined> {
       const updateResult = await this.repo
         .createQueryBuilder()
         .update(Entity, Object.assign(new Entity(), input))
@@ -16,10 +16,10 @@ const createBaseService = <T extends ObjectLiteral>(
         .execute();
 
       if (!updateResult.affected) {
-        return null;
+        return undefined;
       }
 
-      return this.repo.findOne(id);
+      return this.repo.findOne(id) || null;
     }
 
     create(input: T): Promise<T> {

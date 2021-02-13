@@ -1,0 +1,8 @@
+type Mutation {
+  loginUser(input: NativeAuthInput): User
+}
+
+input NativeAuthInput {
+  email: String!
+  password: String!
+}

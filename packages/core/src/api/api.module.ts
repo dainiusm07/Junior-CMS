@@ -4,8 +4,9 @@ import { GraphqlService } from "@config";
 
 import { ServiceModule } from "src/service";
 import { UserResolver } from "./resolvers/user.resolver";
+import { AuthResolver } from "./resolvers/auth.resolver";
 
-const resolvers = [UserResolver];
+const resolvers = [UserResolver, AuthResolver];
 
 @Module({
   imports: [

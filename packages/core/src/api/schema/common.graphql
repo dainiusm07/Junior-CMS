@@ -10,8 +10,3 @@ scalar Upload
 # interface Node {
 #   id: ID!
 # }
-
-input NativeAuthInput {
-  email: String!
-  password: String!
-}

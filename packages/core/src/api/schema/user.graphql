@@ -4,7 +4,6 @@ type Query {
 }
 
 type Mutation {
-  loginUser(input: NativeAuthInput): User
   createUser(input: CreateUserInput): User!
   updateUser(id: Int!, input: UpdateUserInput): User!
 }
