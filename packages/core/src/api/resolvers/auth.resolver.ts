@@ -19,4 +19,10 @@ export class AuthResolver {
 
     return user;
   }
+
+  @Mutation()
+  async logoutUser() {
+    this.authService.logoutUser();
+    return true;
+  }
 }

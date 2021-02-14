@@ -5,6 +5,7 @@ import { GraphqlService } from "@config";
 import { ServiceModule } from "src/service";
 import { UserResolver } from "./resolvers/user.resolver";
 import { AuthResolver } from "./resolvers/auth.resolver";
+import { AuthGuard } from "./middleware/auth-guard";
 
 const resolvers = [UserResolver, AuthResolver];
 
@@ -15,6 +16,12 @@ const resolvers = [UserResolver, AuthResolver];
       useClass: GraphqlService,
     }),
   ],
-  providers: [...resolvers],
+  providers: [
+    ...resolvers,
+    {
+      provide: "APP_GUARD",
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class ApiModule {}

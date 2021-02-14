@@ -6,6 +6,14 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export enum Permission {
+    Owner = "Owner",
+    ReadUsers = "ReadUsers",
+    ReadUser = "ReadUser",
+    CreateUser = "CreateUser",
+    UpdateUser = "UpdateUser"
+}
+
 export class NativeAuthInput {
     email: string;
     password: string;
@@ -25,18 +33,18 @@ export class UpdateUserInput {
     password?: string;
 }
 
-export abstract class IQuery {
-    abstract users(): User[] | Promise<User[]>;
-
-    abstract user(id: number): User | Promise<User>;
-}
-
 export abstract class IMutation {
     abstract loginUser(input?: NativeAuthInput): User | Promise<User>;
 
     abstract createUser(input?: CreateUserInput): User | Promise<User>;
 
     abstract updateUser(id: number, input?: UpdateUserInput): User | Promise<User>;
+}
+
+export abstract class IQuery {
+    abstract users(): User[] | Promise<User[]>;
+
+    abstract user(id: number): User | Promise<User>;
 }
 
 export class User {

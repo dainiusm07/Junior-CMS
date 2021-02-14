@@ -1,4 +1,9 @@
-import { DeepPartial, ObjectLiteral, Repository } from "typeorm";
+import {
+  DeepPartial,
+  FindOneOptions,
+  ObjectLiteral,
+  Repository,
+} from "typeorm";
 
 type Id = number | string;
 
@@ -19,11 +24,15 @@ const createBaseService = <T extends ObjectLiteral>(
         return undefined;
       }
 
-      return this.repo.findOne(id) || null;
+      return this.repo.findOne(id);
     }
 
     create(input: T): Promise<T> {
       return this.repo.save(Object.assign(new Entity(), input));
+    }
+
+    findOne(options: FindOneOptions<T>) {
+      return this.repo.findOne(options);
     }
 
     findOneById(id: Id) {

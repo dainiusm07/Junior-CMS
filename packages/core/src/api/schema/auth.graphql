@@ -1,5 +1,6 @@
 type Mutation {
   loginUser(input: NativeAuthInput): User
+  logoutUser: Boolean
 }
 
 input NativeAuthInput {

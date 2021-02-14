@@ -1,22 +1,31 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { REQUEST } from "@nestjs/core";
+import { CONTEXT } from "@nestjs/graphql";
+import { ExpressContext } from "apollo-server-express";
 import { UserEntity } from "src/entities/user/user.entity";
 
+type Maybe<T> = T | null;
 type UserId = UserEntity["id"];
 
+type SessionData = {
+  userId: Maybe<UserId>;
+};
 @Injectable()
 export class SessionService {
-  constructor(@Inject(REQUEST) private request) {}
+  private req: ExpressContext["req"] & { session: SessionData };
+  constructor(@Inject(CONTEXT) context) {
+    this.req = context.req;
+  }
 
   private assignToSession(obj: unknown) {
-    Object.assign(this.request.req.session, obj);
+    Object.assign(this.req.session, obj);
   }
 
-  getUserId(): UserId | undefined {
-    return this.request.req.session.userId;
+  getUserId() {
+    // On new session initialization this value will be undefined
+    return this.req.session.userId || null;
   }
 
-  setUserId(userId: UserId) {
+  setUserId(userId: Maybe<UserId>) {
     this.assignToSession({ userId });
   }
 }

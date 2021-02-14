@@ -39,4 +39,8 @@ export class AuthService {
   loginUser(user: UserEntity) {
     this.sessionService.setUserId(user.id);
   }
+
+  logoutUser() {
+    this.sessionService.setUserId(null);
+  }
 }
