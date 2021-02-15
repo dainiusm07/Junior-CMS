@@ -8,6 +8,7 @@ export interface PermissionOptions {
 }
 
 interface PermissionDefinition {
+  group: number;
   name: string;
   description: string;
   internal: boolean;
@@ -36,8 +37,11 @@ const generateDescription = (operation: string, name: string) => {
 export const generatePermissions = (
   permissionsOptions: PermissionOptions[]
 ) => {
+  let group = 0;
+
   const permissions: PermissionDefinition[] = [
     {
+      group,
       name: "Owner",
       description: "Grants all permissions",
       internal: true,
@@ -54,8 +58,11 @@ export const generatePermissions = (
 
     const operations = generateOperations(excludeCruds, customOperations);
 
+    group++;
+
     for (const operation of operations) {
       permissions.push({
+        group,
         name: generatePermissionName(operation, name),
         description: generateDescription(operation, name),
         internal: false,
@@ -65,6 +72,7 @@ export const generatePermissions = (
     if (readMany) {
       const customName = name + "s";
       permissions.push({
+        group,
         name: generatePermissionName("Read", customName),
         description: generateDescription("Read", customName),
         internal: false,

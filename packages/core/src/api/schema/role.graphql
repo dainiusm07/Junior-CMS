@@ -17,6 +17,7 @@ type Role {
 }
 
 type PermissionDefinition {
+  group: Int!
   name: String!
   description: String!
 }
