@@ -7,6 +7,8 @@ export const NODE_ENV: string = process.env.NODE_ENV || "development";
 
 // Application
 export const PRIMARY_COLOR: string = process.env.PRIMARY_COLOR || "#87e8de";
+export const API_DOMAIN: string = process.env.API_DOMAIN || "localhost";
+export const API_PORT: number = +(<string>process.env.API_PORT) || 4000;
 export const RATE_LIMIT_MAX: number =
   +(<string>process.env.RATE_LIMIT_MAX) || 10000;
 export const GRAPHQL_DEPTH_LIMIT: number =

@@ -6,14 +6,10 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p ./tsconfig.build.json",
-    "codegen": "ts-node scripts/generate-graphql-types.ts && yarn build"
+    "build": "rimraf dist/* && tsc -p ./tsconfig.build.json",
+    "watch": "tsc -p ./tsconfig.build.json -w"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^1.20.1",
-    "@graphql-codegen/typescript": "^1.21.0",
-    "dotenv": "^8.2.0",
-    "graphql": "^15.5.0",
     "rimraf": "^3.0.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.5"

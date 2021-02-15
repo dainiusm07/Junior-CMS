@@ -1,2 +1,2 @@
-export * from "./environment";
-export * from "./generated-types";
+export * from "./shared-constants";
+export * from "./graphql-types";

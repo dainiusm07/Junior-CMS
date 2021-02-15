@@ -13,22 +13,31 @@ export type Scalars = {
   Upload: any;
 };
 
+export enum Permission {
+  Owner = 'Owner',
+  CreateUser = 'CreateUser',
+  ReadUser = 'ReadUser',
+  UpdateUser = 'UpdateUser',
+  DeleteUser = 'DeleteUser',
+  ReadUsers = 'ReadUsers'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createUser: User;
   loginUser?: Maybe<User>;
   logoutUser?: Maybe<Scalars['Boolean']>;
-  createUser: User;
   updateUser: User;
-};
-
-
-export type MutationLoginUserArgs = {
-  input?: Maybe<NativeAuthInput>;
 };
 
 
 export type MutationCreateUserArgs = {
   input?: Maybe<CreateUserInput>;
+};
+
+
+export type MutationLoginUserArgs = {
+  input?: Maybe<NativeAuthInput>;
 };
 
 
@@ -79,12 +88,3 @@ export type UpdateUserInput = {
   email?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
 };
-
-export enum Permission {
-  Owner = 'Owner',
-  CreateUser = 'CreateUser',
-  ReadUser = 'ReadUser',
-  UpdateUser = 'UpdateUser',
-  DeleteUser = 'DeleteUser',
-  ReadUsers = 'ReadUsers'
-}

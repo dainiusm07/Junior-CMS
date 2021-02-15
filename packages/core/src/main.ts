@@ -11,6 +11,8 @@ import Redis from "ioredis";
 
 import { AppModule } from "./app.module";
 import {
+  API_DOMAIN,
+  API_PORT,
   NODE_ENV,
   RATE_LIMIT_MAX,
   SESSION_SECRET,
@@ -21,7 +23,7 @@ import {
   TimeoutInterceptor,
   LoggerMiddleware,
 } from "./common";
-import { API_DOMAIN, API_END_POINT, API_PORT } from "@junior-cms/common";
+import { API_END_POINT } from "@junior-cms/common";
 
 declare const module: any;
 
