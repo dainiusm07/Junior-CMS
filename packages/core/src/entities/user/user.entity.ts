@@ -1,4 +1,3 @@
-import { BCRYPT_SALT } from "@environments";
 import * as bcrypt from "bcrypt";
 import {
   BeforeInsert,
@@ -8,12 +7,13 @@ import {
   Entity,
 } from "typeorm";
 
+import { BCRYPT_SALT } from "../../environments";
 import { BaseEntity } from "../base/base.entity";
 
 @Entity({ name: "users" })
 export class UserEntity extends BaseEntity {
   @DeleteDateColumn({ name: "deleted_at" })
-  deteledAt: Date | null;
+  deletedAt: Date | null;
 
   @Column()
   firstname: string;

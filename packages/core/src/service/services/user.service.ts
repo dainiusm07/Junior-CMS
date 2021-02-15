@@ -2,10 +2,10 @@ import * as bcrypt from "bcrypt";
 import { Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { NativeAuthInput } from "@junior-cms/common";
 
-import { UserEntity } from "src/entities/user/user.entity";
 import createBaseService from "../helpers/create-base-service";
-import { NativeAuthInput } from "@generator";
+import { UserEntity } from "../../entities/user/user.entity";
 
 Injectable();
 export class UserService extends createBaseService(UserEntity) {

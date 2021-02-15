@@ -1,7 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { CONTEXT } from "@nestjs/graphql";
 import { ExpressContext } from "apollo-server-express";
-import { UserEntity } from "src/entities/user/user.entity";
+
+import { UserEntity } from "../../entities/user/user.entity";
 
 type Maybe<T> = T | null;
 type UserId = UserEntity["id"];
@@ -12,8 +13,8 @@ type SessionData = {
 @Injectable()
 export class SessionService {
   private req: ExpressContext["req"] & { session: SessionData };
-  constructor(@Inject(CONTEXT) context) {
-    this.req = context.req;
+  constructor(@Inject(CONTEXT) context: ExpressContext) {
+    this.req = context.req as ExpressContext["req"] & { session: SessionData };
   }
 
   private assignToSession(obj: unknown) {

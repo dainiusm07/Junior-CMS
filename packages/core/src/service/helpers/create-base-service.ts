@@ -1,11 +1,10 @@
-import {
-  DeepPartial,
-  FindOneOptions,
-  ObjectLiteral,
-  Repository,
-} from "typeorm";
+import { MakeOptional } from "@junior-cms/common";
+import { FindOneOptions, ObjectLiteral, Repository } from "typeorm";
+import { BaseEntity } from "../../entities/base/base.entity";
 
 type Id = number | string;
+
+type BaseKeys = keyof BaseEntity | "deletedAt";
 
 const createBaseService = <T extends ObjectLiteral>(
   Entity: new (...args: any) => T
@@ -13,7 +12,10 @@ const createBaseService = <T extends ObjectLiteral>(
   abstract class BaseService {
     constructor(private repo: Repository<T>) {}
 
-    async update(id: Id, input: DeepPartial<T>): Promise<T | undefined> {
+    async update(
+      id: Id,
+      input: MakeOptional<T, keyof T>
+    ): Promise<T | undefined> {
       const updateResult = await this.repo
         .createQueryBuilder()
         .update(Entity, Object.assign(new Entity(), input))
@@ -27,7 +29,7 @@ const createBaseService = <T extends ObjectLiteral>(
       return this.repo.findOne(id);
     }
 
-    create(input: T): Promise<T> {
+    create(input: Omit<T, BaseKeys>): Promise<T> {
       return this.repo.save(Object.assign(new Entity(), input));
     }
 

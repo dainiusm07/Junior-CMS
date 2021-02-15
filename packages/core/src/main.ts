@@ -1,32 +1,27 @@
 import { NestFactory } from "@nestjs/core";
 import { Logger } from "@nestjs/common";
-import * as chalk from "chalk";
+import chalk from "chalk";
 import { getConnection } from "typeorm";
-import * as helmet from "helmet";
-import * as bodyParser from "body-parser";
-import * as rateLimit from "express-rate-limit";
-import * as session from "express-session";
-import * as connectRedis from "connect-redis";
+import helmet from "helmet";
+import bodyParser from "body-parser";
+import rateLimit from "express-rate-limit";
+import session from "express-session";
+import connectRedis from "connect-redis";
 import Redis from "ioredis";
 
 import { AppModule } from "./app.module";
 import {
-  PORT,
   NODE_ENV,
-  DOMAIN,
   RATE_LIMIT_MAX,
-  PRIMARY_COLOR,
-  END_POINT,
   SESSION_SECRET,
   SESSION_TTL,
-} from "@environments";
-import { MyLogger } from "@config";
+} from "./environments";
 import {
   LoggingInterceptor,
   TimeoutInterceptor,
-  // ValidationPipe,
   LoggerMiddleware,
-} from "@common";
+} from "./common";
+import { API_DOMAIN, API_END_POINT, API_PORT } from "@junior-cms/common";
 
 declare const module: any;
 
@@ -101,19 +96,19 @@ async function bootstrap() {
 
     app.enableShutdownHooks();
 
-    await app.listen(PORT);
+    await app.listen(API_PORT);
 
     if (module.hot) {
       module.hot.accept();
       module.hot.dispose(() => app.close());
     }
 
-    const appUrl = `http://${DOMAIN}:${PORT}`;
+    const appUrl = `http://${API_DOMAIN}:${API_PORT}`;
 
     Logger.log(`🤬  Application is running on: ${appUrl}`, "NestJS", false);
 
     Logger.log(
-      `API ready at ${chalk.bold(`${appUrl}/${END_POINT}`)}`,
+      `API ready at ${chalk.bold(`${appUrl}/${API_END_POINT}`)}`,
       "Bootstrap",
       false
     );

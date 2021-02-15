@@ -1,10 +1,11 @@
-import { PERMISSIONS_METADATA_KEY } from "@config";
-import { Permission } from "@generator";
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { GqlExecutionContext } from "@nestjs/graphql";
-import { UserService } from "src/service";
-import { SessionService } from "src/service/services/session.service";
+import { Permission } from "@junior-cms/common";
+
+import { PERMISSIONS_METADATA_KEY } from "../../config";
+import { UserService } from "../../service";
+import { SessionService } from "../../service/services/session.service";
 
 const matchPermissions = (
   permissions: Permission[],

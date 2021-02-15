@@ -1,7 +1,8 @@
-import { NativeAuthInput } from "@generator";
+import { NativeAuthInput } from "@junior-cms/common";
 import { Injectable } from "@nestjs/common";
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { AuthService } from "src/service/services/auth.service";
+import { Args, Mutation, Resolver } from "@nestjs/graphql";
+
+import { AuthService } from "../../service/services/auth.service";
 
 @Resolver()
 @Injectable()

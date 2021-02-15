@@ -1,10 +1,11 @@
 import { compare } from "bcrypt";
 import { Injectable } from "@nestjs/common";
 import { SessionService } from "./session.service";
-import { NativeAuthInput } from "@generator";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UserEntity } from "src/entities/user/user.entity";
+
+import { UserEntity } from "../../entities/user/user.entity";
+import { NativeAuthInput } from "@junior-cms/common";
 
 @Injectable()
 export class AuthService {

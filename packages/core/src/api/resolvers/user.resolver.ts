@@ -1,10 +1,14 @@
-import { Permission } from "@generator";
+import {
+  CreateUserInput,
+  Permission,
+  UpdateUserInput,
+} from "@junior-cms/common";
 import { Injectable } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 
-import { UserEntity } from "src/entities/user/user.entity";
-import { UserService } from "src/service";
 import { Allow } from "../decorators/Allow";
+import { UserEntity } from "../../entities/user/user.entity";
+import { UserService } from "../../service";
 
 @Resolver()
 @Injectable()
@@ -25,7 +29,7 @@ export class UserResolver {
 
   @Mutation()
   @Allow(Permission.CreateUser)
-  createUser(@Args("input") input: UserEntity): Promise<UserEntity> {
+  createUser(@Args("input") input: CreateUserInput): Promise<UserEntity> {
     return this.userService.create(input);
   }
 
@@ -33,7 +37,7 @@ export class UserResolver {
   @Allow(Permission.UpdateUser)
   async updateUser(
     @Args("id") id: UserEntity["id"],
-    @Args("input") input: Partial<UserEntity>
+    @Args("input") input: UpdateUserInput
   ): Promise<UserEntity> {
     const user = await this.userService.update(id, input);
     if (!user) {

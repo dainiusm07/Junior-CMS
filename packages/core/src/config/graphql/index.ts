@@ -1,6 +1,6 @@
-import { NODE_ENV } from "@environments";
 import { Injectable } from "@nestjs/common";
 import { GqlModuleOptions, GqlOptionsFactory } from "@nestjs/graphql";
+import { NODE_ENV } from "../../environments";
 import { permissionsTypeDef } from "../permissions";
 
 Injectable();

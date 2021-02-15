@@ -13,7 +13,7 @@ export class UploadScalar implements CustomScalar<object, string> {
     return GraphQLUpload.serialize(value);
   }
 
-  parseLiteral(ast) {
+  parseLiteral(ast: any) {
     return GraphQLUpload.parseLiteral(ast, ast.value);
   }
 }

@@ -1,6 +1,11 @@
 import { Logger } from "@nestjs/common";
+import { NextFunction, Response, Request } from "express";
 
-export function LoggerMiddleware(req, res, next): any {
+export function LoggerMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   Logger.debug(
     `💬  ${
       req.headers["user-agent"]

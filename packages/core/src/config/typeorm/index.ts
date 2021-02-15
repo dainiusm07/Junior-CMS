@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { ConnectionOptions, getMetadataArgsStorage } from "typeorm";
 
-import { TYPEORM } from "@environments";
+import { TYPEORM } from "../../environments";
 
 @Injectable()
 export class TypeOrmService implements TypeOrmOptionsFactory {

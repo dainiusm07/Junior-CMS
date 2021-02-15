@@ -26,17 +26,17 @@ export class AppController {
     return "Hello World!";
   }
 
-  @Get(`static/:fileId`)
-  getUpload(@Param("fileId") fileId, @Res() res): any {
-    return res.sendFile(fileId, {
-      root: "static",
-    });
-  }
+  // @Get(`static/:fileId`)
+  // getUpload(@Param("fileId") fileId, @Res() res): any {
+  //   return res.sendFile(fileId, {
+  //     root: "static",
+  //   });
+  // }
 
-  @Post("/gitlab")
-  postGitlab(@Res() res): any {
-    return res.body;
-  }
+  // @Post("/gitlab")
+  // postGitlab(@Res() res): any {
+  //   return res.body;
+  // }
 
   @Get("cache")
   @UseInterceptors(CacheInterceptor)

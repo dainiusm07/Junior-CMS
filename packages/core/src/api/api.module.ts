@@ -1,11 +1,11 @@
 import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
-import { GraphqlService } from "@config";
 
-import { ServiceModule } from "src/service";
 import { UserResolver } from "./resolvers/user.resolver";
 import { AuthResolver } from "./resolvers/auth.resolver";
 import { AuthGuard } from "./middleware/auth-guard";
+import { ServiceModule } from "../service";
+import { GraphqlService } from "../config";
 
 const resolvers = [UserResolver, AuthResolver];
 
