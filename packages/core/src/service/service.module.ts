@@ -1,16 +1,19 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-
-import { UserService } from "./services/user.service";
 import { getMetadataArgsStorage } from "typeorm";
-import { AuthService } from "./services/auth.service";
-import { SessionService } from "./services/session.service";
+
+import {
+  RoleService,
+  UserService,
+  AuthService,
+  SessionService,
+} from "./services";
 
 const entities = getMetadataArgsStorage().tables.map(
   ({ target }) => target as Function
 );
 
-const services = [UserService, AuthService, SessionService];
+const services = [UserService, AuthService, SessionService, RoleService];
 
 @Module({
   imports: [TypeOrmModule.forFeature(entities)],

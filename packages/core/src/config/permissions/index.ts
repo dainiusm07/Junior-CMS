@@ -4,6 +4,10 @@ const permissionsOptions: PermissionOptions[] = [
   {
     name: "User",
   },
+  {
+    name: "Role",
+    customOperations: ["Assign"],
+  },
 ];
 
 export const permissions = generatePermissions(permissionsOptions);

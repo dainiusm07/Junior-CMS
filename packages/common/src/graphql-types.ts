@@ -13,21 +13,19 @@ export type Scalars = {
   Upload: any;
 };
 
-export enum Permission {
-  Owner = 'Owner',
-  CreateUser = 'CreateUser',
-  ReadUser = 'ReadUser',
-  UpdateUser = 'UpdateUser',
-  DeleteUser = 'DeleteUser',
-  ReadUsers = 'ReadUsers'
-}
-
 export type Mutation = {
   __typename?: 'Mutation';
+  createRole: Role;
   createUser: User;
   loginUser?: Maybe<User>;
   logoutUser?: Maybe<Scalars['Boolean']>;
+  updateRole: Role;
   updateUser: User;
+};
+
+
+export type MutationCreateRoleArgs = {
+  input?: Maybe<CreateRoleInput>;
 };
 
 
@@ -38,6 +36,12 @@ export type MutationCreateUserArgs = {
 
 export type MutationLoginUserArgs = {
   input?: Maybe<NativeAuthInput>;
+};
+
+
+export type MutationUpdateRoleArgs = {
+  id: Scalars['Int'];
+  input?: Maybe<UpdateRoleInput>;
 };
 
 
@@ -55,13 +59,47 @@ export type NativeAuthInput = {
 
 export type Query = {
   __typename?: 'Query';
-  users?: Maybe<Array<Maybe<User>>>;
+  permissions: Array<Maybe<PermissionDefinition>>;
+  role?: Maybe<Role>;
+  roles: Array<Maybe<Role>>;
   user?: Maybe<User>;
+  users?: Maybe<Array<Maybe<User>>>;
+};
+
+
+export type QueryRoleArgs = {
+  id: Scalars['Int'];
 };
 
 
 export type QueryUserArgs = {
   id: Scalars['Int'];
+};
+
+export type Role = {
+  __typename?: 'Role';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  permissions: Array<Maybe<Permission>>;
+};
+
+export type PermissionDefinition = {
+  __typename?: 'PermissionDefinition';
+  name: Scalars['String'];
+  description: Scalars['String'];
+};
+
+export type CreateRoleInput = {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  permissions: Array<Permission>;
+};
+
+export type UpdateRoleInput = {
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  permissions?: Maybe<Array<Permission>>;
 };
 
 export type User = {
@@ -88,3 +126,18 @@ export type UpdateUserInput = {
   email?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
 };
+
+export enum Permission {
+  Owner = 'Owner',
+  CreateUser = 'CreateUser',
+  ReadUser = 'ReadUser',
+  UpdateUser = 'UpdateUser',
+  DeleteUser = 'DeleteUser',
+  ReadUsers = 'ReadUsers',
+  AssignRole = 'AssignRole',
+  CreateRole = 'CreateRole',
+  ReadRole = 'ReadRole',
+  UpdateRole = 'UpdateRole',
+  DeleteRole = 'DeleteRole',
+  ReadRoles = 'ReadRoles'
+}

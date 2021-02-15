@@ -1,0 +1,34 @@
+type Query {
+  roles: [Role]!
+  role(id: Int!): Role
+  permissions: [PermissionDefinition]!
+}
+
+type Mutation {
+  createRole(input: CreateRoleInput): Role!
+  updateRole(id: Int!, input: UpdateRoleInput): Role!
+}
+
+type Role {
+  id: Int!
+  name: String!
+  description: String
+  permissions: [Permission]!
+}
+
+type PermissionDefinition {
+  name: String!
+  description: String!
+}
+
+input CreateRoleInput {
+  name: String!
+  description: String
+  permissions: [Permission!]!
+}
+
+input UpdateRoleInput {
+  name: String
+  description: String
+  permissions: [Permission!]
+}

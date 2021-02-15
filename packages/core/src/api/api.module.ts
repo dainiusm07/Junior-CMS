@@ -6,8 +6,9 @@ import { AuthResolver } from "./resolvers/auth.resolver";
 import { AuthGuard } from "./middleware/auth-guard";
 import { ServiceModule } from "../service";
 import { GraphqlService } from "../config";
+import { RoleResolver } from "./resolvers/role.resolver";
 
-const resolvers = [UserResolver, AuthResolver];
+const resolvers = [UserResolver, AuthResolver, RoleResolver];
 
 @Module({
   imports: [
