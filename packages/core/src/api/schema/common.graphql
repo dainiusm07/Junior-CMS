@@ -10,12 +10,3 @@ scalar Upload
 # interface Node {
 #   id: ID!
 # }
-
-enum Permission {
-  Owner
-  LoggedInUser
-  ReadUsers
-  ReadUser
-  CreateUser
-  UpdateUser
-}
