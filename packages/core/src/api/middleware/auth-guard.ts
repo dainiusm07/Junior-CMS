@@ -28,20 +28,24 @@ export class AuthGuard implements CanActivate {
     if (!permissions) return true;
 
     const userId = sessionService.getUserId();
-
     if (!userId) return false;
 
-    // FIX: Fetch for roles
     const user = await this.userService.findOne({ where: { id: userId } });
-
     if (!user) return false;
 
-    // FIX: Check if roles has Owner permission
-    const isOwner = true;
+    const userPermissions = user.roles.reduce((prev, role) => {
+      return [...prev, ...role.permissions];
+    }, [] as Permission[]);
 
-    if (isOwner) return true;
+    const isOwner = userPermissions.includes(Permission.Owner);
 
-    // FIX: Use matchPermissions function
-    return true;
+    const canActivate = matchPermissions(permissions, userPermissions);
+
+    if (isOwner || canActivate) {
+      ctx.user = user;
+      return true;
+    }
+
+    return false;
   }
 }

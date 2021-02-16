@@ -46,7 +46,7 @@ export class RoleResolver {
     @Args("id") id: RoleEntity["id"],
     @Args("input") input: UpdateRoleInput
   ): Promise<RoleEntity | undefined> {
-    const roleIsUpdated = await this.roleService.update(id, input);
+    const roleUpdated = await this.roleService.update(id, input);
 
     return this.roleService.findOne({ where: { id } });
   }

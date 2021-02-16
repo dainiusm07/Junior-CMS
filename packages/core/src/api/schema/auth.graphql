@@ -1,6 +1,10 @@
+type Query {
+  userProfile: User!
+}
+
 type Mutation {
-  loginUser(input: NativeAuthInput): User
-  logoutUser: Boolean
+  userLogin(input: NativeAuthInput!): User!
+  userLogout: Boolean!
 }
 
 input NativeAuthInput {

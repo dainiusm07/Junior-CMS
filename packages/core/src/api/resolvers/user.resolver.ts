@@ -8,16 +8,13 @@ import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 
 import { Allow } from "../decorators/Allow";
 import { UserEntity } from "../../entities/user/user.entity";
-import { SessionService, UserService } from "../../service";
+import { UserService } from "../../service";
+import { CurrentUser } from "../decorators/CurrentUser";
 
 @Resolver()
 @Injectable()
 export class UserResolver {
-  constructor(
-    private userService: UserService,
-    // TODO: Attach user to context instead of using sessionService here
-    private sessionService: SessionService
-  ) {}
+  constructor(private userService: UserService) {}
 
   @Query()
   @Allow(Permission.ReadUser)
@@ -34,14 +31,15 @@ export class UserResolver {
   @Mutation()
   @Allow(Permission.CreateUser)
   async createUser(
-    @Args("input") input: CreateUserInput
+    @Args("input") input: CreateUserInput,
+    @CurrentUser() currentUser: UserEntity
   ): Promise<UserEntity | undefined> {
     const { roleIds, ...restInput } = input;
 
     const user = await this.userService.create({ roles: [], ...restInput });
 
     await this.userService.assignRoles(roleIds, {
-      assignedBy: this.sessionService.getUserId()!,
+      assignedBy: currentUser.id,
       userId: user.id,
     });
 
@@ -52,7 +50,8 @@ export class UserResolver {
   @Allow(Permission.UpdateUser)
   async updateUser(
     @Args("id") id: UserEntity["id"],
-    @Args("input") input: UpdateUserInput
+    @Args("input") input: UpdateUserInput,
+    @CurrentUser() currentUser: UserEntity
   ): Promise<UserEntity | undefined> {
     const { roleIds, ...restInput } = input;
 
@@ -63,7 +62,7 @@ export class UserResolver {
     }
 
     await this.userService.assignRoles(roleIds, {
-      assignedBy: this.sessionService.getUserId()!,
+      assignedBy: currentUser.id,
       userId: id,
     });
 

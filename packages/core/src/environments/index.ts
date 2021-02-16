@@ -40,7 +40,7 @@ const environment: Environment = {
     password: DB_PASS,
     database: DB_DATABASE,
     logging: true,
-    synchronize: true,
+    // synchronize: true,
   },
   production: {
     host: DB_HOST,

@@ -13,14 +13,34 @@ export type Scalars = {
   Upload: any;
 };
 
+export type Query = {
+  __typename?: 'Query';
+  permissions: Array<PermissionDefinition>;
+  role?: Maybe<Role>;
+  roles: Array<Role>;
+  user?: Maybe<User>;
+  userProfile: User;
+  users?: Maybe<Array<Maybe<User>>>;
+};
+
+
+export type QueryRoleArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createRole: Role;
   createUser: User;
-  loginUser?: Maybe<User>;
-  logoutUser?: Maybe<Scalars['Boolean']>;
   updateRole: Role;
   updateUser: User;
+  userLogin: User;
+  userLogout: Scalars['Boolean'];
 };
 
 
@@ -31,11 +51,6 @@ export type MutationCreateRoleArgs = {
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
-};
-
-
-export type MutationLoginUserArgs = {
-  input?: Maybe<NativeAuthInput>;
 };
 
 
@@ -50,31 +65,17 @@ export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
 };
 
+
+export type MutationUserLoginArgs = {
+  input: NativeAuthInput;
+};
+
 export type NativeAuthInput = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
 
 
-
-export type Query = {
-  __typename?: 'Query';
-  permissions: Array<PermissionDefinition>;
-  role?: Maybe<Role>;
-  roles: Array<Role>;
-  user?: Maybe<User>;
-  users?: Maybe<Array<Maybe<User>>>;
-};
-
-
-export type QueryRoleArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryUserArgs = {
-  id: Scalars['Int'];
-};
 
 export type Role = {
   __typename?: 'Role';

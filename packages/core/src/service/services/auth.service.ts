@@ -1,24 +1,24 @@
 import { compare } from "bcrypt";
 import { Injectable } from "@nestjs/common";
 import { SessionService } from "./session.service";
-import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
 
 import { UserEntity } from "../../entities/user/user.entity";
 import { NativeAuthInput } from "@junior-cms/common";
+import { UserService } from "./user.service";
+import { BaseService } from "./base.service";
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
+    private userService: UserService,
     private sessionService: SessionService
   ) {}
 
   private async validateNativeAuth<T extends NativeAuthInput>(
-    repo: Repository<T>,
+    service: BaseService<T>,
     { email, password }: NativeAuthInput
   ): Promise<T | null> {
-    const entity = await repo.findOne({ where: { email } });
+    const entity = await service.findOne({ where: { email } });
 
     if (!entity) {
       return null;
@@ -34,7 +34,7 @@ export class AuthService {
   }
 
   validateUser(input: NativeAuthInput) {
-    return this.validateNativeAuth(this.userRepo, input);
+    return this.validateNativeAuth(this.userService, input);
   }
 
   loginUser(user: UserEntity) {

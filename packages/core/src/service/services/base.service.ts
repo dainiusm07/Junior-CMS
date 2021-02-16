@@ -21,7 +21,13 @@ export abstract class BaseService<T> {
     return this.repo.save(Object.assign(this.repo.create(), input));
   }
 
-  findOne(options: FindOneOptions<T>) {
-    return this.repo.findOne(options);
+  async findOne(options: FindOneOptions<T>): Promise<T | undefined> {
+    /**
+     * TODO: Replace with findOne when it will be fixed
+     *
+     * https://github.com/typeorm/typeorm/issues/5694
+     *  */
+    const result = await this.repo.find(options);
+    return result[0];
   }
 }
