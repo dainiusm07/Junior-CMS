@@ -1,2 +1,8 @@
+# Build folder
 dist
+
+# Environment
 .env
+
+# Tests
+coverage

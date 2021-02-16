@@ -8,7 +8,7 @@ import { BaseService } from "./base.service";
 
 @Injectable()
 export class RoleService extends BaseService<RoleEntity> {
-  permissions = permissions;
+  private permissions = permissions;
   constructor(
     @InjectRepository(RoleEntity) private roleRepo: Repository<RoleEntity>
   ) {

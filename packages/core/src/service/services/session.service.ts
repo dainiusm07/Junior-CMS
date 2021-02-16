@@ -1,14 +1,12 @@
+import { Maybe } from "@junior-cms/common";
 import { Inject, Injectable } from "@nestjs/common";
 import { CONTEXT } from "@nestjs/graphql";
 import { ExpressContext } from "apollo-server-express";
 
 import { UserEntity } from "../../entities/user/user.entity";
 
-type Maybe<T> = T | null;
-type UserId = UserEntity["id"];
-
 type SessionData = {
-  userId: Maybe<UserId>;
+  userId: Maybe<UserEntity["id"]>;
 };
 @Injectable()
 export class SessionService {
@@ -26,7 +24,7 @@ export class SessionService {
     return this.req.session.userId || null;
   }
 
-  setUserId(userId: Maybe<UserId>) {
+  setUserId(userId: Maybe<UserEntity["id"]>) {
     this.assignToSession({ userId });
   }
 }

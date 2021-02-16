@@ -4,7 +4,6 @@ import { MakeOptional } from "@junior-cms/common";
 import { BaseKeys } from "../../types";
 
 type Id = string | number;
-
 export abstract class BaseService<T> {
   constructor(private repo: Repository<T>) {}
 
