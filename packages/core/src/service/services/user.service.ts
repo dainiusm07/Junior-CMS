@@ -1,37 +1,54 @@
-import * as bcrypt from "bcrypt";
-import { Repository } from "typeorm";
+import { FindOneOptions, In, Not, Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { NativeAuthInput } from "@junior-cms/common";
 
 import createBaseService from "../helpers/create-base-service";
 import { UserEntity } from "../../entities/user/user.entity";
+import { UserRolesEntity } from "../../entities/user/user-roles.entity";
+import { BaseKeys } from "../../types";
+import { MutationUpdateUserArgs } from "@junior-cms/common";
 
 Injectable();
 export class UserService extends createBaseService(UserEntity) {
   constructor(
-    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>
+    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
+    @InjectRepository(UserRolesEntity)
+    private userRolesRepo: Repository<UserRolesEntity>
   ) {
     super(userRepo);
   }
 
-  async login({ email, password }: NativeAuthInput) {
-    const user = await this.userRepo.findOne({ where: { email } });
-
-    if (!user) {
-      return null;
-    }
-
-    const passwordIsValid = await bcrypt.compare(password, user.password);
-
-    if (!passwordIsValid) {
-      return null;
-    }
-
-    return user;
+  findOne(options: FindOneOptions<UserEntity>) {
+    return super.findOne({ relations: ["roles"], ...options });
   }
 
   findMany() {
     return this.userRepo.find();
+  }
+
+  async assignRoles(
+    rolesIds: MutationUpdateUserArgs["input"]["roleIds"],
+    commonFields: Omit<UserRolesEntity, BaseKeys | "roleId" | "user">
+  ): Promise<void> {
+    if (!rolesIds) {
+      return;
+    }
+
+    const newUserRoles = rolesIds.map((roleId) => ({
+      roleId,
+      ...commonFields,
+    }));
+
+    await this.userRolesRepo
+      .createQueryBuilder()
+      .insert()
+      .values(newUserRoles)
+      .orIgnore(true)
+      .execute();
+
+    await this.userRolesRepo.delete({
+      userId: commonFields.userId,
+      ...(rolesIds && { roleId: Not(In(rolesIds)) }),
+    });
   }
 }

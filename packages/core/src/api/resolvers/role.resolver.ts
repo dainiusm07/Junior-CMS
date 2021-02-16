@@ -24,7 +24,7 @@ export class RoleResolver {
   @Query()
   @Allow(Permission.ReadRole)
   role(id: RoleEntity["id"]) {
-    return this.roleService.findOneById(id);
+    return this.roleService.findOne({ where: { id } });
   }
 
   @Query()
@@ -41,10 +41,12 @@ export class RoleResolver {
 
   @Mutation()
   @Allow(Permission.UpdateRole)
-  updateRole(
+  async updateRole(
     @Args("id") id: RoleEntity["id"],
     @Args("input") input: UpdateRoleInput
-  ) {
-    return this.roleService.update(id, input);
+  ): Promise<RoleEntity | undefined> {
+    const roleIsUpdated = await this.roleService.update(id, input);
+
+    return this.roleService.findOne({ where: { id } });
   }
 }

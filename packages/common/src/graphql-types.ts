@@ -25,12 +25,12 @@ export type Mutation = {
 
 
 export type MutationCreateRoleArgs = {
-  input?: Maybe<CreateRoleInput>;
+  input: CreateRoleInput;
 };
 
 
 export type MutationCreateUserArgs = {
-  input?: Maybe<CreateUserInput>;
+  input: CreateUserInput;
 };
 
 
@@ -41,13 +41,13 @@ export type MutationLoginUserArgs = {
 
 export type MutationUpdateRoleArgs = {
   id: Scalars['Int'];
-  input?: Maybe<UpdateRoleInput>;
+  input: UpdateRoleInput;
 };
 
 
 export type MutationUpdateUserArgs = {
   id: Scalars['Int'];
-  input?: Maybe<UpdateUserInput>;
+  input: UpdateUserInput;
 };
 
 export type NativeAuthInput = {
@@ -86,6 +86,7 @@ export type Role = {
 
 export type PermissionDefinition = {
   __typename?: 'PermissionDefinition';
+  group: Scalars['Int'];
   name: Scalars['String'];
   description: Scalars['String'];
 };
@@ -111,6 +112,7 @@ export type User = {
   updatedAt: Scalars['Date'];
   createdAt: Scalars['Date'];
   deletedAt?: Maybe<Scalars['Date']>;
+  roles: Array<Maybe<Role>>;
 };
 
 export type CreateUserInput = {
@@ -118,6 +120,7 @@ export type CreateUserInput = {
   lastname: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
+  roleIds: Array<Scalars['Int']>;
 };
 
 export type UpdateUserInput = {
@@ -125,6 +128,7 @@ export type UpdateUserInput = {
   lastname?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
+  roleIds?: Maybe<Array<Scalars['Int']>>;
 };
 
 export enum Permission {

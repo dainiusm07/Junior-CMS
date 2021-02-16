@@ -4,8 +4,8 @@ type Query {
 }
 
 type Mutation {
-  createUser(input: CreateUserInput): User!
-  updateUser(id: Int!, input: UpdateUserInput): User!
+  createUser(input: CreateUserInput!): User!
+  updateUser(id: Int!, input: UpdateUserInput!): User!
 }
 
 type User {
@@ -16,6 +16,7 @@ type User {
   updatedAt: Date!
   createdAt: Date!
   deletedAt: Date
+  roles: [Role]!
 }
 
 input CreateUserInput {
@@ -23,6 +24,7 @@ input CreateUserInput {
   lastname: String!
   email: String!
   password: String!
+  roleIds: [Int!]!
 }
 
 input UpdateUserInput {
@@ -30,4 +32,5 @@ input UpdateUserInput {
   lastname: String
   email: String
   password: String
+  roleIds: [Int!]
 }

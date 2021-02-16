@@ -1,10 +1,8 @@
 import { MakeOptional } from "@junior-cms/common";
 import { FindOneOptions, ObjectLiteral, Repository } from "typeorm";
-import { BaseEntity } from "../../entities/base/base.entity";
+import { BaseKeys } from "../../types";
 
 type Id = number | string;
-
-type BaseKeys = keyof BaseEntity | "deletedAt";
 
 const createBaseService = <T extends ObjectLiteral>(
   Entity: new (...args: any) => T
@@ -12,21 +10,13 @@ const createBaseService = <T extends ObjectLiteral>(
   abstract class BaseService {
     constructor(private repo: Repository<T>) {}
 
-    async update(
-      id: Id,
-      input: MakeOptional<T, keyof T>
-    ): Promise<T | undefined> {
-      const updateResult = await this.repo
-        .createQueryBuilder()
-        .update(Entity, Object.assign(new Entity(), input))
-        .where("id = :id", { id })
-        .execute();
+    async update(id: Id, input: MakeOptional<T, keyof T>): Promise<Boolean> {
+      const updateResult = await this.repo.update(
+        id,
+        Object.assign(new Entity(), input)
+      );
 
-      if (!updateResult.affected) {
-        return undefined;
-      }
-
-      return this.repo.findOne(id);
+      return Boolean(updateResult.affected);
     }
 
     create(input: Omit<T, BaseKeys>): Promise<T> {
@@ -35,10 +25,6 @@ const createBaseService = <T extends ObjectLiteral>(
 
     findOne(options: FindOneOptions<T>) {
       return this.repo.findOne(options);
-    }
-
-    findOneById(id: Id) {
-      return this.repo.findOne(id);
     }
   }
 

@@ -5,10 +5,13 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
 } from "typeorm";
 
 import { BCRYPT_SALT } from "../../environments";
 import { BaseEntity } from "../base/base.entity";
+import { RoleEntity } from "../role/role.entity";
 
 @Entity({ name: "users" })
 export class UserEntity extends BaseEntity {
@@ -26,6 +29,18 @@ export class UserEntity extends BaseEntity {
 
   @Column()
   password: string;
+
+  @ManyToMany(() => RoleEntity, (role) => role.id)
+  @JoinTable({
+    name: "users_roles",
+    joinColumn: {
+      name: "user_id",
+    },
+    inverseJoinColumn: {
+      name: "role_id",
+    },
+  })
+  roles: RoleEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

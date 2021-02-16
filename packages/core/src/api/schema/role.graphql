@@ -1,19 +1,19 @@
 type Query {
-  roles: [Role]!
+  roles: [Role!]!
   role(id: Int!): Role
-  permissions: [PermissionDefinition]!
+  permissions: [PermissionDefinition!]!
 }
 
 type Mutation {
-  createRole(input: CreateRoleInput): Role!
-  updateRole(id: Int!, input: UpdateRoleInput): Role!
+  createRole(input: CreateRoleInput!): Role!
+  updateRole(id: Int!, input: UpdateRoleInput!): Role!
 }
 
 type Role {
   id: Int!
   name: String!
   description: String
-  permissions: [Permission]!
+  permissions: [Permission!]!
 }
 
 type PermissionDefinition {

@@ -8,17 +8,21 @@ import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 
 import { Allow } from "../decorators/Allow";
 import { UserEntity } from "../../entities/user/user.entity";
-import { UserService } from "../../service";
+import { SessionService, UserService } from "../../service";
 
 @Resolver()
 @Injectable()
 export class UserResolver {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    // TODO: Attach user to context instead of using sessionService here
+    private sessionService: SessionService
+  ) {}
 
   @Query()
   @Allow(Permission.ReadUser)
-  user(id: number): Promise<UserEntity | undefined> {
-    return this.userService.findOneById(id);
+  async user(@Args("id") id: number): Promise<UserEntity | undefined> {
+    return this.userService.findOne({ where: { id } });
   }
 
   @Query()
@@ -29,8 +33,19 @@ export class UserResolver {
 
   @Mutation()
   @Allow(Permission.CreateUser)
-  createUser(@Args("input") input: CreateUserInput): Promise<UserEntity> {
-    return this.userService.create(input);
+  async createUser(
+    @Args("input") input: CreateUserInput
+  ): Promise<UserEntity | undefined> {
+    const { roleIds, ...restInput } = input;
+
+    const user = await this.userService.create({ roles: [], ...restInput });
+
+    await this.userService.assignRoles(roleIds, {
+      assignedBy: this.sessionService.getUserId()!,
+      userId: user.id,
+    });
+
+    return this.userService.findOne({ where: { id: user.id } });
   }
 
   @Mutation()
@@ -38,11 +53,20 @@ export class UserResolver {
   async updateUser(
     @Args("id") id: UserEntity["id"],
     @Args("input") input: UpdateUserInput
-  ): Promise<UserEntity> {
-    const user = await this.userService.update(id, input);
-    if (!user) {
+  ): Promise<UserEntity | undefined> {
+    const { roleIds, ...restInput } = input;
+
+    const userUpdated = await this.userService.update(id, restInput);
+
+    if (!userUpdated) {
       throw Error("No user");
     }
-    return user;
+
+    await this.userService.assignRoles(roleIds, {
+      assignedBy: this.sessionService.getUserId()!,
+      userId: id,
+    });
+
+    return this.userService.findOne({ where: { id } });
   }
 }
