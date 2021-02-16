@@ -1,3 +1,5 @@
+import { PermissionDefinition } from "@junior-cms/common";
+
 const CrudOperations = ["Create", "Read", "Update", "Delete"] as const;
 
 export interface PermissionOptions {
@@ -7,11 +9,8 @@ export interface PermissionOptions {
   readMany?: boolean;
 }
 
-interface PermissionDefinition {
-  group: number;
-  name: string;
-  description: string;
-  internal: boolean;
+export interface IPermissionDefinition extends PermissionDefinition {
+  assignable: Boolean;
 }
 
 const capitalize = (s: string) => {
@@ -39,12 +38,12 @@ export const generatePermissions = (
 ) => {
   let group = 0;
 
-  const permissions: PermissionDefinition[] = [
+  const permissions: IPermissionDefinition[] = [
     {
       group,
       name: "Owner",
       description: "Grants all permissions",
-      internal: true,
+      assignable: false,
     },
   ];
 
@@ -65,7 +64,7 @@ export const generatePermissions = (
         group,
         name: generatePermissionName(operation, name),
         description: generateDescription(operation, name),
-        internal: false,
+        assignable: true,
       });
     }
 
@@ -75,7 +74,7 @@ export const generatePermissions = (
         group,
         name: generatePermissionName("Read", customName),
         description: generateDescription("Read", customName),
-        internal: false,
+        assignable: true,
       });
     }
   });

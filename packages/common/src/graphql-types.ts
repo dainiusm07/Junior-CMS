@@ -59,9 +59,9 @@ export type NativeAuthInput = {
 
 export type Query = {
   __typename?: 'Query';
-  permissions: Array<Maybe<PermissionDefinition>>;
+  permissions: Array<PermissionDefinition>;
   role?: Maybe<Role>;
-  roles: Array<Maybe<Role>>;
+  roles: Array<Role>;
   user?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
 };
@@ -81,7 +81,7 @@ export type Role = {
   id: Scalars['Int'];
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  permissions: Array<Maybe<Permission>>;
+  permissions: Array<Permission>;
 };
 
 export type PermissionDefinition = {

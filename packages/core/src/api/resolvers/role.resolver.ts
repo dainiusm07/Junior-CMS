@@ -1,6 +1,7 @@
 import {
   CreateRoleInput,
   Permission,
+  PermissionDefinition,
   UpdateRoleInput,
 } from "@junior-cms/common";
 import { Injectable } from "@nestjs/common";
@@ -29,8 +30,8 @@ export class RoleResolver {
 
   @Query()
   @Allow(Permission.CreateRole)
-  permissions() {
-    return this.roleService.getPermissions();
+  permissions(): PermissionDefinition[] {
+    return this.roleService.getAssignablePermissions();
   }
 
   @Mutation()

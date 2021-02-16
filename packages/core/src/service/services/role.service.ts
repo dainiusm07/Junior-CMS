@@ -4,10 +4,10 @@ import { Repository } from "typeorm";
 
 import { permissions } from "../../config/permissions";
 import { RoleEntity } from "../../entities/role/role.entity";
-import createBaseService from "../helpers/create-base-service";
+import { BaseService } from "./base.service";
 
 @Injectable()
-export class RoleService extends createBaseService(RoleEntity) {
+export class RoleService extends BaseService<RoleEntity> {
   permissions = permissions;
   constructor(
     @InjectRepository(RoleEntity) private roleRepo: Repository<RoleEntity>
@@ -19,7 +19,7 @@ export class RoleService extends createBaseService(RoleEntity) {
     return this.roleRepo.find();
   }
 
-  getPermissions() {
-    return this.permissions.filter((perm) => !perm.internal);
+  getAssignablePermissions() {
+    return this.permissions.filter((perm) => perm.assignable);
   }
 }

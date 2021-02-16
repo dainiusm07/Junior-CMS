@@ -2,14 +2,14 @@ import { FindOneOptions, In, Not, Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
-import createBaseService from "../helpers/create-base-service";
 import { UserEntity } from "../../entities/user/user.entity";
 import { UserRolesEntity } from "../../entities/user/user-roles.entity";
 import { BaseKeys } from "../../types";
 import { MutationUpdateUserArgs } from "@junior-cms/common";
+import { BaseService } from "./base.service";
 
 Injectable();
-export class UserService extends createBaseService(UserEntity) {
+export class UserService extends BaseService<UserEntity> {
   constructor(
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
     @InjectRepository(UserRolesEntity)
