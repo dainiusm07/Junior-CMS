@@ -5,7 +5,6 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { BaseEntity } from "../../entities/base/base.entity";
 
 const updateResults: UpdateResult[] = [
-  // test push
   { affected: 1, generatedMaps: [], raw: [] },
   { affected: 0, generatedMaps: [], raw: [] },
 ];
