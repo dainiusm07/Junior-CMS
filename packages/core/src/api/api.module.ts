@@ -1,9 +1,10 @@
 import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
+import { APP_GUARD } from "@nestjs/core";
 
 import { UserResolver } from "./resolvers/user.resolver";
 import { AuthResolver } from "./resolvers/auth.resolver";
-import { AuthGuard } from "./middleware/auth-guard";
+import { AuthGuard } from "./guards/auth-guard";
 import { ServiceModule } from "../service";
 import { GraphqlService } from "../config";
 import { RoleResolver } from "./resolvers/role.resolver";
@@ -20,7 +21,7 @@ const resolvers = [UserResolver, AuthResolver, RoleResolver];
   providers: [
     ...resolvers,
     {
-      provide: "APP_GUARD",
+      provide: APP_GUARD,
       useClass: AuthGuard,
     },
   ],

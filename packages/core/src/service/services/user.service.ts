@@ -6,7 +6,7 @@ import { UserEntity } from "../../entities/user/user.entity";
 import { UserRolesEntity } from "../../entities/user/user-roles.entity";
 import { BaseKeys } from "../../types";
 import { MutationUpdateUserArgs } from "@junior-cms/common";
-import { BaseService } from "./base.service";
+import { BaseFindOneOptions, BaseService } from "./base.service";
 
 Injectable();
 export class UserService extends BaseService<UserEntity> {
@@ -18,7 +18,7 @@ export class UserService extends BaseService<UserEntity> {
     super(userRepo);
   }
 
-  findOne(options: FindOneOptions<UserEntity>) {
+  findOne(options: BaseFindOneOptions<UserEntity>) {
     return super.findOne({ relations: ["roles"], ...options });
   }
 

@@ -5,7 +5,7 @@ jest.mock("@nestjs/graphql");
 import { GqlExecutionContext } from "@nestjs/graphql";
 
 import { UserEntity } from "../../src/entities/user/user.entity";
-import { AuthGuard } from "../../src/api/middleware/auth-guard";
+import { AuthGuard } from "../../src/api/guards/auth-guard";
 import { UserService } from "../../src/service";
 import { MockExecutionContext } from "../mocks/execution-context.mock";
 
