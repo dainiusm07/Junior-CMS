@@ -8,7 +8,7 @@
     "build": "tsc -p tsconfig.build.json && yarn copy-schemas",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "ts-node -r src/main.ts",
-    "start:dev": "nodemon",
+    "start:dev": "ts-node-dev src/main.ts",
     "start:debug": "nodemon --config nodemon-debug.json",
     "test": "NODE_ENV=testing jest -w 1 --config ./jest.config.json --forceExit",
     "test:watch": "NODE_ENV=testing jest -w 1 --watch --forceExit",
@@ -51,6 +51,7 @@
     "nodemon": "^2.0.7",
     "ts-jest": "^26.5.1",
     "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.1.3"
   }
