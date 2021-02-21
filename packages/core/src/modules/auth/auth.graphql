@@ -1,0 +1,13 @@
+type Query {
+  userProfile: User
+}
+
+type Mutation {
+  userLogin(input: NativeAuthInput!): User!
+  userLogout: Boolean!
+}
+
+input NativeAuthInput {
+  email: String!
+  password: String!
+}

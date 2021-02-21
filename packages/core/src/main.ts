@@ -1,13 +1,14 @@
 import { NestFactory } from "@nestjs/core";
 import { Logger } from "@nestjs/common";
 import chalk from "chalk";
-import { getConnection } from "typeorm";
+import { MikroORM } from "@mikro-orm/core";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import rateLimit from "express-rate-limit";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
+import { API_END_POINT } from "@junior-cms/common";
 
 import { AppModule } from "./app.module";
 import {
@@ -18,26 +19,14 @@ import {
   SESSION_SECRET,
   SESSION_TTL,
 } from "./environments";
-import {
-  LoggingInterceptor,
-  TimeoutInterceptor,
-  LoggerMiddleware,
-} from "./common";
-import { API_END_POINT } from "@junior-cms/common";
+import { LoggerMiddleware } from "./middleware";
+import { LoggingInterceptor, TimeoutInterceptor } from "./interceptors";
 
 declare const module: any;
 
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
-
-    // Database connection
-    const connection = getConnection("default");
-    const { isConnected } = connection;
-    // connection.runMigrations();
-    isConnected
-      ? Logger.log(`🌨️  Database connected`, "TypeORM", false)
-      : Logger.error(`❌  Database connect error`, "", "TypeORM", false);
 
     // NOTE: adapter for e2e testing
     app.getHttpAdapter();
@@ -104,7 +93,14 @@ async function bootstrap() {
       module.hot.accept();
       module.hot.dispose(() => app.close());
     }
+    // Database
+    const isConnected = await app.get(MikroORM).isConnected();
 
+    isConnected
+      ? Logger.log(`🌨️  Database connected`, "MikroORM", false)
+      : Logger.error(`❌  Database connection error`, "", "MikroORM", false);
+
+    // Application
     const appUrl = `http://${API_DOMAIN}:${API_PORT}`;
 
     Logger.log(`🤬  Application is running on: ${appUrl}`, "NestJS", false);

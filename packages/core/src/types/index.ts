@@ -1,4 +1,4 @@
-import { BaseEntity } from "../entities/base/base.entity";
+import { BaseEntity } from "../modules/common/base.entity";
 
 export type BaseKeys = keyof BaseEntity | "deletedAt";
 

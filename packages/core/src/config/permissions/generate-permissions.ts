@@ -29,10 +29,6 @@ const generateOperations = (
 const generatePermissionName = (operation: string, name: string) =>
   `${capitalize(operation)}${capitalize(name)}`;
 
-const generateDescription = (operation: string, name: string) => {
-  return `Grants permission to ${operation.toLowerCase()} ${capitalize(name)}`;
-};
-
 export const generatePermissions = (
   permissionsOptions: PermissionOptions[]
 ) => {
@@ -42,7 +38,6 @@ export const generatePermissions = (
     {
       group,
       name: "Owner",
-      description: "Grants all permissions",
       assignable: false,
     },
   ];
@@ -63,7 +58,6 @@ export const generatePermissions = (
       permissions.push({
         group,
         name: generatePermissionName(operation, name),
-        description: generateDescription(operation, name),
         assignable: true,
       });
     }
@@ -73,7 +67,6 @@ export const generatePermissions = (
       permissions.push({
         group,
         name: generatePermissionName("Read", customName),
-        description: generateDescription("Read", customName),
         assignable: true,
       });
     }

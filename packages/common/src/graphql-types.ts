@@ -19,7 +19,7 @@ export type Query = {
   role?: Maybe<Role>;
   roles: Array<Role>;
   user?: Maybe<User>;
-  userProfile: User;
+  userProfile?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
 };
 
@@ -81,7 +81,6 @@ export type Role = {
   __typename?: 'Role';
   id: Scalars['Int'];
   name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
   permissions: Array<Permission>;
 };
 
@@ -89,18 +88,15 @@ export type PermissionDefinition = {
   __typename?: 'PermissionDefinition';
   group: Scalars['Int'];
   name: Scalars['String'];
-  description: Scalars['String'];
 };
 
 export type CreateRoleInput = {
   name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
   permissions: Array<Permission>;
 };
 
 export type UpdateRoleInput = {
   name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
   permissions?: Maybe<Array<Permission>>;
 };
 
@@ -110,10 +106,10 @@ export type User = {
   email: Scalars['String'];
   firstname: Scalars['String'];
   lastname: Scalars['String'];
+  role: Role;
   updatedAt: Scalars['Date'];
   createdAt: Scalars['Date'];
   deletedAt?: Maybe<Scalars['Date']>;
-  roles: Array<Maybe<Role>>;
 };
 
 export type CreateUserInput = {
@@ -121,7 +117,7 @@ export type CreateUserInput = {
   lastname: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
-  roleIds: Array<Scalars['Int']>;
+  roleId: Scalars['Int'];
 };
 
 export type UpdateUserInput = {
@@ -129,7 +125,7 @@ export type UpdateUserInput = {
   lastname?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
-  roleIds?: Maybe<Array<Scalars['Int']>>;
+  roleId?: Maybe<Scalars['Int']>;
 };
 
 export enum Permission {
