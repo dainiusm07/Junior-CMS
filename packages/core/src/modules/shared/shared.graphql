@@ -10,3 +10,12 @@ scalar Upload
 # interface Node {
 #   id: ID!
 # }
+
+type ValidationError {
+  path: String!
+  message: String!
+}
+
+type InputValidationError {
+  errors: [ValidationError!]!
+}

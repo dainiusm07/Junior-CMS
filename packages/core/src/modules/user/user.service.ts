@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 
-import { BaseService } from "../common/base.service";
+import { BaseService } from "../shared/base.service";
 import { UserEntity } from "./user.entity";
 
 @Injectable()

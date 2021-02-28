@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { Logger } from "@nestjs/common";
 import chalk from "chalk";
-import { MikroORM } from "@mikro-orm/core";
+import { MikroORM, RequestContext } from "@mikro-orm/core";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import rateLimit from "express-rate-limit";
@@ -18,7 +18,7 @@ import {
   RATE_LIMIT_MAX,
   SESSION_SECRET,
   SESSION_TTL,
-} from "./environments";
+} from "./common/environment";
 import { LoggerMiddleware } from "./middleware";
 import { LoggingInterceptor, TimeoutInterceptor } from "./interceptors";
 
@@ -94,9 +94,13 @@ async function bootstrap() {
       module.hot.dispose(() => app.close());
     }
     // Database
-    const isConnected = await app.get(MikroORM).isConnected();
+    const orm = app.get(MikroORM);
 
-    isConnected
+    app.use((req: any, res: any, next: any) => {
+      RequestContext.create(orm.em, next);
+    });
+
+    (await orm.isConnected())
       ? Logger.log(`🌨️  Database connected`, "MikroORM", false)
       : Logger.error(`❌  Database connection error`, "", "MikroORM", false);
 

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { GqlModuleOptions, GqlOptionsFactory } from "@nestjs/graphql";
-import { NODE_ENV } from "../../environments";
+import { NODE_ENV } from "../../common/environment";
 import { permissionsTypeDef } from "../permissions";
 
 Injectable();
@@ -15,6 +15,7 @@ export class GraphqlService implements GqlOptionsFactory {
               credentials: true,
             }
           : true,
+
       bodyParserConfig: { limit: "50mb" },
       tracing: NODE_ENV !== "production",
       cacheControl: NODE_ENV === "production" && {

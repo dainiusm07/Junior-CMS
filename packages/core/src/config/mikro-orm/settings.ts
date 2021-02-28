@@ -7,7 +7,7 @@ import {
   DB_PORT,
   DB_USER,
   NODE_ENV,
-} from "../../environments";
+} from "../../common/environment";
 
 interface Environment {
   [key: string]: MikroOrmModuleOptions;

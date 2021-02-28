@@ -6,7 +6,7 @@ import {
 import { Injectable } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 
-import { Allow } from "../../decorators/Allow";
+import { Allow } from "../../decorators";
 import { RoleEntity } from "./role.entity";
 import { RoleService } from "./role.service";
 

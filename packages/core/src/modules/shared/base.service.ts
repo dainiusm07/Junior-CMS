@@ -5,12 +5,16 @@ import {
   FindOptions,
   NotFoundError,
   Populate,
-  wrap,
+  Primary,
 } from "@mikro-orm/core";
 import { BaseEntity } from "./base.entity";
 
 export abstract class BaseService<T extends BaseEntity> {
   constructor(private repo: EntityRepository<T>, private name: string) {}
+
+  getReference(id: Primary<T>) {
+    return this.repo.getReference(id);
+  }
 
   findOne(where: FilterQuery<T>, populate?: any) {
     return this.repo.findOne(where, populate);
@@ -34,15 +38,15 @@ export abstract class BaseService<T extends BaseEntity> {
     return this.repo.create(data);
   }
 
-  async insert(data: EntityData<T>) {
+  async insert(data: EntityData<Omit<T, "">>) {
     const entity = this.repo.create(data);
+
     await this.repo.persistAndFlush(entity);
     return entity;
   }
 
   async updateOne(filter: FilterQuery<T>, data: EntityData<T>) {
     const entity = await this.findOneOrFail(filter);
-
     this.repo.assign(entity, data);
 
     await this.repo.persistAndFlush(entity);

@@ -8,11 +8,13 @@ import {
   OneToOne,
 } from "@mikro-orm/core";
 
-import { BCRYPT_SALT } from "../../environments";
-import { BaseEntity } from "../common/base.entity";
+import { BCRYPT_SALT } from "../../common/environment";
+import { BaseEntity } from "../shared/base.entity";
 import { RoleEntity } from "../role/role.entity";
+import { Typename } from "../../decorators";
 
 @Entity({ tableName: "users" })
+@Typename("User")
 export class UserEntity extends BaseEntity {
   @Property({ nullable: true })
   deletedAt: Date | null;

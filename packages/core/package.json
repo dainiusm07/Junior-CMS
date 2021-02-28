@@ -41,7 +41,8 @@
     "ioredis": "^4.22.0",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.3",
+    "yup": "^0.32.9"
   },
   "mikro-orm": {
     "useTsNode": true,
@@ -57,6 +58,7 @@
     "@types/connect-redis": "^0.0.16",
     "@types/express-rate-limit": "^5.1.1",
     "@types/jest": "^26.0.20",
+    "@types/yup": "^0.29.11",
     "cpx": "^1.5.0",
     "jest": "^26.6.3",
     "nodemon": "^2.0.7",

@@ -36,9 +36,9 @@ export type QueryUserArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   createRole: Role;
-  createUser: User;
+  createUser: UserMutationResponse;
   updateRole: Role;
-  updateUser: User;
+  updateUser: UserMutationResponse;
   userLogin: User;
   userLogout: Scalars['Boolean'];
 };
@@ -75,13 +75,13 @@ export type NativeAuthInput = {
   password: Scalars['String'];
 };
 
-
-
 export type Role = {
   __typename?: 'Role';
   id: Scalars['Int'];
   name: Scalars['String'];
   permissions: Array<Permission>;
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
 };
 
 export type PermissionDefinition = {
@@ -99,6 +99,21 @@ export type UpdateRoleInput = {
   name?: Maybe<Scalars['String']>;
   permissions?: Maybe<Array<Permission>>;
 };
+
+
+
+export type ValidationError = {
+  __typename?: 'ValidationError';
+  path: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type InputValidationError = {
+  __typename?: 'InputValidationError';
+  errors: Array<ValidationError>;
+};
+
+export type UserMutationResponse = User | InputValidationError;
 
 export type User = {
   __typename?: 'User';

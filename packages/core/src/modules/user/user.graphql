@@ -3,9 +3,11 @@ type Query {
   user(id: Int!): User
 }
 
+union UserMutationResponse = User | InputValidationError
+
 type Mutation {
-  createUser(input: CreateUserInput!): User!
-  updateUser(id: Int!, input: UpdateUserInput!): User!
+  createUser(input: CreateUserInput!): UserMutationResponse!
+  updateUser(id: Int!, input: UpdateUserInput!): UserMutationResponse!
 }
 
 type User {

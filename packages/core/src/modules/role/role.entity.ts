@@ -1,8 +1,11 @@
 import { Permission } from "@junior-cms/common/dist/graphql-types";
 import { Entity, Property } from "@mikro-orm/core";
-import { BaseEntity } from "../common/base.entity";
+
+import { Typename } from "../../decorators";
+import { BaseEntity } from "../shared/base.entity";
 
 @Entity({ tableName: "roles" })
+@Typename("Role")
 export class RoleEntity extends BaseEntity {
   @Property()
   name: string;
