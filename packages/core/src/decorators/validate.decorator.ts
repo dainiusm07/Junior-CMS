@@ -33,7 +33,7 @@ const getSchema = (
 };
 
 export function Validate<T extends {}>(
-  validations: ValidationSettings<T>
+  validations: ValidationSettings<T> = {}
 ): MethodDecorator {
   return (target: object, methodName: string | symbol, descriptor: any) => {
     const argsMeta =

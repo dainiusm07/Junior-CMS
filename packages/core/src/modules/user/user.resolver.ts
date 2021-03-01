@@ -7,8 +7,8 @@ import {
 } from "@junior-cms/common";
 import { Injectable } from "@nestjs/common";
 import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
-import { Allow, Validate, ValidatedArg } from "../../decorators";
 
+import { Allow, Validate, ValidatedArg } from "../../decorators";
 import { RoleService } from "../role/role.service";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
