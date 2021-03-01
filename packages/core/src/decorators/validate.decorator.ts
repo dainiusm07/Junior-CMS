@@ -1,4 +1,4 @@
-import { RequestContext } from "@mikro-orm/core";
+import { EntityManager, RequestContext } from "@mikro-orm/core";
 import { AnySchema } from "yup";
 
 import { VALIDATE_ARGS_METADATA_KEY } from "../common/constants";
@@ -13,7 +13,7 @@ type ValidationSettings<T> =
   | SchemaGenFunc<any>;
 
 const getSchema = (
-  methodName: string | symbol,
+  em: EntityManager,
   index: number,
   argsMeta: any,
   validations: any
@@ -25,7 +25,7 @@ const getSchema = (
     const schemaGenFunc = validations[fieldName];
 
     if (typeof schemaGenFunc === "function") {
-      return schemaGenFunc(RequestContext.getEntityManager()!);
+      return schemaGenFunc(em);
     }
   }
 
@@ -42,8 +42,10 @@ export function Validate<T extends {}>(
 
     const method = descriptor.value;
     descriptor.value = async function () {
+      const em = RequestContext.getEntityManager()!;
+
       for (let i = 0; i < arguments.length; i++) {
-        const schema = getSchema(methodName, i, argsMeta, validations);
+        const schema = getSchema(em, i, argsMeta, validations);
 
         const result = await validateArgs(schema, arguments[i]);
 
