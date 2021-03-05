@@ -1,12 +1,12 @@
 import { compare } from "bcrypt";
 import { Injectable } from "@nestjs/common";
-import { Maybe, NativeAuthInput } from "@junior-cms/common";
 
 import { UserService } from "../user/user.service";
 import { UserEntity } from "../user/user.entity";
+import { NativeAuthInput } from "./dto/native-auth.input";
 
 type SessionData = {
-  userId: Maybe<UserEntity["id"]>;
+  userId: UserEntity["id"] | null;
 };
 
 @Injectable()
@@ -27,7 +27,7 @@ export class AuthService {
     return this.getSessionFromCtx(ctx).userId || null;
   }
 
-  private setUserId(ctx: any, userId: Maybe<UserEntity["id"]>) {
+  private setUserId(ctx: any, userId: UserEntity["id"] | null) {
     this.assignToSession(ctx, { userId });
   }
 

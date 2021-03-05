@@ -1,10 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { GqlExecutionContext } from "@nestjs/graphql";
-import { Permission } from "@junior-cms/common";
 
 import { PERMISSIONS_METADATA_KEY } from "../common/constants";
 import { AuthService } from "../modules/auth/auth.service";
+import { Permission } from "../common/permission.enum";
 
 const matchPermissions = (
   permissions: Permission[],

@@ -1,20 +1,24 @@
+import { Injectable, UseFilters } from "@nestjs/common";
 import {
-  CreateUserInput,
-  MutationCreateUserArgs,
-  MutationUpdateUserArgs,
-  UpdateUserInput,
-  User,
-} from "@junior-cms/common";
-import { Injectable } from "@nestjs/common";
-import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
+  Args,
+  Resolver,
+  Query,
+  Mutation,
+  createUnionType,
+} from "@nestjs/graphql";
 
-import { Allow, Validate, ValidatedArg } from "../../decorators";
+import { InputValidationError } from "../../common/errors/input-validation.error";
+import { Allow } from "../../decorators";
 import { RoleService } from "../role/role.service";
+import { NewUserInput } from "./dto/new-user.input";
+import { UpdateUserInput } from "./dto/update-user.input";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
-import { createUserValidation } from "./validations/create-user.validation";
-import { updateUserValidation } from "./validations/update-user.validation";
 
+const UserMutationResponse = createUnionType({
+  name: "UserMutationResponse",
+  types: () => [UserEntity, InputValidationError],
+});
 @Resolver()
 @Injectable()
 export class UserResolver {
@@ -23,25 +27,22 @@ export class UserResolver {
     private roleService: RoleService
   ) {}
 
-  @Query()
   @Allow()
+  @Query(() => UserEntity)
   user(@Args("id") id: number): Promise<UserEntity | null> {
     return this.userService.findOneOrFail({ id });
   }
 
-  @Query()
-  users(): Promise<UserEntity[]> {
+  @Query(() => [UserMutationResponse])
+  users() {
     return this.userService.findAll();
   }
 
-  @Mutation()
-  @Validate<MutationCreateUserArgs>({
-    input: createUserValidation,
-  })
+  @Mutation(() => UserMutationResponse)
   async createUser(
-    @ValidatedArg("input")
-    input: CreateUserInput
-  ): Promise<User> {
+    @Args("input")
+    input: NewUserInput
+  ): Promise<typeof UserMutationResponse> {
     const { roleId, ...user } = input;
 
     const role = this.roleService.getReference(roleId);
@@ -49,13 +50,10 @@ export class UserResolver {
     return this.userService.insert({ ...user, role });
   }
 
-  @Mutation()
-  @Validate<MutationUpdateUserArgs>({
-    input: updateUserValidation,
-  })
+  @Mutation(() => UserMutationResponse)
   updateUser(
     @Args("id") id: number,
-    @ValidatedArg("input") input: UpdateUserInput
+    @Args("input") input: UpdateUserInput
   ): Promise<UserEntity> {
     return this.userService.updateOne(id, input);
   }

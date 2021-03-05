@@ -1,13 +1,12 @@
-import { Permission } from "@junior-cms/common";
 import { Test } from "@nestjs/testing";
 import { Reflector } from "@nestjs/core";
-jest.mock("@nestjs/graphql");
 import { GqlExecutionContext } from "@nestjs/graphql";
 
 import { mockedExecutionContext } from "../test-utils/mocked-execution-context";
 import { AuthGuard } from "./auth-guard";
 import { UserEntity } from "../modules/user/user.entity";
 import { AuthService } from "../modules/auth/auth.service";
+import { Permission } from "../common/permission.enum";
 const { ReadUser, ReadUsers, Owner } = Permission;
 
 let authGuard: AuthGuard;
@@ -58,7 +57,6 @@ describe("AuthGuard", () => {
         },
       ],
     }).compile();
-
     authGuard = moduleRef.get(AuthGuard);
     authService = moduleRef.get(AuthService);
     reflector = moduleRef.get(Reflector);
@@ -70,19 +68,16 @@ describe("AuthGuard", () => {
       mockUserWithPermissions([]);
       mockRequiredPermissions([ReadUser]);
       mockContextWithUserId(1);
-
       const canActivate = await authGuard.canActivate(mockedExecutionContext);
-
       expect(canActivate).toBe(false);
     });
+
     it(`if has only part of required permissions
         should return false`, async () => {
       mockUserWithPermissions([ReadUser]);
       mockRequiredPermissions([ReadUser, ReadUsers]);
       mockContextWithUserId(1);
-
       const canActivate = await authGuard.canActivate(mockedExecutionContext);
-
       expect(canActivate).toBe(false);
     });
 
@@ -90,9 +85,7 @@ describe("AuthGuard", () => {
       mockUserWithPermissions([ReadUser]);
       mockRequiredPermissions([ReadUser]);
       mockContextWithUserId(1);
-
       const canActivate = await authGuard.canActivate(mockedExecutionContext);
-
       expect(canActivate).toBe(true);
     });
 
@@ -101,9 +94,7 @@ describe("AuthGuard", () => {
       mockUserWithPermissions([ReadUser, ReadUsers]);
       mockRequiredPermissions([ReadUser, ReadUsers]);
       mockContextWithUserId(1);
-
       const canActivate = await authGuard.canActivate(mockedExecutionContext);
-
       expect(canActivate).toBe(true);
     });
 
@@ -111,9 +102,7 @@ describe("AuthGuard", () => {
       mockUserWithPermissions([Owner]);
       mockRequiredPermissions([ReadUser, ReadUsers]);
       mockContextWithUserId(1);
-
       const canActivate = await authGuard.canActivate(mockedExecutionContext);
-
       expect(canActivate).toBe(true);
     });
 
@@ -122,9 +111,7 @@ describe("AuthGuard", () => {
       mockRequiredPermissions([]);
       const user = mockUserWithPermissions([]);
       const context = mockContextWithUserId(1);
-
       await authGuard.canActivate(mockedExecutionContext);
-
       expect(context.user).toBe(user);
     });
   });
@@ -135,38 +122,30 @@ describe("AuthGuard", () => {
         .spyOn(authService, "getCurrentUser")
         .mockReturnValue(Promise.resolve(null));
     });
-
     it(`if user with that id isn't found / is deleted
         should return false`, async () => {
       mockRequiredPermissions([]);
       mockContextWithUserId(1);
-
       const canActivate = await authGuard.canActivate(mockedExecutionContext);
-
       expect(canActivate).toBe(false);
     });
-  }),
-    describe(`user isn't logged in`, () => {
-      beforeEach(() => {
-        jest
-          .spyOn(authService, "getCurrentUser")
-          .mockReturnValue(Promise.resolve(null));
-      });
+  });
 
-      it(`if permissions are not needed should return true`, async () => {
-        mockRequiredPermissions(undefined);
-
-        const canActivate = await authGuard.canActivate(mockedExecutionContext);
-
-        expect(canActivate).toBe(true);
-      });
-
-      it(`if permissions are needed should return false`, async () => {
-        mockRequiredPermissions([]);
-
-        const canActivate = await authGuard.canActivate(mockedExecutionContext);
-
-        expect(canActivate).toBe(false);
-      });
+  describe(`user isn't logged in`, () => {
+    beforeEach(() => {
+      jest
+        .spyOn(authService, "getCurrentUser")
+        .mockReturnValue(Promise.resolve(null));
     });
+    it(`if permissions are not needed should return true`, async () => {
+      mockRequiredPermissions(undefined);
+      const canActivate = await authGuard.canActivate(mockedExecutionContext);
+      expect(canActivate).toBe(true);
+    });
+    it(`if permissions are needed should return false`, async () => {
+      mockRequiredPermissions([]);
+      const canActivate = await authGuard.canActivate(mockedExecutionContext);
+      expect(canActivate).toBe(false);
+    });
+  });
 });

@@ -1,15 +1,17 @@
-import { Permission } from "@junior-cms/common/dist/graphql-types";
 import { Entity, Property } from "@mikro-orm/core";
+import { Field, ObjectType } from "@nestjs/graphql";
 
-import { Typename } from "../../decorators";
 import { BaseEntity } from "../shared/base.entity";
+import { Permission } from "../../common/permission.enum";
 
 @Entity({ tableName: "roles" })
-@Typename("Role")
+@ObjectType()
 export class RoleEntity extends BaseEntity {
+  @Field()
   @Property()
   name: string;
 
+  @Field(() => [Permission])
   @Property({ type: "array" })
   permissions: Permission[];
 }

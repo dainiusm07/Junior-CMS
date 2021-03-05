@@ -11,26 +11,32 @@ import {
 import { BCRYPT_SALT } from "../../common/environment";
 import { BaseEntity } from "../shared/base.entity";
 import { RoleEntity } from "../role/role.entity";
-import { Typename } from "../../decorators";
+import { Field, ObjectType } from "@nestjs/graphql";
 
 @Entity({ tableName: "users" })
-@Typename("User")
+@ObjectType()
 export class UserEntity extends BaseEntity {
+  @Field(() => Date, { nullable: true })
   @Property({ nullable: true })
   deletedAt: Date | null;
 
+  @Field()
   @Property()
   firstname: string;
 
+  @Field()
   @Property()
   lastname: string;
 
+  @Field()
   @Property()
   email: string;
 
+  @Field()
   @Property()
   password: string;
 
+  @Field(() => RoleEntity)
   @OneToOne({
     entity: () => RoleEntity,
     unique: false,

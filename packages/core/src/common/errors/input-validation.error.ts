@@ -1,10 +1,27 @@
-type ValidationError = {
-  path: string;
-  message: string;
-};
+import { Field, ObjectType } from "@nestjs/graphql";
+import { BaseError } from "./base.error";
 
-export class InputValidationError {
+@ObjectType()
+class ValidationError {
+  @Field()
+  path: string;
+
+  @Field()
+  message: string;
+}
+
+@ObjectType()
+export class InputValidationError extends BaseError {
   readonly __typename = "InputValidationError";
   readonly errorCode = "INPUT_VALIDATION_ERROR";
-  constructor(public errors: ValidationError[]) {}
+
+  message = "Invalid input";
+
+  @Field(() => [ValidationError])
+  errors: ValidationError[];
+
+  constructor(errors: ValidationError[]) {
+    super();
+    this.errors = errors;
+  }
 }

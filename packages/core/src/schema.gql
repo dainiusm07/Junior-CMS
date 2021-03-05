@@ -1,0 +1,103 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type RoleEntity {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  permissions: [Permission!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum Permission {
+  Owner
+  CreateUser
+  ReadUser
+  ReadUsers
+  UpdateUser
+  DeleteUser
+  CreateRole
+  ReadRole
+  ReadRoles
+  UpdateRole
+  DeleteRole
+}
+
+type UserEntity {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  firstname: String!
+  lastname: String!
+  email: String!
+  password: String!
+  role: RoleEntity!
+}
+
+type ValidationError {
+  path: String!
+  message: String!
+}
+
+type Query {
+  user(id: Float!): UserEntity!
+  users: [UserMutationResponse!]!
+  userProfile: UserEntity!
+  roles: [RoleEntity!]!
+  role(id: Float!): RoleEntity!
+}
+
+union UserMutationResponse = UserEntity | InputValidationError
+
+type InputValidationError {
+  message: String!
+  errorCode: String!
+  errors: [ValidationError!]!
+}
+
+type Mutation {
+  createUser(input: NewUserInput!): UserMutationResponse!
+  updateUser(input: UpdateUserInput!, id: Float!): UserMutationResponse!
+  userLogin(input: NativeAuthInput!): UserEntity!
+  userLogout: Boolean!
+  createRole(input: NewRoleInput!): RoleEntity!
+  updateRole(input: UpdateRoleInput!, id: Float!): RoleEntity!
+}
+
+input NewUserInput {
+  firstname: String!
+  lastname: String!
+  email: String!
+  password: String!
+  roleId: Int!
+}
+
+input UpdateUserInput {
+  firstname: String
+  lastname: String
+  email: String
+  password: String
+  roleId: Int
+}
+
+input NativeAuthInput {
+  email: String!
+  password: String!
+}
+
+input NewRoleInput {
+  name: String!
+  permissions: [Permission!]!
+}
+
+input UpdateRoleInput {
+  name: String
+  permissions: [Permission!]
+}

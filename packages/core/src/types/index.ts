@@ -15,7 +15,3 @@ export type Relations<T> = {
       : never
     : never;
 }[keyof T];
-
-export type SchemaGenFunc<T> = (
-  em: EntityManager
-) => T extends {} ? Partial<Record<keyof T, AnySchema<any, any>>> : AnySchema;
