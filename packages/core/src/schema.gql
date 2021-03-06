@@ -46,20 +46,85 @@ type ValidationError {
   message: String!
 }
 
+type PaginationResult {
+  currentPage: Int!
+  totalPages: Int!
+}
+
+type UserListResponse {
+  items: [UserEntity!]!
+  totalItems: Int!
+  pagination: PaginationResult!
+}
+
+type RoleListResponse {
+  items: [RoleEntity!]!
+  totalItems: Int!
+  pagination: PaginationResult!
+}
+
 type Query {
   user(id: Float!): UserEntity!
-  users: [UserMutationResponse!]!
+  users(filter: ExtendedUserFilterOptions, page: Int!, limit: Int!): UserListResponse!
   userProfile: UserEntity!
-  roles: [RoleEntity!]!
+  roles(filter: ExtendedRoleFilterOptions, page: Int!, limit: Int!): RoleListResponse!
   role(id: Float!): RoleEntity!
 }
 
-union UserMutationResponse = UserEntity | InputValidationError
+input ExtendedUserFilterOptions {
+  id: NumberOperator
+  updatedAt: DateOperator
+  createdAt: DateOperator
+  email: StringOperator
+  firstname: StringOperator
+  lastname: StringOperator
+  deletedAt: DateOperator
+  _and: [UserFilterOptions!]
+  _or: [UserFilterOptions!]
+}
 
-type InputValidationError {
-  message: String!
-  errorCode: String!
-  errors: [ValidationError!]!
+input NumberOperator {
+  _gt: Float
+  _lt: Float
+  _eq: Float
+  _in: [Float!]
+  _nin: [Float!]
+}
+
+input DateOperator {
+  _gte: DateTime
+  _lte: DateTime
+}
+
+input StringOperator {
+  _ilike: String
+  _eq: String
+}
+
+input UserFilterOptions {
+  id: NumberOperator
+  updatedAt: DateOperator
+  createdAt: DateOperator
+  email: StringOperator
+  firstname: StringOperator
+  lastname: StringOperator
+  deletedAt: DateOperator
+}
+
+input ExtendedRoleFilterOptions {
+  id: NumberOperator
+  updatedAt: DateOperator
+  createdAt: DateOperator
+  name: StringOperator
+  _and: [RoleFilterOptions!]
+  _or: [RoleFilterOptions!]
+}
+
+input RoleFilterOptions {
+  id: NumberOperator
+  updatedAt: DateOperator
+  createdAt: DateOperator
+  name: StringOperator
 }
 
 type Mutation {
@@ -69,6 +134,14 @@ type Mutation {
   userLogout: Boolean!
   createRole(input: NewRoleInput!): RoleEntity!
   updateRole(input: UpdateRoleInput!, id: Float!): RoleEntity!
+}
+
+union UserMutationResponse = UserEntity | InputValidationError
+
+type InputValidationError {
+  message: String!
+  errorCode: String!
+  errors: [ValidationError!]!
 }
 
 input NewUserInput {

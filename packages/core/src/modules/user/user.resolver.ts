@@ -1,17 +1,28 @@
-import { Injectable, UseFilters } from "@nestjs/common";
+import { Injectable, UsePipes, ValidationPipe } from "@nestjs/common";
 import {
   Args,
   Resolver,
   Query,
   Mutation,
   createUnionType,
+  ObjectType,
 } from "@nestjs/graphql";
+import {
+  classToPlain,
+  plainToClass,
+  plainToClassFromExist,
+} from "class-transformer";
 
 import { InputValidationError } from "../../common/errors/input-validation.error";
 import { Allow } from "../../decorators";
 import { RoleService } from "../role/role.service";
+import { generateListResponse } from "../shared/list-utils";
 import { NewUserInput } from "./dto/new-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
+import {
+  UserFilterOptions,
+  UserListOptions,
+} from "./dto/user-list-options.input";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
 
@@ -19,6 +30,10 @@ const UserMutationResponse = createUnionType({
   name: "UserMutationResponse",
   types: () => [UserEntity, InputValidationError],
 });
+
+@ObjectType()
+class UserListResponse extends generateListResponse(UserEntity) {}
+
 @Resolver()
 @Injectable()
 export class UserResolver {
@@ -33,9 +48,9 @@ export class UserResolver {
     return this.userService.findOneOrFail({ id });
   }
 
-  @Query(() => [UserMutationResponse])
-  users() {
-    return this.userService.findAll();
+  @Query(() => UserListResponse)
+  async users(@Args() options: UserListOptions): Promise<UserListResponse> {
+    return this.userService.findList(options);
   }
 
   @Mutation(() => UserMutationResponse)

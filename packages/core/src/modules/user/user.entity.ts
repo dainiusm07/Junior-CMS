@@ -7,11 +7,11 @@ import {
   EventArgs,
   OneToOne,
 } from "@mikro-orm/core";
+import { Field, ObjectType } from "@nestjs/graphql";
 
 import { BCRYPT_SALT } from "../../common/environment";
 import { BaseEntity } from "../shared/base.entity";
 import { RoleEntity } from "../role/role.entity";
-import { Field, ObjectType } from "@nestjs/graphql";
 
 @Entity({ tableName: "users" })
 @ObjectType()

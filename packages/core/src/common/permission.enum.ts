@@ -1,4 +1,4 @@
-// import { registerEnumType } from "@nestjs/graphql";
+import { registerEnumType } from "@nestjs/graphql";
 
 export enum Permission {
   Owner = "Owner",
@@ -14,4 +14,4 @@ export enum Permission {
   DeleteRole = "DeleteRole",
 }
 
-// registerEnumType(Permission, { name: "Permission" });
+registerEnumType(Permission, { name: "Permission" });

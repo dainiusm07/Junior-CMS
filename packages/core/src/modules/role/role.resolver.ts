@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ObjectType } from "@nestjs/graphql";
 
 import { Allow } from "../../decorators";
 import { Permission } from "../../common/permission.enum";
@@ -7,16 +7,21 @@ import { NewRoleInput } from "./dto/new-role.input";
 import { UpdateRoleInput } from "./dto/update-role.input";
 import { RoleEntity } from "./role.entity";
 import { RoleService } from "./role.service";
+import { RoleListOptions } from "./dto/role-list-options.input";
+import { generateListResponse } from "../shared/list-utils";
+
+@ObjectType()
+class RoleListResponse extends generateListResponse(RoleEntity) {}
 
 @Resolver()
 @Injectable()
 export class RoleResolver {
   constructor(private roleService: RoleService) {}
 
-  @Query(() => [RoleEntity])
-  @Allow(Permission.ReadRole)
-  async roles(): Promise<RoleEntity[]> {
-    return this.roleService.findAll();
+  @Query(() => RoleListResponse)
+  @Allow(Permission.ReadRoles)
+  async roles(@Args() options: RoleListOptions): Promise<RoleListResponse> {
+    return this.roleService.findList(options);
   }
 
   @Query(() => RoleEntity)
