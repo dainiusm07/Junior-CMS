@@ -1,13 +1,13 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { BaseError } from "./base.error";
 
-@ObjectType()
-class ValidationError {
+@ObjectType("ValidationError")
+export class CmsValidationError {
   @Field()
   path: string;
 
-  @Field()
-  message: string;
+  @Field(() => [String])
+  messages: string[];
 }
 
 @ObjectType()
@@ -17,11 +17,11 @@ export class InputValidationError extends BaseError {
 
   message = "Invalid input";
 
-  @Field(() => [ValidationError])
-  errors: ValidationError[];
+  @Field(() => [CmsValidationError])
+  errors: CmsValidationError[];
 
-  constructor(errors: ValidationError[]) {
+  constructor(errors: CmsValidationError[]) {
     super();
-    this.errors = errors;
+    this.errors = [...errors];
   }
 }

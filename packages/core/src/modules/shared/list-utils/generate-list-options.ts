@@ -1,5 +1,6 @@
 import { Constructor } from "@mikro-orm/core";
 import { ArgsType, Field, InputType, Int } from "@nestjs/graphql";
+import { Type } from "class-transformer";
 
 import { ExcludeNever } from "../../../types";
 import { DateOperators, NumberOperators, StringOperators } from "../operators";
@@ -31,9 +32,11 @@ export const generateListOptions = <T, P>(
   @ArgsType()
   @InputType({ isAbstract: true })
   class ListOptions implements IListOptions<T, P> {
+    @Type(() => filterInputCls)
     @Field(() => filterInputCls, { nullable: true })
     filter?: T | null;
 
+    @Type(() => sortOrderCls)
     @Field(() => sortOrderCls, { nullable: true })
     sort?: P | null;
 

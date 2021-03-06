@@ -8,7 +8,6 @@ import {
   Primary,
 } from "@mikro-orm/core";
 
-import { mapFilterOptions } from "../../utils/map-filter-options";
 import { BaseEntity } from "./base.entity";
 import { IListOptions, IListResponse, SortOrder } from "./list-utils";
 
@@ -38,20 +37,13 @@ export abstract class BaseService<T extends BaseEntity> {
   }
 
   async findList(options: IListOptions<T>): Promise<IListResponse<T>> {
-    let { filter: rawFilter, page, limit, sort } = options;
-    /**
-     * TODO: https://github.com/nestjs/graphql/issues/1096
-     * NestJS graphql package is not mapping field values
-     * by @Field name prop so for know parsing them with
-     * mapFilterOptions function
-     */
-    const filter = mapFilterOptions(rawFilter || {}) as any;
+    let { filter, page, limit, sort } = options;
 
     page = page > 0 ? page : 1;
 
     const orderBy = this.getOrderBy(sort);
 
-    const [items, totalItems] = await this.repo.findAndCount(filter, {
+    const [items, totalItems] = await this.repo.findAndCount(filter || {}, {
       offset: (page - 1) * limit,
       limit,
       orderBy,

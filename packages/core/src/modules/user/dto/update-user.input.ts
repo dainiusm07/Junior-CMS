@@ -1,8 +1,10 @@
 import { Field, InputType, Int } from "@nestjs/graphql";
-import { UserEntity } from "../user.entity";
+
+import { optionalProperties } from "../../../utils/optional-properties";
+import { NewUserInput } from "./new-user.input";
 
 @InputType()
-export class UpdateUserInput implements Partial<UserEntity> {
+export class UpdateUserInput extends optionalProperties(NewUserInput) {
   @Field({ nullable: true })
   firstname?: string;
 

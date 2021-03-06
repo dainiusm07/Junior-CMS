@@ -1,4 +1,4 @@
-import { Injectable, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import {
   Args,
   Resolver,
@@ -7,14 +7,10 @@ import {
   createUnionType,
   ObjectType,
 } from "@nestjs/graphql";
-import {
-  classToPlain,
-  plainToClass,
-  plainToClassFromExist,
-} from "class-transformer";
 
 import { InputValidationError } from "../../common/errors/input-validation.error";
 import { Allow } from "../../decorators";
+import { InputValidation } from "../../decorators/input-validation.decorator";
 import { RoleService } from "../role/role.service";
 import { generateListResponse } from "../shared/list-utils";
 import { NewUserInput } from "./dto/new-user.input";
@@ -33,6 +29,7 @@ class UserListResponse extends generateListResponse(UserEntity) {}
 
 @Resolver()
 @Injectable()
+@InputValidation()
 export class UserResolver {
   constructor(
     private userService: UserService,

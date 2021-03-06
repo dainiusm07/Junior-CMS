@@ -48,7 +48,7 @@ type UserEntity {
 
 type ValidationError {
   path: String!
-  message: String!
+  messages: [String!]!
 }
 
 type UserListResponse {

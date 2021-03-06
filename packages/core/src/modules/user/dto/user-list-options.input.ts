@@ -1,4 +1,5 @@
 import { ArgsType, Field, InputType } from "@nestjs/graphql";
+import { Type } from "class-transformer";
 
 import { BaseFilterOptions } from "../../shared/dto/base-filter-options.input";
 import { BaseSortOptions } from "../../shared/dto/base-sort-options";
@@ -24,15 +25,19 @@ class UserSortOptions
 export class UserFilterOptions
   extends BaseFilterOptions
   implements FilterOptions<UserEntity> {
+  @Type(() => StringOperators)
   @Field(() => StringOperators, { nullable: true })
   email: StringOperators;
 
+  @Type(() => StringOperators)
   @Field(() => StringOperators, { nullable: true })
   firstname: StringOperators;
 
+  @Type(() => StringOperators)
   @Field(() => StringOperators, { nullable: true })
   lastname: StringOperators;
 
+  @Type(() => DateOperators)
   @Field(() => DateOperators, { nullable: true })
   deletedAt: DateOperators;
 }
