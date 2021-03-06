@@ -19,10 +19,7 @@ import { RoleService } from "../role/role.service";
 import { generateListResponse } from "../shared/list-utils";
 import { NewUserInput } from "./dto/new-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
-import {
-  UserFilterOptions,
-  UserListOptions,
-} from "./dto/user-list-options.input";
+import { UserListOptions } from "./dto/user-list-options.input";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
 

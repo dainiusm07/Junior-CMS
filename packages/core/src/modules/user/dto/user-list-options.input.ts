@@ -1,29 +1,40 @@
 import { ArgsType, Field, InputType } from "@nestjs/graphql";
 
 import { BaseFilterOptions } from "../../shared/dto/base-filter-options.input";
+import { BaseSortOptions } from "../../shared/dto/base-sort-options";
 import {
   conditionOperatorsMixin,
+  SortOptions,
   FilterOptions,
   generateListOptions,
+  SortOrder,
 } from "../../shared/list-utils";
-import { DateOperator, StringOperator } from "../../shared/operators";
+import { DateOperators, StringOperators } from "../../shared/operators";
 import { UserEntity } from "../user.entity";
+
+@InputType()
+class UserSortOptions
+  extends BaseSortOptions
+  implements SortOptions<UserEntity> {
+  @Field(() => SortOrder, { nullable: true })
+  email?: SortOrder;
+}
 
 @InputType()
 export class UserFilterOptions
   extends BaseFilterOptions
   implements FilterOptions<UserEntity> {
-  @Field(() => StringOperator, { nullable: true })
-  email: StringOperator;
+  @Field(() => StringOperators, { nullable: true })
+  email: StringOperators;
 
-  @Field(() => StringOperator, { nullable: true })
-  firstname: StringOperator;
+  @Field(() => StringOperators, { nullable: true })
+  firstname: StringOperators;
 
-  @Field(() => StringOperator, { nullable: true })
-  lastname: StringOperator;
+  @Field(() => StringOperators, { nullable: true })
+  lastname: StringOperators;
 
-  @Field(() => DateOperator, { nullable: true })
-  deletedAt: DateOperator;
+  @Field(() => DateOperators, { nullable: true })
+  deletedAt: DateOperators;
 }
 
 @InputType()
@@ -33,5 +44,6 @@ class ExtendedUserFilterOptions extends conditionOperatorsMixin(
 
 @ArgsType()
 export class UserListOptions extends generateListOptions(
-  ExtendedUserFilterOptions
+  ExtendedUserFilterOptions,
+  UserSortOptions
 ) {}

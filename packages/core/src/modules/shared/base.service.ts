@@ -10,7 +10,7 @@ import {
 
 import { mapFilterOptions } from "../../utils/map-filter-options";
 import { BaseEntity } from "./base.entity";
-import { IListOptions, IListResponse } from "./list-utils";
+import { IListOptions, IListResponse, SortOrder } from "./list-utils";
 
 export abstract class BaseService<T extends BaseEntity> {
   constructor(private repo: EntityRepository<T>, private name: string) {}
@@ -38,7 +38,7 @@ export abstract class BaseService<T extends BaseEntity> {
   }
 
   async findList(options: IListOptions<T>): Promise<IListResponse<T>> {
-    let { filter: rawFilter, page, limit } = options;
+    let { filter: rawFilter, page, limit, sort } = options;
     /**
      * TODO: https://github.com/nestjs/graphql/issues/1096
      * NestJS graphql package is not mapping field values
@@ -49,9 +49,12 @@ export abstract class BaseService<T extends BaseEntity> {
 
     page = page > 0 ? page : 1;
 
+    const orderBy = this.getOrderBy(sort);
+
     const [items, totalItems] = await this.repo.findAndCount(filter, {
       offset: (page - 1) * limit,
       limit,
+      orderBy,
     });
 
     const totalPages = Math.ceil(totalItems / limit) || 1;
@@ -95,5 +98,27 @@ export abstract class BaseService<T extends BaseEntity> {
 
     await this.repo.persistAndFlush(entities);
     return entities;
+  }
+
+  private getOrderBy(
+    sort: Record<string, SortOrder | null | undefined> | null | undefined
+  ) {
+    const orderBy: Record<string, SortOrder> = {};
+    if (sort) {
+      Object.entries(sort)
+        .reverse()
+        .forEach(([field, value]) => {
+          if (value) {
+            orderBy[field] = value;
+          }
+        });
+    }
+
+    // Default sorting
+    if (orderBy.id === undefined) {
+      orderBy.id = SortOrder.ASC;
+    }
+
+    return orderBy;
   }
 }

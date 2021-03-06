@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type PaginationResult {
+  currentPage: Int!
+  totalPages: Int!
+}
+
 type RoleEntity {
   id: Int!
   createdAt: DateTime!
@@ -46,11 +51,6 @@ type ValidationError {
   message: String!
 }
 
-type PaginationResult {
-  currentPage: Int!
-  totalPages: Int!
-}
-
 type UserListResponse {
   items: [UserEntity!]!
   totalItems: Int!
@@ -65,25 +65,25 @@ type RoleListResponse {
 
 type Query {
   user(id: Float!): UserEntity!
-  users(filter: ExtendedUserFilterOptions, page: Int!, limit: Int!): UserListResponse!
+  users(filter: ExtendedUserFilterOptions, sort: UserSortOptions, page: Int!, limit: Int!): UserListResponse!
   userProfile: UserEntity!
-  roles(filter: ExtendedRoleFilterOptions, page: Int!, limit: Int!): RoleListResponse!
+  roles(filter: ExtendedRoleFilterOptions, sort: RoleSortOptions, page: Int!, limit: Int!): RoleListResponse!
   role(id: Float!): RoleEntity!
 }
 
 input ExtendedUserFilterOptions {
-  id: NumberOperator
-  updatedAt: DateOperator
-  createdAt: DateOperator
-  email: StringOperator
-  firstname: StringOperator
-  lastname: StringOperator
-  deletedAt: DateOperator
+  id: NumberOperators
+  updatedAt: DateOperators
+  createdAt: DateOperators
+  email: StringOperators
+  firstname: StringOperators
+  lastname: StringOperators
+  deletedAt: DateOperators
   _and: [UserFilterOptions!]
   _or: [UserFilterOptions!]
 }
 
-input NumberOperator {
+input NumberOperators {
   _gt: Float
   _lt: Float
   _eq: Float
@@ -91,40 +91,58 @@ input NumberOperator {
   _nin: [Float!]
 }
 
-input DateOperator {
+input DateOperators {
   _gte: DateTime
   _lte: DateTime
 }
 
-input StringOperator {
+input StringOperators {
   _ilike: String
   _eq: String
 }
 
 input UserFilterOptions {
-  id: NumberOperator
-  updatedAt: DateOperator
-  createdAt: DateOperator
-  email: StringOperator
-  firstname: StringOperator
-  lastname: StringOperator
-  deletedAt: DateOperator
+  id: NumberOperators
+  updatedAt: DateOperators
+  createdAt: DateOperators
+  email: StringOperators
+  firstname: StringOperators
+  lastname: StringOperators
+  deletedAt: DateOperators
+}
+
+input UserSortOptions {
+  id: SortOrder
+  updatedAt: SortOrder
+  createdAt: SortOrder
+  email: SortOrder
+}
+
+enum SortOrder {
+  ASC
+  DESC
 }
 
 input ExtendedRoleFilterOptions {
-  id: NumberOperator
-  updatedAt: DateOperator
-  createdAt: DateOperator
-  name: StringOperator
+  id: NumberOperators
+  updatedAt: DateOperators
+  createdAt: DateOperators
+  name: StringOperators
   _and: [RoleFilterOptions!]
   _or: [RoleFilterOptions!]
 }
 
 input RoleFilterOptions {
-  id: NumberOperator
-  updatedAt: DateOperator
-  createdAt: DateOperator
-  name: StringOperator
+  id: NumberOperators
+  updatedAt: DateOperators
+  createdAt: DateOperators
+  name: StringOperators
+}
+
+input RoleSortOptions {
+  id: SortOrder
+  updatedAt: SortOrder
+  createdAt: SortOrder
 }
 
 type Mutation {

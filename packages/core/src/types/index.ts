@@ -1,5 +1,3 @@
-import { EntityManager } from "@mikro-orm/core";
-import { AnySchema } from "yup";
 import { BaseEntity } from "../modules/shared/base.entity";
 
 export type BaseKeys = keyof BaseEntity | "deletedAt";
@@ -15,3 +13,10 @@ export type Relations<T> = {
       : never
     : never;
 }[keyof T];
+
+export type ExcludeNever<T> = Pick<
+  T,
+  {
+    [K in keyof T]: T[K] extends undefined ? never : K;
+  }[keyof T]
+>;

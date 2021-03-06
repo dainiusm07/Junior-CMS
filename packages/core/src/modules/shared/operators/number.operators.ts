@@ -3,7 +3,7 @@ import { Field, InputType } from "@nestjs/graphql";
 import { Operators } from "../operators.enum";
 
 @InputType()
-export class NumberOperator {
+export class NumberOperators {
   @Field({ nullable: true, name: Operators.$gt })
   $gt?: number;
 
