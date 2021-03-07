@@ -7,7 +7,7 @@ type PaginationResult {
   totalPages: Int!
 }
 
-type RoleEntity {
+type Role {
   id: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -34,7 +34,7 @@ enum Permission {
   DeleteRole
 }
 
-type UserEntity {
+type User {
   id: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -43,7 +43,7 @@ type UserEntity {
   lastname: String!
   email: String!
   password: String!
-  role: RoleEntity!
+  role: Role!
 }
 
 type ValidationError {
@@ -52,23 +52,30 @@ type ValidationError {
 }
 
 type UserListResponse {
-  items: [UserEntity!]!
+  items: [User!]!
   totalItems: Int!
   pagination: PaginationResult!
 }
 
 type RoleListResponse {
-  items: [RoleEntity!]!
+  items: [Role!]!
   totalItems: Int!
   pagination: PaginationResult!
 }
 
 type Query {
-  user(id: Float!): UserEntity!
+  user(id: Float!): UserResponse!
   users(filter: ExtendedUserFilterOptions, sort: UserSortOptions, page: Int!, limit: Int!): UserListResponse!
-  userProfile: UserEntity!
+  userProfile: User
   roles(filter: ExtendedRoleFilterOptions, sort: RoleSortOptions, page: Int!, limit: Int!): RoleListResponse!
-  role(id: Float!): RoleEntity!
+  role(id: Float!): RoleResponse!
+}
+
+union UserResponse = User | NotFoundError
+
+type NotFoundError {
+  message: String!
+  errorCode: String!
 }
 
 input ExtendedUserFilterOptions {
@@ -145,16 +152,18 @@ input RoleSortOptions {
   createdAt: SortOrder
 }
 
+union RoleResponse = Role | NotFoundError
+
 type Mutation {
-  createUser(input: NewUserInput!): UserMutationResponse!
-  updateUser(input: UpdateUserInput!, id: Float!): UserMutationResponse!
-  userLogin(input: NativeAuthInput!): UserEntity!
+  createUser(input: NewUserInput!): CreateUserResponse!
+  updateUser(input: UpdateUserInput!, id: Float!): UpdateUserResponse!
+  userLogin(input: NativeAuthInput!): User
   userLogout: Boolean!
-  createRole(input: NewRoleInput!): RoleEntity!
-  updateRole(input: UpdateRoleInput!, id: Float!): RoleEntity!
+  createRole(input: NewRoleInput!): CreateRoleResponse!
+  updateRole(input: UpdateRoleInput!, id: Float!): UpdateRoleResponse!
 }
 
-union UserMutationResponse = UserEntity | InputValidationError
+union CreateUserResponse = User | InputValidationError
 
 type InputValidationError {
   message: String!
@@ -170,6 +179,8 @@ input NewUserInput {
   roleId: Int!
 }
 
+union UpdateUserResponse = User | InputValidationError | NotFoundError
+
 input UpdateUserInput {
   firstname: String
   lastname: String
@@ -183,10 +194,14 @@ input NativeAuthInput {
   password: String!
 }
 
+union CreateRoleResponse = Role | InputValidationError
+
 input NewRoleInput {
   name: String!
   permissions: [Permission!]!
 }
+
+union UpdateRoleResponse = Role | InputValidationError | NotFoundError
 
 input UpdateRoleInput {
   name: String

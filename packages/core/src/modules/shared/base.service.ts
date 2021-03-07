@@ -3,13 +3,13 @@ import {
   EntityRepository,
   FilterQuery,
   FindOptions,
-  NotFoundError,
   Populate,
   Primary,
 } from "@mikro-orm/core";
 
 import { BaseEntity } from "./base.entity";
 import { IListOptions, IListResponse, SortOrder } from "./list-utils";
+import { NotFoundError } from "../../common/errors/not-found.error";
 
 export abstract class BaseService<T extends BaseEntity> {
   constructor(private repo: EntityRepository<T>, private name: string) {}
@@ -24,10 +24,7 @@ export abstract class BaseService<T extends BaseEntity> {
 
   async findOneOrFail(where: FilterQuery<T>, populate?: any) {
     return this.findOne(where, populate).then((res) => {
-      if (!res)
-        throw new NotFoundError(`${this.name} not found`, {
-          name: this.create({}).constructor.name,
-        });
+      if (!res) return new NotFoundError(this.name);
       return res;
     });
   }
@@ -78,6 +75,11 @@ export abstract class BaseService<T extends BaseEntity> {
 
   async updateOne(filter: FilterQuery<T>, data: EntityData<T>) {
     const entity = await this.findOneOrFail(filter);
+
+    if (entity instanceof NotFoundError) {
+      return entity;
+    }
+
     this.repo.assign(entity, data);
 
     await this.repo.persistAndFlush(entity);

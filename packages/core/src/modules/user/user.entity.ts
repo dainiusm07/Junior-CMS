@@ -15,7 +15,7 @@ import { RoleEntity } from "../role/role.entity";
 import { capitalizeFirstLetter } from "../../utils/capitalize-first-letter";
 
 @Entity({ tableName: "users" })
-@ObjectType()
+@ObjectType("User")
 export class UserEntity extends BaseEntity {
   @Field(() => Date, { nullable: true })
   @Property({ nullable: true })

@@ -1,31 +1,16 @@
 import { Injectable } from "@nestjs/common";
-import {
-  Args,
-  Resolver,
-  Query,
-  Mutation,
-  createUnionType,
-  ObjectType,
-} from "@nestjs/graphql";
+import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 
-import { InputValidationError } from "../../common/errors/input-validation.error";
-import { Allow } from "../../decorators";
-import { InputValidation } from "../../decorators/input-validation.decorator";
+import { Allow, InputValidation } from "../../decorators";
 import { RoleService } from "../role/role.service";
-import { generateListResponse } from "../shared/list-utils";
-import { NewUserInput } from "./dto/new-user.input";
-import { UpdateUserInput } from "./dto/update-user.input";
-import { UserListOptions } from "./dto/user-list-options.input";
-import { UserEntity } from "./user.entity";
+import { NewUserInput, UpdateUserInput, UserListOptions } from "./dto";
+import {
+  CreateUserResponse,
+  UpdateUserResponse,
+  UserListResponse,
+  UserResponse,
+} from "./responses";
 import { UserService } from "./user.service";
-
-const UserMutationResponse = createUnionType({
-  name: "UserMutationResponse",
-  types: () => [UserEntity, InputValidationError],
-});
-
-@ObjectType()
-class UserListResponse extends generateListResponse(UserEntity) {}
 
 @Resolver()
 @Injectable()
@@ -37,8 +22,8 @@ export class UserResolver {
   ) {}
 
   @Allow()
-  @Query(() => UserEntity)
-  user(@Args("id") id: number): Promise<UserEntity | null> {
+  @Query(() => UserResponse)
+  user(@Args("id") id: number): Promise<typeof UserResponse> {
     return this.userService.findOneOrFail({ id });
   }
 
@@ -47,11 +32,11 @@ export class UserResolver {
     return this.userService.findList(options);
   }
 
-  @Mutation(() => UserMutationResponse)
+  @Mutation(() => CreateUserResponse)
   async createUser(
     @Args("input")
     input: NewUserInput
-  ): Promise<typeof UserMutationResponse> {
+  ): Promise<typeof CreateUserResponse> {
     const { roleId, ...user } = input;
 
     const role = this.roleService.getReference(roleId);
@@ -59,11 +44,11 @@ export class UserResolver {
     return this.userService.insert({ ...user, role });
   }
 
-  @Mutation(() => UserMutationResponse)
+  @Mutation(() => UpdateUserResponse)
   updateUser(
     @Args("id") id: number,
     @Args("input") input: UpdateUserInput
-  ): Promise<UserEntity> {
+  ): Promise<typeof UpdateUserResponse> {
     return this.userService.updateOne(id, input);
   }
 }

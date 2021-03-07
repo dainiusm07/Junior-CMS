@@ -5,7 +5,7 @@ import { BaseEntity } from "../shared/base.entity";
 import { Permission } from "../../common/permission.enum";
 
 @Entity({ tableName: "roles" })
-@ObjectType()
+@ObjectType("Role")
 export class RoleEntity extends BaseEntity {
   @Field()
   @Property()

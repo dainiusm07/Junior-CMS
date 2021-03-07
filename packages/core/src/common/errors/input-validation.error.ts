@@ -12,16 +12,14 @@ export class CmsValidationError {
 
 @ObjectType()
 export class InputValidationError extends BaseError {
-  readonly __typename = "InputValidationError";
   readonly errorCode = "INPUT_VALIDATION_ERROR";
-
-  message = "Invalid input";
+  readonly message = "Invalid input";
 
   @Field(() => [CmsValidationError])
   errors: CmsValidationError[];
 
   constructor(errors: CmsValidationError[]) {
     super();
-    this.errors = [...errors];
+    this.errors = errors;
   }
 }

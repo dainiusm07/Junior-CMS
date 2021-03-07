@@ -16,12 +16,13 @@ export function Email<T extends BaseEntity & { email: string }>(
     registerDecorator({
       name: "isEmailUnique",
       target: object.constructor,
-      async: true,
       propertyName,
+      async: true,
       validator: {
         async validate(value: string, args: ValidationArguments) {
           const em = RequestContext.getEntityManager()!;
-          const result = await em.findOne(entity, { email: value });
+          // Using em.count to not pollute the context
+          const result = await em.count(entity, { email: value });
 
           return !Boolean(result);
         },
