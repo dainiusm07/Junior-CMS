@@ -64,11 +64,11 @@ type RoleListResponse {
 }
 
 type Query {
-  user(id: Float!): UserResponse!
+  user(id: Int!): UserResponse!
   users(filter: ExtendedUserFilterOptions, sort: UserSortOptions, page: Int!, limit: Int!): UserListResponse!
   userProfile: User
   roles(filter: ExtendedRoleFilterOptions, sort: RoleSortOptions, page: Int!, limit: Int!): RoleListResponse!
-  role(id: Float!): RoleResponse!
+  role(id: Int!): RoleResponse!
 }
 
 union UserResponse = User | NotFoundError
@@ -156,11 +156,11 @@ union RoleResponse = Role | NotFoundError
 
 type Mutation {
   createUser(input: NewUserInput!): CreateUserResponse!
-  updateUser(input: UpdateUserInput!, id: Float!): UpdateUserResponse!
+  updateUser(input: UpdateUserInput!, id: Int!): UpdateUserResponse!
   userLogin(input: NativeAuthInput!): User
   userLogout: Boolean!
   createRole(input: NewRoleInput!): CreateRoleResponse!
-  updateRole(input: UpdateRoleInput!, id: Float!): UpdateRoleResponse!
+  updateRole(input: UpdateRoleInput!, id: Int!): UpdateRoleResponse!
 }
 
 union CreateUserResponse = User | InputValidationError
