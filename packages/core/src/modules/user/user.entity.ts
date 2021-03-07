@@ -46,15 +46,17 @@ export class UserEntity extends BaseEntity {
 
   @BeforeCreate()
   @BeforeUpdate()
-  protected async hashPassword({ changeSet }: EventArgs<UserEntity>) {
-    if (changeSet?.payload.password) {
-      this.password = await bcrypt.hash(this.password, BCRYPT_SALT);
+  private async hashPassword({ changeSet }: EventArgs<UserEntity>) {
+    const { password: newPassword } = changeSet?.payload || {};
+
+    if (newPassword) {
+      this.password = await bcrypt.hash(newPassword, BCRYPT_SALT);
     }
   }
 
   @BeforeCreate()
   @BeforeUpdate()
-  protected async capitalize({ changeSet }: EventArgs<UserEntity>) {
+  private async capitalize({ changeSet }: EventArgs<UserEntity>) {
     const { firstname, lastname } = changeSet?.payload || {};
 
     if (firstname) {
