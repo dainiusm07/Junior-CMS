@@ -1,12 +1,6 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { InputType, PartialType } from "@nestjs/graphql";
 
-import { Permission } from "../../../common/permission.enum";
+import { NewRoleInput } from "./new-role.input";
 
 @InputType()
-export class UpdateRoleInput {
-  @Field({ nullable: true })
-  name: string;
-
-  @Field(() => [Permission], { nullable: true })
-  permissions: Permission[];
-}
+export class UpdateRoleInput extends PartialType(NewRoleInput) {}
