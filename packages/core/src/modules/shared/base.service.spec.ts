@@ -1,6 +1,10 @@
 import { EntityRepository } from "@mikro-orm/core";
 import { getRepositoryToken } from "@mikro-orm/nestjs";
 import { Test } from "@nestjs/testing";
+import {
+  DEFAULT_RESULTS_PER_PAGE_LIMIT,
+  MAX_RESULTS_PER_PAGE_LIMIT,
+} from "../../common/constants";
 import { NotFoundError } from "../../common/errors/not-found.error";
 
 import { mockEntities } from "../../test-utils/mock-entities";
@@ -100,7 +104,42 @@ describe("BaseService", () => {
       expect(result).toStrictEqual(listResponse);
     });
 
-    it("should set currentPage to 1 if given page is less than 1", async () => {
+    [
+      {
+        description:
+          "should set limit to default value when requested limit less or equal to 0",
+        limit: 0,
+        expectedValue: DEFAULT_RESULTS_PER_PAGE_LIMIT,
+      },
+      {
+        description:
+          "should set limit to default value when requested limit is bigger than max limit",
+        limit: MAX_RESULTS_PER_PAGE_LIMIT + 1,
+        expectedValue: DEFAULT_RESULTS_PER_PAGE_LIMIT,
+      },
+      {
+        description: "should not modify limit when given limit is good",
+        limit: 15,
+        expectedValue: 15,
+      },
+    ].forEach(({ description, limit, expectedValue }) => {
+      it(description, () => {
+        const findAndCount = jest.spyOn(repo, "findAndCount");
+
+        service.findList({ limit, page: 1 });
+
+        const { limit: calledWithLimit } = findAndCount.mock.calls[0][1] as any;
+        expect(calledWithLimit).toBe(expectedValue);
+      });
+    });
+
+    it("should set page to 1 if requested page number is less than 1", async () => {
+      const result = await service.findList({ limit: 1, page: 0 });
+
+      expect(result.pagination.currentPage).toBe(1);
+    });
+
+    it("should set page to 1 if requested page number is less than 1", async () => {
       const result = await service.findList({ limit: 1, page: 0 });
 
       expect(result.pagination.currentPage).toBe(1);

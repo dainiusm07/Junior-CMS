@@ -7,15 +7,21 @@ import { AuthGuard } from "./auth-guard";
 import { UserEntity } from "../modules/user/user.entity";
 import { AuthService } from "../modules/auth/auth.service";
 import { Permission } from "../common/permission.enum";
-const { ReadUser, ReadUsers, Owner } = Permission;
+const { ReadUser, CreateUser } = Permission;
 
 let authGuard: AuthGuard;
 let authService: AuthService;
 let reflector: Reflector;
 
-const mockUserWithPermissions = (rolesPermissions: Permission[]) => {
+const mockUserWithPermissions = (
+  rolesPermissions: Permission[],
+  isAdmin = false
+) => {
   const user = {
-    role: { permissions: rolesPermissions },
+    role: {
+      isAdmin,
+      permissions: rolesPermissions,
+    },
   } as UserEntity;
 
   jest
@@ -75,7 +81,7 @@ describe("AuthGuard", () => {
     it(`if has only part of required permissions
         should return false`, async () => {
       mockUserWithPermissions([ReadUser]);
-      mockRequiredPermissions([ReadUser, ReadUsers]);
+      mockRequiredPermissions([ReadUser, CreateUser]);
       mockContextWithUserId(1);
       const canActivate = await authGuard.canActivate(mockedExecutionContext);
       expect(canActivate).toBe(false);
@@ -91,16 +97,16 @@ describe("AuthGuard", () => {
 
     it(`if has required permissions but those are in
         different roles should return true`, async () => {
-      mockUserWithPermissions([ReadUser, ReadUsers]);
-      mockRequiredPermissions([ReadUser, ReadUsers]);
+      mockUserWithPermissions([ReadUser, CreateUser]);
+      mockRequiredPermissions([ReadUser, CreateUser]);
       mockContextWithUserId(1);
       const canActivate = await authGuard.canActivate(mockedExecutionContext);
       expect(canActivate).toBe(true);
     });
 
-    it(`if has owner permission should return true`, async () => {
-      mockUserWithPermissions([Owner]);
-      mockRequiredPermissions([ReadUser, ReadUsers]);
+    it(`if it is admin role should return true`, async () => {
+      mockUserWithPermissions([], true);
+      mockRequiredPermissions([ReadUser, CreateUser]);
       mockContextWithUserId(1);
       const canActivate = await authGuard.canActivate(mockedExecutionContext);
       expect(canActivate).toBe(true);

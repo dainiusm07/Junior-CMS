@@ -10,6 +10,10 @@ import {
 import { BaseEntity } from "./base.entity";
 import { IListOptions, IListResponse, SortOrder } from "./list-utils";
 import { NotFoundError } from "../../common/errors/not-found.error";
+import {
+  MAX_RESULTS_PER_PAGE_LIMIT,
+  DEFAULT_RESULTS_PER_PAGE_LIMIT,
+} from "../../common/constants";
 
 export abstract class BaseService<T extends BaseEntity> {
   constructor(private repo: EntityRepository<T>, private name: string) {}
@@ -37,6 +41,9 @@ export abstract class BaseService<T extends BaseEntity> {
     let { filter, page, limit, sort } = options;
 
     page = page > 0 ? page : 1;
+    if (limit <= 0 || limit > MAX_RESULTS_PER_PAGE_LIMIT) {
+      limit = DEFAULT_RESULTS_PER_PAGE_LIMIT;
+    }
 
     const orderBy = this.getOrderBy(sort);
 
