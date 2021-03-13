@@ -29,11 +29,9 @@ export class AuthGuard implements CanActivate {
 
     if (!user || !user.role) return false;
 
-    const isOwner = user.role.permissions.includes(Permission.Owner);
-
     const canActivate = matchPermissions(permissions, user.role.permissions);
 
-    if (isOwner || canActivate) {
+    if (user.role.isAdmin || canActivate) {
       ctx.user = user;
       return true;
     }

@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Args, Resolver, Query, Mutation, Int } from "@nestjs/graphql";
+import { Permission } from "../../common/permission.enum";
 
 import { Allow, InputValidation } from "../../decorators";
 import { RoleService } from "../role/role.service";
@@ -21,7 +22,7 @@ export class UserResolver {
     private roleService: RoleService
   ) {}
 
-  @Allow()
+  @Allow(Permission.ReadUser)
   @Query(() => UserResponse)
   user(
     @Args("id", { type: () => Int }) id: number
@@ -29,11 +30,13 @@ export class UserResolver {
     return this.userService.findOneOrFail({ id });
   }
 
+  @Allow(Permission.ReadUser)
   @Query(() => UserListResponse)
   async users(@Args() options: UserListOptions): Promise<UserListResponse> {
     return this.userService.findList(options);
   }
 
+  @Allow(Permission.CreateUser)
   @Mutation(() => CreateUserResponse)
   async createUser(
     @Args("input")
@@ -46,6 +49,7 @@ export class UserResolver {
     return this.userService.insert({ ...user, role });
   }
 
+  @Allow(Permission.UpdateUser)
   @Mutation(() => UpdateUserResponse)
   updateUser(
     @Args("id", { type: () => Int }) id: number,

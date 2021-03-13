@@ -1,4 +1,4 @@
-import { Entity, Property } from "@mikro-orm/core";
+import { Entity, Enum, Property } from "@mikro-orm/core";
 import { Field, ObjectType } from "@nestjs/graphql";
 
 import { BaseEntity } from "../shared/base.entity";
@@ -11,7 +11,10 @@ export class RoleEntity extends BaseEntity {
   @Property()
   name: string;
 
+  @Property({ default: false })
+  isAdmin: boolean;
+
   @Field(() => [Permission])
-  @Property({ type: "array" })
+  @Enum({ items: () => Permission, array: true, default: [] })
   permissions: Permission[];
 }

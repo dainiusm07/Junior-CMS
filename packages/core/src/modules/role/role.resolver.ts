@@ -20,7 +20,7 @@ export class RoleResolver {
   constructor(private roleService: RoleService) {}
 
   @Query(() => RoleListResponse)
-  @Allow(Permission.ReadRoles)
+  @Allow(Permission.ReadRole)
   async roles(@Args() options: RoleListOptions): Promise<RoleListResponse> {
     return this.roleService.findList(options);
   }
