@@ -32,11 +32,27 @@ export class ProductResolver {
     return this.productService.findList(options);
   }
 
+  @Allow(Permission.UpdateProduct)
+  @Mutation(() => Boolean)
+  isProductSlugAvailable(@Args("slug") slug: string): Promise<Boolean> {
+    return this.productService.checkSlugAvailability(slug);
+  }
+
+  @Allow(Permission.UpdateProduct)
+  @Mutation(() => String)
+  getProductSlug(@Args("name") name: string): Promise<String> {
+    return this.productService.getAvailableSlug(name);
+  }
+
   @Allow(Permission.CreateProduct)
   @Mutation(() => CreateProductResponse)
-  createProduct(
+  async createProduct(
     @Args("input") input: NewProductInput
   ): Promise<typeof CreateProductResponse> {
+    if (!input.slug) {
+      input.slug = await this.productService.getAvailableSlug(input.name);
+    }
+
     return this.productService.insert(input);
   }
 

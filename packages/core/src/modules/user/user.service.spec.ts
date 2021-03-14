@@ -43,7 +43,7 @@ describe("UserService tests", () => {
         {
           provide: getRepositoryToken(UserEntity),
           useValue: {
-            findAll: jest.fn(),
+            find: jest.fn(),
             findOne: jest.fn(),
           },
         },
@@ -72,19 +72,19 @@ describe("UserService tests", () => {
     });
   });
 
-  describe("findAll", () => {
+  describe("find", () => {
     beforeEach(() => {
-      jest.spyOn(repo, "findAll").mockReturnValue(Promise.resolve(usersMock));
+      jest.spyOn(repo, "find").mockReturnValue(Promise.resolve(usersMock));
     });
 
     it("should return many users", async () => {
-      const users = await service.findAll();
+      const users = await service.find({});
 
       expect(users).toBe(usersMock);
     });
 
     it("should return array", async () => {
-      const users = await service.findAll();
+      const users = await service.find({});
 
       expect(Array.isArray(users)).toBe(true);
     });

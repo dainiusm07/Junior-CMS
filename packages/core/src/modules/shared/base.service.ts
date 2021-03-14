@@ -8,12 +8,12 @@ import {
 } from "@mikro-orm/core";
 
 import { BaseEntity } from "./base.entity";
-import { IListOptions, IListResponse, SortOrder } from "./list-utils";
 import { NotFoundError } from "../../common/errors/not-found.error";
 import {
   MAX_RESULTS_PER_PAGE_LIMIT,
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
 } from "../../common/constants";
+import { IListOptions, IListResponse, SortOrder } from "./list-utils";
 
 export abstract class BaseService<T extends BaseEntity> {
   constructor(private repo: EntityRepository<T>, private name: string) {}
@@ -33,8 +33,8 @@ export abstract class BaseService<T extends BaseEntity> {
     });
   }
 
-  findAll(options?: FindOptions<T, Populate<T>>) {
-    return this.repo.findAll(options);
+  find(where: FilterQuery<T>, options?: FindOptions<T, Populate<T>>) {
+    return this.repo.find(where, options);
   }
 
   async findList(options: IListOptions<T>): Promise<IListResponse<T>> {
@@ -122,4 +122,6 @@ export abstract class BaseService<T extends BaseEntity> {
 
     return orderBy;
   }
+
+  generateSlug(str: string, properties: (keyof T)[]) {}
 }

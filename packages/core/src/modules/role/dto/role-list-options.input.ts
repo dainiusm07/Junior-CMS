@@ -4,11 +4,11 @@ import { Type } from "class-transformer";
 import { BaseFilterOptions } from "../../shared/dto/base-filter-options.input";
 import { BaseSortOptions } from "../../shared/dto/base-sort-options";
 import {
-  conditionOperatorsMixin,
   FilterOptions,
   generateListOptions,
   SortOptions,
 } from "../../shared/list-utils";
+import { conditionOperatorsMixin } from "../../shared/mixins";
 import { StringOperators } from "../../shared/operators";
 import { RoleEntity } from "../role.entity";
 

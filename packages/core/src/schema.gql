@@ -70,6 +70,7 @@ type Product {
   updatedAt: DateTime!
   deletedAt: DateTime
   name: String!
+  slug: String!
   description: String
   price: Int!
 }
@@ -204,6 +205,8 @@ input RoleSortOptions {
 union RoleResponse = Role | NotFoundError
 
 type Mutation {
+  isProductSlugAvailable(slug: String!): Boolean!
+  getProductSlug(name: String!): String!
   createProduct(input: NewProductInput!): CreateProductResponse!
   updateProduct(input: UpdateProductInput!, id: Int!): UpdateProductResponse!
   createUser(input: NewUserInput!): CreateUserResponse!
@@ -226,6 +229,7 @@ input NewProductInput {
   name: String!
   description: String
   price: Int!
+  slug: String
 }
 
 union UpdateProductResponse = Product | InputValidationError | NotFoundError
@@ -234,6 +238,7 @@ input UpdateProductInput {
   name: String
   description: String
   price: Int
+  slug: String
 }
 
 union CreateUserResponse = User | InputValidationError

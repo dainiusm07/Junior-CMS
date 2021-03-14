@@ -13,6 +13,10 @@ export class ProductEntity extends BaseEntity {
   @Property()
   name: string;
 
+  @Field()
+  @Property({ index: true, unique: true })
+  slug: string;
+
   @Field({ nullable: true })
   @Property({ nullable: true })
   description?: string;
