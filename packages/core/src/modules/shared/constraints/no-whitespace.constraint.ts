@@ -1,10 +1,10 @@
 import { registerDecorator } from "class-validator";
 
-export function NoWhiteSpace() {
-  return ((target: Object, propertyName: string) => {
+export function NoWhiteSpace(): PropertyDecorator {
+  return (target: Object, propertyName: string | symbol) => {
     registerDecorator({
       target: target.constructor,
-      propertyName,
+      propertyName: propertyName.toString(),
       name: "noWhiteSpace",
       validator: {
         validate(value) {
@@ -13,5 +13,5 @@ export function NoWhiteSpace() {
       },
       options: { message: "white spaces are not allowed" },
     });
-  }) as PropertyDecorator;
+  };
 }

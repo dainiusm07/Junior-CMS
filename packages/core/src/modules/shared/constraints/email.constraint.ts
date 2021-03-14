@@ -9,14 +9,14 @@ import { BaseEntity } from "../base.entity";
 
 export function Email<T extends BaseEntity & { email: string }>(
   entity: Constructor<T>
-) {
-  return ((object: Object, propertyName: string) => {
+): PropertyDecorator {
+  return (object: Object, propertyName: string | symbol) => {
     IsEmail()(object, propertyName);
 
     registerDecorator({
       name: "isEmailUnique",
       target: object.constructor,
-      propertyName,
+      propertyName: propertyName.toString(),
       async: true,
       validator: {
         async validate(value: string, args: ValidationArguments) {
@@ -29,5 +29,5 @@ export function Email<T extends BaseEntity & { email: string }>(
       },
       options: { message: "Email must be unique" },
     });
-  }) as PropertyDecorator;
+  };
 }

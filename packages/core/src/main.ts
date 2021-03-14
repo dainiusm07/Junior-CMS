@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { Logger } from "@nestjs/common";
 import chalk from "chalk";
-import { MikroORM, RequestContext } from "@mikro-orm/core";
+import { MikroORM } from "@mikro-orm/core";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import rateLimit from "express-rate-limit";
@@ -95,10 +95,6 @@ async function bootstrap() {
     }
     // Database
     const orm = app.get(MikroORM);
-
-    app.use((req: any, res: any, next: any) => {
-      RequestContext.create(orm.em, next);
-    });
 
     (await orm.isConnected())
       ? Logger.log(`🌨️  Database connected`, "MikroORM", false)

@@ -4,8 +4,8 @@ import { NoWhiteSpace } from "./no-whitespace.constraint";
 const minLength = 6;
 const maxLength = 120;
 
-export function Password() {
-  return ((object: Object, propertyName: string) => {
+export function Password(): PropertyDecorator {
+  return (object: Object, propertyName: string | symbol) => {
     MinLength(minLength)(object, propertyName);
     MaxLength(maxLength)(object, propertyName);
     Matches(
@@ -18,5 +18,5 @@ export function Password() {
       }
     )(object, propertyName);
     NoWhiteSpace()(object, propertyName);
-  }) as PropertyDecorator;
+  };
 }

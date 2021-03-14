@@ -166,7 +166,8 @@ describe("BaseService", () => {
       await service.findList(listOptions);
 
       expect(findList).toBeCalledTimes(2);
-      expect(findList.mock.calls.pop()[0]).toStrictEqual({
+
+      expect((findList.mock as any).calls.pop()[0]).toStrictEqual({
         ...listOptions,
         page: 1,
       });
