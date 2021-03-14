@@ -29,6 +29,10 @@ enum Permission {
   ReadRole
   UpdateRole
   DeleteRole
+  CreateProduct
+  ReadProduct
+  UpdateProduct
+  DeleteProduct
 }
 
 type User {
@@ -60,7 +64,25 @@ type RoleListResponse {
   pagination: PaginationResult!
 }
 
+type Product {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  name: String!
+  description: String
+  price: Int!
+}
+
+type ProductListResponse {
+  items: [Product!]!
+  totalItems: Int!
+  pagination: PaginationResult!
+}
+
 type Query {
+  product(id: Int!): ProductResponse!
+  products(filter: ExtendedProductFilterOptions, sort: ProductSortOptions, page: Int!, limit: Int!): ProductListResponse!
   user(id: Int!): UserResponse!
   users(filter: ExtendedUserFilterOptions, sort: UserSortOptions, page: Int!, limit: Int!): UserListResponse!
   userProfile: User
@@ -68,23 +90,23 @@ type Query {
   role(id: Int!): RoleResponse!
 }
 
-union UserResponse = User | NotFoundError
+union ProductResponse = Product | NotFoundError
 
 type NotFoundError {
   message: String!
   errorCode: String!
 }
 
-input ExtendedUserFilterOptions {
+input ExtendedProductFilterOptions {
   id: NumberOperators
   updatedAt: DateOperators
   createdAt: DateOperators
-  email: StringOperators
-  firstname: StringOperators
-  lastname: StringOperators
+  name: StringOperators
+  description: StringOperators
+  price: NumberOperators
   deletedAt: DateOperators
-  _and: [UserFilterOptions!]
-  _or: [UserFilterOptions!]
+  _and: [ProductFilterOptions!]
+  _or: [ProductFilterOptions!]
 }
 
 input NumberOperators {
@@ -105,6 +127,41 @@ input StringOperators {
   _eq: String
 }
 
+input ProductFilterOptions {
+  id: NumberOperators
+  updatedAt: DateOperators
+  createdAt: DateOperators
+  name: StringOperators
+  description: StringOperators
+  price: NumberOperators
+  deletedAt: DateOperators
+}
+
+input ProductSortOptions {
+  id: SortOrder
+  updatedAt: SortOrder
+  createdAt: SortOrder
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+union UserResponse = User | NotFoundError
+
+input ExtendedUserFilterOptions {
+  id: NumberOperators
+  updatedAt: DateOperators
+  createdAt: DateOperators
+  email: StringOperators
+  firstname: StringOperators
+  lastname: StringOperators
+  deletedAt: DateOperators
+  _and: [UserFilterOptions!]
+  _or: [UserFilterOptions!]
+}
+
 input UserFilterOptions {
   id: NumberOperators
   updatedAt: DateOperators
@@ -120,11 +177,6 @@ input UserSortOptions {
   updatedAt: SortOrder
   createdAt: SortOrder
   email: SortOrder
-}
-
-enum SortOrder {
-  ASC
-  DESC
 }
 
 input ExtendedRoleFilterOptions {
@@ -152,6 +204,8 @@ input RoleSortOptions {
 union RoleResponse = Role | NotFoundError
 
 type Mutation {
+  createProduct(input: NewProductInput!): CreateProductResponse!
+  updateProduct(input: UpdateProductInput!, id: Int!): UpdateProductResponse!
   createUser(input: NewUserInput!): CreateUserResponse!
   updateUser(input: UpdateUserInput!, id: Int!): UpdateUserResponse!
   userLogin(input: NativeAuthInput!): User
@@ -160,13 +214,29 @@ type Mutation {
   updateRole(input: UpdateRoleInput!, id: Int!): UpdateRoleResponse!
 }
 
-union CreateUserResponse = User | InputValidationError
+union CreateProductResponse = Product | InputValidationError
 
 type InputValidationError {
   message: String!
   errorCode: String!
   errors: [ValidationError!]!
 }
+
+input NewProductInput {
+  name: String!
+  description: String
+  price: Int!
+}
+
+union UpdateProductResponse = Product | InputValidationError | NotFoundError
+
+input UpdateProductInput {
+  name: String
+  description: String
+  price: Int
+}
+
+union CreateUserResponse = User | InputValidationError
 
 input NewUserInput {
   firstname: String!

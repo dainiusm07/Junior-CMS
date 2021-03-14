@@ -9,6 +9,10 @@ export enum Permission {
   ReadRole = "ReadRole",
   UpdateRole = "UpdateRole",
   DeleteRole = "DeleteRole",
+  CreateProduct = "CreateProduct",
+  ReadProduct = "ReadProduct",
+  UpdateProduct = "UpdateProduct",
+  DeleteProduct = "DeleteProduct",
 }
 
 registerEnumType(Permission, { name: "Permission" });

@@ -12,8 +12,9 @@ import { AuthGuard } from "./middleware/auth-guard";
 import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { RoleModule } from "./modules/role/role.module";
+import { ProductModule } from "./modules/product/product.module";
 
-const CustomModules = [UserModule, AuthModule, RoleModule];
+const CustomModules = [ProductModule, UserModule, AuthModule, RoleModule];
 @Module({
   imports: [
     MikroOrmModule.forRootAsync({
