@@ -1,4 +1,4 @@
-import { createUnionType, ObjectType } from "@nestjs/graphql";
+import { createUnionType, Field, ObjectType } from "@nestjs/graphql";
 
 import { InputValidationError } from "../../common/errors/input-validation.error";
 import { NotFoundError } from "../../common/errors/not-found.error";
@@ -24,3 +24,9 @@ export const CreateCategoryResponse = createUnionType({
 export class CategoryListResponse extends generateListResponse(
   CategoryEntity
 ) {}
+
+@ObjectType()
+export class CategoryTreeResponse extends CategoryEntity {
+  @Field(() => [CategoryTreeResponse])
+  children: CategoryTreeResponse[];
+}

@@ -93,6 +93,7 @@ type Category {
   name: String!
   slug: String!
   active: Boolean!
+  parent: Category
 }
 
 type CategoryListResponse {
@@ -101,7 +102,22 @@ type CategoryListResponse {
   pagination: PaginationResult!
 }
 
+type CategoryTreeResponse {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  name: String!
+  slug: String!
+  active: Boolean!
+  parent: Category
+  children: [CategoryTreeResponse!]!
+}
+
 type Query {
+  categoriesTree: [CategoryTreeResponse!]!
+  category(id: Int!): CategoryResponse!
+  categories(filter: ExtendedCategoryFilterOptions, sort: CategorySortOptions, page: Int!, limit: Int!): CategoryListResponse!
   product(id: Int!): ProductResponse!
   products(filter: ExtendedProductFilterOptions, sort: ProductSortOptions, page: Int!, limit: Int!): ProductListResponse!
   user(id: Int!): UserResponse!
@@ -111,23 +127,20 @@ type Query {
   role(id: Int!): RoleResponse!
 }
 
-union ProductResponse = Product | NotFoundError
+union CategoryResponse = Category | NotFoundError
 
 type NotFoundError {
   message: String!
   errorCode: String!
 }
 
-input ExtendedProductFilterOptions {
+input ExtendedCategoryFilterOptions {
   id: NumberOperators
   updatedAt: DateOperators
   createdAt: DateOperators
   name: StringOperators
-  description: StringOperators
-  price: NumberOperators
-  deletedAt: DateOperators
-  _and: [ProductFilterOptions!]
-  _or: [ProductFilterOptions!]
+  _and: [CategoryFilterOptions!]
+  _or: [CategoryFilterOptions!]
 }
 
 input NumberOperators {
@@ -148,6 +161,38 @@ input StringOperators {
   _eq: String
 }
 
+input CategoryFilterOptions {
+  id: NumberOperators
+  updatedAt: DateOperators
+  createdAt: DateOperators
+  name: StringOperators
+}
+
+input CategorySortOptions {
+  id: SortOrder
+  updatedAt: SortOrder
+  createdAt: SortOrder
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+union ProductResponse = Product | NotFoundError
+
+input ExtendedProductFilterOptions {
+  id: NumberOperators
+  updatedAt: DateOperators
+  createdAt: DateOperators
+  name: StringOperators
+  description: StringOperators
+  price: NumberOperators
+  deletedAt: DateOperators
+  _and: [ProductFilterOptions!]
+  _or: [ProductFilterOptions!]
+}
+
 input ProductFilterOptions {
   id: NumberOperators
   updatedAt: DateOperators
@@ -162,11 +207,6 @@ input ProductSortOptions {
   id: SortOrder
   updatedAt: SortOrder
   createdAt: SortOrder
-}
-
-enum SortOrder {
-  ASC
-  DESC
 }
 
 union UserResponse = User | NotFoundError

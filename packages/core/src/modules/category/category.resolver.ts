@@ -14,7 +14,12 @@ import {
   CategoryListResponse,
   CategoryResponse,
   UpdateCategoryResponse,
+  CategoryTreeResponse,
 } from "./responses";
+import { CATEGORIES_TREE_DEPTH } from "../../common/constants";
+
+const categoriesPopulate =
+  "children" + ".children".repeat(CATEGORIES_TREE_DEPTH - 1);
 
 @Resolver()
 @Injectable()
@@ -22,9 +27,18 @@ import {
 export class CategoryResolver {
   constructor(private categoryService: CategoryService) {}
 
+  @Query(() => [CategoryTreeResponse])
+  // NOTE: Needs to be cached and some point
+  async categoriesTree() {
+    return this.categoryService.find(
+      { parent: null },
+      { populate: [categoriesPopulate] }
+    );
+  }
+
   @Allow(Permission.ReadCategory)
   @Query(() => CategoryResponse)
-  product(
+  category(
     @Args("id", { type: () => Int }) id: number
   ): Promise<typeof CategoryResponse> {
     return this.categoryService.findOneOrFail({ id });
@@ -32,7 +46,7 @@ export class CategoryResolver {
 
   @Allow(Permission.ReadCategory)
   @Query(() => CategoryListResponse)
-  products(
+  categories(
     @Args() options: CategoryListOptions
   ): Promise<CategoryListResponse> {
     return this.categoryService.findList(options);
@@ -63,7 +77,9 @@ export class CategoryResolver {
       );
     }
 
-    const parentCategory = this.categoryService.getReference(parentId);
+    const parentCategory = parentId
+      ? this.categoryService.getReference(parentId)
+      : null;
 
     return this.categoryService.insert({
       ...category,
