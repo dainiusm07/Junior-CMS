@@ -5,14 +5,12 @@ class BaseServiceDerived {
   find = jest.fn();
 }
 
-const entities = [
-  {
-    id: 1,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    slug: "test",
-  },
-];
+const getBaseEntity = (slug: string) => ({
+  id: 1,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  slug,
+});
 
 const helper = new (slugHelperMixin(BaseServiceDerived as any))();
 
@@ -27,7 +25,7 @@ describe("Slug-helper-mixin", () => {
       },
       {
         description: "should return false when there is entity with that slug",
-        returnValue: entities[0],
+        returnValue: getBaseEntity(""),
         expectedResult: false,
       },
     ].forEach(({ description, returnValue, expectedResult }) => {
@@ -43,13 +41,6 @@ describe("Slug-helper-mixin", () => {
     });
   });
   describe("getAvailableSlug", () => {
-    const getBaseEntity = (slug: string) => ({
-      id: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      slug,
-    });
-
     [
       {
         description:
