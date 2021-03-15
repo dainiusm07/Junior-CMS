@@ -11,6 +11,6 @@ export function Email<T extends BaseEntityWithEmail>(
 ): PropertyDecorator {
   return (object: Object, propertyName: string | symbol) => {
     IsEmail()(object, propertyName);
-    Unique("email", entity)(object, propertyName);
+    Unique(entity, "email")(object, propertyName);
   };
 }

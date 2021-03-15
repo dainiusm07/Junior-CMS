@@ -15,7 +15,7 @@ export class NewProductInput implements PartialEntity<ProductEntity> {
   @Field(() => Int)
   price: number;
 
-  @Unique<ProductEntity>("slug", ProductEntity)
+  @Unique(ProductEntity, "slug")
   @Field({ nullable: true })
   slug?: string;
 }

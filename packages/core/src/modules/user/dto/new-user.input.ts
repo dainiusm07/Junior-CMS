@@ -2,8 +2,9 @@ import { Field, InputType, Int } from "@nestjs/graphql";
 import { MinLength } from "class-validator";
 
 import { PartialEntity } from "../../../types";
+import { RoleEntity } from "../../role/role.entity";
 import { Email, NoWhiteSpace, Password } from "../../shared/constraints";
-import { RoleId } from "../constraints/role-id.constraint";
+import { Exists } from "../../shared/constraints/exists.constraint";
 import { UserEntity } from "../user.entity";
 
 @InputType()
@@ -26,7 +27,7 @@ export class NewUserInput implements PartialEntity<UserEntity> {
   @Field()
   password: string;
 
-  @RoleId()
+  @Exists(RoleEntity, "id", "Role")
   @Field(() => Int)
   roleId: number;
 }

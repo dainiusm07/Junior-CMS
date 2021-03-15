@@ -4,15 +4,16 @@ import { capitalizeFirstLetter } from "../../../utils/capitalize-first-letter";
 
 import { BaseEntity } from "../base.entity";
 
-export function Unique<T extends BaseEntity>(
+export function Exists<T extends BaseEntity>(
   entity: Constructor<T>,
-  field: keyof T
+  findBy: keyof T,
+  typeName: string
 ): PropertyDecorator {
   return (object: Object, propertyName: string | symbol) => {
-    const fieldName = capitalizeFirstLetter(field);
+    const name = capitalizeFirstLetter(typeName);
 
     registerDecorator({
-      name: `is${fieldName}Unique`,
+      name: `does${name}Exists`,
       target: object.constructor,
       propertyName: propertyName.toString(),
       async: true,
@@ -20,12 +21,12 @@ export function Unique<T extends BaseEntity>(
         async validate(value: string, args: ValidationArguments) {
           const em = RequestContext.getEntityManager()!;
           // Using em.count to not pollute the context
-          const result = await em.count(entity, { [field]: value });
+          const result = await em.count(entity, { [findBy]: value });
 
-          return !Boolean(result);
+          return Boolean(result);
         },
       },
-      options: { message: `${fieldName} must be unique` },
+      options: { message: `${name} doesn't exist` },
     });
   };
 }

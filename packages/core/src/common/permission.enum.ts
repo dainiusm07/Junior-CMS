@@ -13,6 +13,10 @@ export enum Permission {
   ReadProduct = "ReadProduct",
   UpdateProduct = "UpdateProduct",
   DeleteProduct = "DeleteProduct",
+  CreateCategory = "CreateCategory",
+  ReadCategory = "ReadCategory",
+  UpdateCategory = "UpdateCategory",
+  DeleteCategory = "DeleteCategory",
 }
 
 registerEnumType(Permission, { name: "Permission" });

@@ -33,6 +33,10 @@ enum Permission {
   ReadProduct
   UpdateProduct
   DeleteProduct
+  CreateCategory
+  ReadCategory
+  UpdateCategory
+  DeleteCategory
 }
 
 type User {
@@ -77,6 +81,22 @@ type Product {
 
 type ProductListResponse {
   items: [Product!]!
+  totalItems: Int!
+  pagination: PaginationResult!
+}
+
+type Category {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  name: String!
+  slug: String!
+  active: Boolean!
+}
+
+type CategoryListResponse {
+  items: [Category!]!
   totalItems: Int!
   pagination: PaginationResult!
 }
@@ -205,6 +225,10 @@ input RoleSortOptions {
 union RoleResponse = Role | NotFoundError
 
 type Mutation {
+  isCategorySlugAvailable(slug: String!): Boolean!
+  getCategorySlug(name: String!): String!
+  createCategory(input: NewCategoryInput!): CreateCategoryResponse!
+  updateCategory(input: UpdateCategoryInput!, id: Int!): UpdateCategoryResponse!
   isProductSlugAvailable(slug: String!): Boolean!
   getProductSlug(name: String!): String!
   createProduct(input: NewProductInput!): CreateProductResponse!
@@ -217,13 +241,29 @@ type Mutation {
   updateRole(input: UpdateRoleInput!, id: Int!): UpdateRoleResponse!
 }
 
-union CreateProductResponse = Product | InputValidationError
+union CreateCategoryResponse = Category | InputValidationError
 
 type InputValidationError {
   message: String!
   errorCode: String!
   errors: [ValidationError!]!
 }
+
+input NewCategoryInput {
+  name: String!
+  slug: String
+  parentId: Int
+}
+
+union UpdateCategoryResponse = Category | InputValidationError | NotFoundError
+
+input UpdateCategoryInput {
+  name: String
+  slug: String
+  parentId: Int
+}
+
+union CreateProductResponse = Product | InputValidationError
 
 input NewProductInput {
   name: String!

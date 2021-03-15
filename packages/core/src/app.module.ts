@@ -13,8 +13,16 @@ import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { RoleModule } from "./modules/role/role.module";
 import { ProductModule } from "./modules/product/product.module";
+import { CategoryModule } from "./modules/category/category.module";
 
-const CustomModules = [ProductModule, UserModule, AuthModule, RoleModule];
+const CustomModules = [
+  CategoryModule,
+  ProductModule,
+  UserModule,
+  AuthModule,
+  RoleModule,
+];
+
 @Module({
   imports: [
     MikroOrmModule.forRootAsync({
