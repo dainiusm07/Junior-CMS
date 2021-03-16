@@ -115,7 +115,7 @@ type CategoryTreeResponse {
 }
 
 type Query {
-  categoriesTree: [CategoryTreeResponse!]!
+  categoriesTree(id: Int): [CategoryTreeResponse!]!
   category(id: Int!): CategoryResponse!
   categories(filter: ExtendedCategoryFilterOptions, sort: CategorySortOptions, page: Int!, limit: Int!): CategoryListResponse!
   product(id: Int!): ProductResponse!

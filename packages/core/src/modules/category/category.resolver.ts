@@ -16,12 +16,8 @@ import {
   UpdateCategoryResponse,
   CategoryTreeResponse,
 } from "./responses";
-import { CATEGORIES_TREE_DEPTH } from "../../common/constants";
 import { EntityData } from "@mikro-orm/core";
 import { CategoryEntity } from "./category.entity";
-
-const categoriesPopulate =
-  "children" + ".children".repeat(CATEGORIES_TREE_DEPTH - 1);
 
 @Resolver()
 @Injectable()
@@ -31,11 +27,10 @@ export class CategoryResolver {
 
   @Query(() => [CategoryTreeResponse])
   // NOTE: Needs to be cached and some point
-  async categoriesTree() {
-    return this.categoryService.find(
-      { parent: null },
-      { populate: [categoriesPopulate] }
-    );
+  async categoriesTree(
+    @Args("id", { type: () => Int, nullable: true }) id?: number
+  ): Promise<CategoryTreeResponse[]> {
+    return this.categoryService.getCategoriesTree(id);
   }
 
   @Allow(Permission.ReadCategory)

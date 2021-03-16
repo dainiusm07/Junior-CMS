@@ -39,5 +39,5 @@ export class CategoryEntity extends BaseEntity {
   @OneToMany(() => CategoryEntity, "parent", {
     strategy: LoadStrategy.SELECT_IN,
   })
-  children?: CategoryEntity[];
+  children: CategoryEntity[];
 }

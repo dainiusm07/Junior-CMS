@@ -10,6 +10,10 @@ import {
 @Injectable()
 export class InputValidationPipe implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
+    if (typeof value !== "object" || value === null) {
+      return value;
+    }
+
     const plain = plainToClass(metadata.metatype!, value, {
       exposeUnsetFields: false,
     });
