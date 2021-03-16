@@ -1,5 +1,6 @@
-import { Entity, Property } from "@mikro-orm/core";
+import { Entity, ManyToOne, Property } from "@mikro-orm/core";
 import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { CategoryEntity } from "../category/category.entity";
 import { BaseEntity } from "../shared/base.entity";
 
 @ObjectType("Product")
@@ -24,4 +25,7 @@ export class ProductEntity extends BaseEntity {
   @Field(() => Int)
   @Property()
   price: number;
+
+  @ManyToOne(() => CategoryEntity)
+  category: CategoryEntity;
 }

@@ -17,6 +17,8 @@ import {
   CategoryTreeResponse,
 } from "./responses";
 import { CATEGORIES_TREE_DEPTH } from "../../common/constants";
+import { EntityData } from "@mikro-orm/core";
+import { CategoryEntity } from "./category.entity";
 
 const categoriesPopulate =
   "children" + ".children".repeat(CATEGORIES_TREE_DEPTH - 1);
@@ -77,13 +79,9 @@ export class CategoryResolver {
       );
     }
 
-    const parentCategory = parentId
-      ? this.categoryService.getReference(parentId)
-      : null;
-
     return this.categoryService.insert({
       ...category,
-      parent: parentCategory,
+      parent: parentId,
     });
   }
 
@@ -93,6 +91,14 @@ export class CategoryResolver {
     @Args("id", { type: () => Int }) id: number,
     @Args("input") input: UpdateCategoryInput
   ): Promise<typeof UpdateCategoryResponse> {
-    return this.categoryService.updateOne(id, input);
+    const { parentId, ...restInput } = input;
+
+    const payload: EntityData<CategoryEntity> = restInput;
+
+    if (parentId !== undefined) {
+      payload.parent = parentId;
+    }
+
+    return this.categoryService.updateOne(id, payload);
   }
 }

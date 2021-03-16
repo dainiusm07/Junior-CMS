@@ -1,8 +1,8 @@
 import {
   EntityRepository,
   FilterQuery,
+  FindOneOptions,
   LoadStrategy,
-  QueryOrderMap,
 } from "@mikro-orm/core";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
@@ -18,7 +18,10 @@ export class UserService extends BaseService<UserEntity> {
     super(userRepo, "User");
   }
 
-  findOne(options: FilterQuery<UserEntity>, populate?: any) {
+  findOne(
+    options: FilterQuery<UserEntity>,
+    populate?: FindOneOptions<UserEntity, any>
+  ) {
     return super.findOne(options, {
       populate: { role: LoadStrategy.JOINED },
       ...populate,

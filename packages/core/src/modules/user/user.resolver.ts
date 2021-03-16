@@ -1,9 +1,9 @@
+import { EntityData } from "@mikro-orm/core";
 import { Injectable } from "@nestjs/common";
 import { Args, Resolver, Query, Mutation, Int } from "@nestjs/graphql";
 import { Permission } from "../../common/permission.enum";
 
 import { Allow, InputValidation } from "../../decorators";
-import { RoleService } from "../role/role.service";
 import { NewUserInput, UpdateUserInput, UserListOptions } from "./dto";
 import {
   CreateUserResponse,
@@ -11,16 +11,14 @@ import {
   UserListResponse,
   UserResponse,
 } from "./responses";
+import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
 
 @Resolver()
 @Injectable()
 @InputValidation()
 export class UserResolver {
-  constructor(
-    private userService: UserService,
-    private roleService: RoleService
-  ) {}
+  constructor(private userService: UserService) {}
 
   @Allow(Permission.ReadUser)
   @Query(() => UserResponse)
@@ -44,9 +42,7 @@ export class UserResolver {
   ): Promise<typeof CreateUserResponse> {
     const { roleId, ...user } = input;
 
-    const role = this.roleService.getReference(roleId);
-
-    return this.userService.insert({ ...user, role });
+    return this.userService.insert({ ...user, role: roleId });
   }
 
   @Allow(Permission.UpdateUser)
@@ -55,6 +51,12 @@ export class UserResolver {
     @Args("id", { type: () => Int }) id: number,
     @Args("input") input: UpdateUserInput
   ): Promise<typeof UpdateUserResponse> {
-    return this.userService.updateOne(id, input);
+    const { roleId, ...restInput } = input;
+    const payload: EntityData<UserEntity> = restInput;
+
+    if (roleId) {
+      payload.role = roleId;
+    }
+    return this.userService.updateOne(id, payload);
   }
 }

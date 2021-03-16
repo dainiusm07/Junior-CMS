@@ -68,6 +68,17 @@ type RoleListResponse {
   pagination: PaginationResult!
 }
 
+type Category {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  name: String!
+  slug: String!
+  active: Boolean!
+  parent: Category
+}
+
 type Product {
   id: Int!
   createdAt: DateTime!
@@ -83,17 +94,6 @@ type ProductListResponse {
   items: [Product!]!
   totalItems: Int!
   pagination: PaginationResult!
-}
-
-type Category {
-  id: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  deletedAt: DateTime
-  name: String!
-  slug: String!
-  active: Boolean!
-  parent: Category
 }
 
 type CategoryListResponse {
@@ -310,6 +310,7 @@ input NewProductInput {
   description: String
   price: Int!
   slug: String
+  categoryId: Float!
 }
 
 union UpdateProductResponse = Product | InputValidationError | NotFoundError
@@ -319,6 +320,7 @@ input UpdateProductInput {
   description: String
   price: Int
   slug: String
+  categoryId: Float
 }
 
 union CreateUserResponse = User | InputValidationError

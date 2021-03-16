@@ -1,9 +1,11 @@
+import { EntityData } from "@mikro-orm/core";
 import { Injectable } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
 import { Permission } from "../../common/permission.enum";
 
 import { Allow, InputValidation } from "../../decorators";
 import { NewProductInput, ProductListOptions, UpdateProductInput } from "./dto";
+import { ProductEntity } from "./product.entity";
 import { ProductService } from "./product.service";
 import {
   CreateProductResponse,
@@ -49,11 +51,18 @@ export class ProductResolver {
   async createProduct(
     @Args("input") input: NewProductInput
   ): Promise<typeof CreateProductResponse> {
-    if (!input.slug) {
-      input.slug = await this.productService.getAvailableSlug(input.name);
+    const { categoryId, ...restInput } = input;
+
+    if (!restInput.slug) {
+      restInput.slug = await this.productService.getAvailableSlug(
+        restInput.name
+      );
     }
 
-    return this.productService.insert(input);
+    return this.productService.insert({
+      ...restInput,
+      category: categoryId,
+    });
   }
 
   @Allow(Permission.UpdateProduct)
@@ -62,6 +71,12 @@ export class ProductResolver {
     @Args("id", { type: () => Int }) id: number,
     @Args("input") input: UpdateProductInput
   ): Promise<typeof UpdateProductResponse> {
-    return this.productService.updateOne(id, input);
+    const { categoryId, ...restInput } = input;
+    const payload: EntityData<ProductEntity> = restInput;
+
+    if (categoryId) {
+      payload.category = categoryId;
+    }
+    return this.productService.updateOne(id, payload);
   }
 }

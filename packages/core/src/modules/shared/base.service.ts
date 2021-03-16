@@ -2,6 +2,7 @@ import {
   EntityData,
   EntityRepository,
   FilterQuery,
+  FindOneOptions,
   FindOptions,
   Populate,
   Primary,
@@ -14,7 +15,6 @@ import {
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
 } from "../../common/constants";
 import { IListOptions, IListResponse, SortOrder } from "./list-utils";
-
 export abstract class BaseService<T extends BaseEntity> {
   constructor(private repo: EntityRepository<T>, private name: string) {}
 
@@ -22,11 +22,14 @@ export abstract class BaseService<T extends BaseEntity> {
     return this.repo.getReference(id);
   }
 
-  findOne(where: FilterQuery<T>, populate?: any) {
+  findOne(where: FilterQuery<T>, populate?: FindOneOptions<T, any>) {
     return this.repo.findOne(where, populate);
   }
 
-  async findOneOrFail(where: FilterQuery<T>, populate?: any) {
+  async findOneOrFail(
+    where: FilterQuery<T>,
+    populate?: FindOneOptions<T, any>
+  ) {
     return this.findOne(where, populate).then((res) => {
       if (!res) return new NotFoundError(this.name);
       return res;
@@ -122,6 +125,4 @@ export abstract class BaseService<T extends BaseEntity> {
 
     return orderBy;
   }
-
-  generateSlug(str: string, properties: (keyof T)[]) {}
 }
