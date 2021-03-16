@@ -35,6 +35,9 @@ const MikroORMConfig: MikroOrmModuleOptions = {
   type: "postgresql",
   ...configs[NODE_ENV],
   entities: ["./src/modules/**/*.entity.ts"],
+  migrations: {
+    pattern: /^\d+_[\w-]+.ts$/,
+  },
 };
 
 export default MikroORMConfig;

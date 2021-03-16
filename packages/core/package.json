@@ -19,6 +19,7 @@
   "dependencies": {
     "@junior-cms/common": "1.0.0",
     "@mikro-orm/core": "^4.4.3",
+    "@mikro-orm/migrations": "^4.4.4",
     "@mikro-orm/nestjs": "^4.2.0",
     "@mikro-orm/postgresql": "^4.4.3",
     "@mikro-orm/sql-highlighter": "^1.0.1",
