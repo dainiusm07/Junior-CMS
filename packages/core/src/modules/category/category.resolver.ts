@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
-import { Permission } from "../../common/permission.enum";
 
+import { Permission } from "../../common/permission.enum";
 import { Allow, InputValidation } from "../../decorators";
 import {
   NewCategoryInput,
@@ -16,8 +16,6 @@ import {
   UpdateCategoryResponse,
   CategoryTreeResponse,
 } from "./responses";
-import { EntityData } from "@mikro-orm/core";
-import { CategoryEntity } from "./category.entity";
 
 @Resolver()
 @Injectable()
@@ -68,12 +66,6 @@ export class CategoryResolver {
   ): Promise<typeof CreateCategoryResponse> {
     const { parentId, ...category } = input;
 
-    if (!category.slug) {
-      category.slug = await this.categoryService.getAvailableSlug(
-        category.name
-      );
-    }
-
     return this.categoryService.insert({
       ...category,
       parent: parentId,
@@ -88,12 +80,9 @@ export class CategoryResolver {
   ): Promise<typeof UpdateCategoryResponse> {
     const { parentId, ...restInput } = input;
 
-    const payload: EntityData<CategoryEntity> = restInput;
-
-    if (parentId !== undefined) {
-      payload.parent = parentId;
-    }
-
-    return this.categoryService.updateOne(id, payload);
+    return this.categoryService.updateOne(id, {
+      ...restInput,
+      parent: parentId,
+    });
   }
 }

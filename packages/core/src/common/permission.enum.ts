@@ -17,6 +17,10 @@ export enum Permission {
   ReadCategory = "ReadCategory",
   UpdateCategory = "UpdateCategory",
   DeleteCategory = "DeleteCategory",
+  CreateAttribute = "CreateAttribute",
+  ReadAttribute = "ReadAttribute",
+  UpdateAttribute = "UpdateAttribute",
+  DeleteAttribute = "DeleteAttribute",
 }
 
 registerEnumType(Permission, { name: "Permission" });

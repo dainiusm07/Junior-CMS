@@ -1,4 +1,4 @@
-import { EntityRepository, FilterQuery } from "@mikro-orm/core";
+import { EntityData, EntityRepository } from "@mikro-orm/core";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 import { CATEGORIES_TREE_DEPTH } from "../../common/constants";
@@ -23,6 +23,14 @@ export class CategoryService extends Mixins {
     private categoryRepo: EntityRepository<CategoryEntity>
   ) {
     super(categoryRepo, "Category");
+  }
+
+  async insert(data: EntityData<CategoryEntity>) {
+    if (!data.slug) {
+      data.slug = await this.getAvailableSlug(data.name);
+    }
+
+    return super.insert(data);
   }
 
   getCategoriesTree(id?: number) {

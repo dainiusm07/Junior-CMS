@@ -24,4 +24,7 @@ export class NewProductInput implements PartialEntity<ProductEntity> {
   @Exists(CategoryEntity, "id", "Category")
   @Field()
   categoryId: number;
+
+  @Field(() => [Int])
+  attributesValuesIds: number[];
 }

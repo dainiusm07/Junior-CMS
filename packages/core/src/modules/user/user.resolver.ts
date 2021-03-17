@@ -1,8 +1,7 @@
-import { EntityData } from "@mikro-orm/core";
 import { Injectable } from "@nestjs/common";
 import { Args, Resolver, Query, Mutation, Int } from "@nestjs/graphql";
-import { Permission } from "../../common/permission.enum";
 
+import { Permission } from "../../common/permission.enum";
 import { Allow, InputValidation } from "../../decorators";
 import { NewUserInput, UpdateUserInput, UserListOptions } from "./dto";
 import {
@@ -11,7 +10,6 @@ import {
   UserListResponse,
   UserResponse,
 } from "./responses";
-import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
 
 @Resolver()
@@ -52,11 +50,7 @@ export class UserResolver {
     @Args("input") input: UpdateUserInput
   ): Promise<typeof UpdateUserResponse> {
     const { roleId, ...restInput } = input;
-    const payload: EntityData<UserEntity> = restInput;
 
-    if (roleId) {
-      payload.role = roleId;
-    }
-    return this.userService.updateOne(id, payload);
+    return this.userService.updateOne(id, { ...restInput, role: roleId });
   }
 }

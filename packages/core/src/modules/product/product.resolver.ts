@@ -1,11 +1,10 @@
-import { EntityData } from "@mikro-orm/core";
+import { LoadStrategy } from "@mikro-orm/core";
 import { Injectable } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
-import { Permission } from "../../common/permission.enum";
 
+import { Permission } from "../../common/permission.enum";
 import { Allow, InputValidation } from "../../decorators";
 import { NewProductInput, ProductListOptions, UpdateProductInput } from "./dto";
-import { ProductEntity } from "./product.entity";
 import { ProductService } from "./product.service";
 import {
   CreateProductResponse,
@@ -22,10 +21,16 @@ export class ProductResolver {
 
   @Allow(Permission.ReadProduct)
   @Query(() => ProductResponse)
-  product(
+  async product(
     @Args("id", { type: () => Int }) id: number
   ): Promise<typeof ProductResponse> {
-    return this.productService.findOneOrFail({ id });
+    return this.productService.findOneOrFail(
+      { id },
+      {
+        populate: ["attributesValues.attribute"],
+        strategy: LoadStrategy.JOINED,
+      }
+    );
   }
 
   @Allow(Permission.ReadProduct)
@@ -51,17 +56,12 @@ export class ProductResolver {
   async createProduct(
     @Args("input") input: NewProductInput
   ): Promise<typeof CreateProductResponse> {
-    const { categoryId, ...restInput } = input;
-
-    if (!restInput.slug) {
-      restInput.slug = await this.productService.getAvailableSlug(
-        restInput.name
-      );
-    }
+    const { categoryId, attributesValuesIds, ...restInput } = input;
 
     return this.productService.insert({
       ...restInput,
       category: categoryId,
+      attributesValues: attributesValuesIds,
     });
   }
 
@@ -71,12 +71,12 @@ export class ProductResolver {
     @Args("id", { type: () => Int }) id: number,
     @Args("input") input: UpdateProductInput
   ): Promise<typeof UpdateProductResponse> {
-    const { categoryId, ...restInput } = input;
-    const payload: EntityData<ProductEntity> = restInput;
+    const { categoryId, attributesValuesIds, ...restInput } = input;
 
-    if (categoryId) {
-      payload.category = categoryId;
-    }
-    return this.productService.updateOne(id, payload);
+    return this.productService.updateOne(id, {
+      ...restInput,
+      attributesValues: attributesValuesIds,
+      category: categoryId,
+    });
   }
 }

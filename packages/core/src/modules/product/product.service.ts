@@ -1,4 +1,4 @@
-import { EntityRepository } from "@mikro-orm/core";
+import { EntityData, EntityRepository } from "@mikro-orm/core";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 
@@ -17,5 +17,13 @@ export class ProductService extends Mixins {
     private productRepo: EntityRepository<ProductEntity>
   ) {
     super(productRepo, "Product");
+  }
+
+  async insert(data: EntityData<ProductEntity>) {
+    if (!data.slug) {
+      data.slug = await this.getAvailableSlug(data.name);
+    }
+
+    return super.insert(data);
   }
 }

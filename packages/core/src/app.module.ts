@@ -14,8 +14,12 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { RoleModule } from "./modules/role/role.module";
 import { ProductModule } from "./modules/product/product.module";
 import { CategoryModule } from "./modules/category/category.module";
+import { AttributeModule } from "./modules/attribute/attribute.module";
+import { AttributeValueModule } from "./modules/attribute-value/attribute-value.module";
 
 const CustomModules = [
+  AttributeValueModule,
+  AttributeModule,
   CategoryModule,
   ProductModule,
   UserModule,

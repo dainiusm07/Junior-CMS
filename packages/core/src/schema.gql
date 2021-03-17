@@ -37,6 +37,10 @@ enum Permission {
   ReadCategory
   UpdateCategory
   DeleteCategory
+  CreateAttribute
+  ReadAttribute
+  UpdateAttribute
+  DeleteAttribute
 }
 
 type User {
@@ -68,6 +72,17 @@ type RoleListResponse {
   pagination: PaginationResult!
 }
 
+type Attribute {
+  id: Int!
+  name: String!
+  values: [AttributeValue!]!
+}
+
+type AttributeValue {
+  id: Int!
+  value: String!
+}
+
 type Category {
   id: Int!
   createdAt: DateTime!
@@ -88,6 +103,7 @@ type Product {
   slug: String!
   description: String
   price: Int!
+  attributes: [Attribute!]!
 }
 
 type ProductListResponse {
@@ -115,6 +131,8 @@ type CategoryTreeResponse {
 }
 
 type Query {
+  attribute(id: Int!): AttributeResponse!
+  attributes: [Attribute!]!
   categoriesTree(id: Int): [CategoryTreeResponse!]!
   category(id: Int!): CategoryResponse!
   categories(filter: ExtendedCategoryFilterOptions, sort: CategorySortOptions, page: Int!, limit: Int!): CategoryListResponse!
@@ -127,12 +145,14 @@ type Query {
   role(id: Int!): RoleResponse!
 }
 
-union CategoryResponse = Category | NotFoundError
+union AttributeResponse = Attribute | NotFoundError
 
 type NotFoundError {
   message: String!
   errorCode: String!
 }
+
+union CategoryResponse = Category | NotFoundError
 
 input ExtendedCategoryFilterOptions {
   id: NumberOperators
@@ -265,6 +285,10 @@ input RoleSortOptions {
 union RoleResponse = Role | NotFoundError
 
 type Mutation {
+  createAttributeValue(input: NewAttributeValueInput!): CreateAttributeValueResponse!
+  updateAttributeValue(input: UpdateAttributeValueInput!, id: Int!): UpdateAttributeValueResponse!
+  createAttribute(input: NewAttributeInput!): CreateAttributeResponse!
+  updateAttribute(input: UpdateAttributeInput!, id: Int!): UpdateAttributeResponse!
   isCategorySlugAvailable(slug: String!): Boolean!
   getCategorySlug(name: String!): String!
   createCategory(input: NewCategoryInput!): CreateCategoryResponse!
@@ -281,13 +305,39 @@ type Mutation {
   updateRole(input: UpdateRoleInput!, id: Int!): UpdateRoleResponse!
 }
 
-union CreateCategoryResponse = Category | InputValidationError
+union CreateAttributeValueResponse = AttributeValue | InputValidationError
 
 type InputValidationError {
   message: String!
   errorCode: String!
   errors: [ValidationError!]!
 }
+
+input NewAttributeValueInput {
+  attributeId: Int!
+  value: String!
+}
+
+union UpdateAttributeValueResponse = AttributeValue | InputValidationError | NotFoundError
+
+input UpdateAttributeValueInput {
+  attributeId: Int
+  value: String
+}
+
+union CreateAttributeResponse = Attribute | InputValidationError
+
+input NewAttributeInput {
+  name: String!
+}
+
+union UpdateAttributeResponse = Attribute | InputValidationError | NotFoundError
+
+input UpdateAttributeInput {
+  name: String
+}
+
+union CreateCategoryResponse = Category | InputValidationError
 
 input NewCategoryInput {
   name: String!
@@ -311,6 +361,7 @@ input NewProductInput {
   price: Int!
   slug: String
   categoryId: Float!
+  attributesValuesIds: [Int!]!
 }
 
 union UpdateProductResponse = Product | InputValidationError | NotFoundError
@@ -321,6 +372,7 @@ input UpdateProductInput {
   price: Int
   slug: String
   categoryId: Float
+  attributesValuesIds: [Int!]
 }
 
 union CreateUserResponse = User | InputValidationError

@@ -8,14 +8,15 @@ import {
   Primary,
 } from "@mikro-orm/core";
 
-import { BaseEntity } from "./base.entity";
 import { NotFoundError } from "../../common/errors/not-found.error";
 import {
   MAX_RESULTS_PER_PAGE_LIMIT,
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
 } from "../../common/constants";
 import { IListOptions, IListResponse, SortOrder } from "./list-utils";
-export abstract class BaseService<T extends BaseEntity> {
+import { deleteUndefinedProperties } from "../../utils/delete-undefined-properties";
+
+export class BaseService<T extends object> {
   constructor(private repo: EntityRepository<T>, private name: string) {}
 
   getReference(id: Primary<T>) {
@@ -77,6 +78,8 @@ export abstract class BaseService<T extends BaseEntity> {
   }
 
   async insert(data: EntityData<Omit<T, "">>) {
+    deleteUndefinedProperties(data);
+
     const entity = this.repo.create(data);
 
     await this.repo.persistAndFlush(entity);
@@ -84,6 +87,8 @@ export abstract class BaseService<T extends BaseEntity> {
   }
 
   async updateOne(filter: FilterQuery<T>, data: EntityData<T>) {
+    deleteUndefinedProperties(data);
+
     const entity = await this.findOneOrFail(filter);
 
     if (entity instanceof NotFoundError) {
@@ -97,6 +102,8 @@ export abstract class BaseService<T extends BaseEntity> {
   }
 
   async updateMany(filter: FilterQuery<T>, data: EntityData<T>) {
+    deleteUndefinedProperties(data);
+
     const entities = await this.repo.find(filter);
     entities.forEach((entity) => this.repo.assign(entity, data));
 

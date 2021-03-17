@@ -1,5 +1,14 @@
-import { Entity, ManyToOne, Property } from "@mikro-orm/core";
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  Property,
+} from "@mikro-orm/core";
 import { Field, Int, ObjectType } from "@nestjs/graphql";
+
+import { AttributeValueEntity } from "../attribute-value/attribute-value.entity";
+import { AttributeEntity } from "../attribute/attribute.entity";
 import { CategoryEntity } from "../category/category.entity";
 import { BaseEntity } from "../shared/base.entity";
 
@@ -28,4 +37,31 @@ export class ProductEntity extends BaseEntity {
 
   @ManyToOne(() => CategoryEntity)
   category: CategoryEntity;
+
+  @ManyToMany({
+    entity: () => AttributeValueEntity,
+    joinColumn: "product_id",
+    inverseJoinColumn: "attribute_value_id",
+    pivotTable: "products_attributes_values",
+  })
+  attributesValues = new Collection<AttributeValueEntity>(this);
+
+  @Field(() => [AttributeEntity])
+  protected attributes: AttributeEntity[] = [];
+
+  mapAttributes() {
+    const attributesValues = this.attributesValues.getItems(false);
+
+    const attributes = [
+      ...new Set(attributesValues.map(({ attribute }) => attribute)),
+    ].map((attribute) => {
+      const values = attributesValues.filter(
+        (value) => value.attribute.id === attribute.id
+      );
+
+      return Object.assign(attribute, { values });
+    });
+
+    return attributes;
+  }
 }
