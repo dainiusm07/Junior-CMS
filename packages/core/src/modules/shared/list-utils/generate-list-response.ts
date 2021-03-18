@@ -13,7 +13,7 @@ export type IListResponse<T> = {
 };
 
 @ObjectType()
-class PaginationResult implements Pagination {
+export class PaginationResult implements Pagination {
   @Field(() => Int)
   currentPage: number;
 
