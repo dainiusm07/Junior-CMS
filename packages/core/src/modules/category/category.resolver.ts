@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
 
 import { Permission } from "../../common/permission.enum";
-import { Allow, InputValidation } from "../../decorators";
+import { Allow } from "../../decorators";
 import {
   NewCategoryInput,
   CategoryListOptions,
@@ -16,10 +16,10 @@ import {
   UpdateCategoryResponse,
   CategoryTreeResponse,
 } from "./responses";
+import { InputValidationPipe } from "../../middleware/input-validation.pipe";
 
 @Resolver()
 @Injectable()
-@InputValidation()
 export class CategoryResolver {
   constructor(private categoryService: CategoryService) {}
 
@@ -62,7 +62,7 @@ export class CategoryResolver {
   @Allow(Permission.CreateCategory)
   @Mutation(() => CreateCategoryResponse)
   async createCategory(
-    @Args("input") input: NewCategoryInput
+    @Args("input", InputValidationPipe) input: NewCategoryInput
   ): Promise<typeof CreateCategoryResponse> {
     const { parentId, ...category } = input;
 
@@ -76,7 +76,7 @@ export class CategoryResolver {
   @Mutation(() => UpdateCategoryResponse)
   updateCategory(
     @Args("id", { type: () => Int }) id: number,
-    @Args("input") input: UpdateCategoryInput
+    @Args("input", InputValidationPipe) input: UpdateCategoryInput
   ): Promise<typeof UpdateCategoryResponse> {
     const { parentId, ...restInput } = input;
 

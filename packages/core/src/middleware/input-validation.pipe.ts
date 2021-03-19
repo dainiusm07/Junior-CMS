@@ -7,10 +7,13 @@ import {
   InputValidationError,
 } from "../common/errors/input-validation.error";
 
+const isClass = (v?: unknown) => {
+  return typeof v === "function" && /^\s*class\s+/.test(v.toString());
+};
 @Injectable()
 export class InputValidationPipe implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
-    if (typeof value !== "object" || value === null) {
+    if (!isClass(metadata.metatype)) {
       return value;
     }
 

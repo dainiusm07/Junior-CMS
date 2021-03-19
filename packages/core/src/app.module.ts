@@ -1,6 +1,6 @@
 import { MikroOrmModule } from "@mikro-orm/nestjs";
 import { CacheModule, Module } from "@nestjs/common";
-import { APP_GUARD } from "@nestjs/core";
+import { APP_FILTER, APP_GUARD } from "@nestjs/core";
 import { GraphQLModule } from "@nestjs/graphql";
 
 import { GraphqlService } from "./config";
@@ -16,6 +16,7 @@ import { ProductModule } from "./modules/product/product.module";
 import { CategoryModule } from "./modules/category/category.module";
 import { AttributeModule } from "./modules/attribute/attribute.module";
 import { AttributeValueModule } from "./modules/attribute-value/attribute-value.module";
+import { InputValidationFilter } from "./middleware/input-validation.filter";
 
 const CustomModules = [
   AttributeValueModule,
@@ -44,6 +45,10 @@ const CustomModules = [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: InputValidationFilter,
     },
   ],
 })

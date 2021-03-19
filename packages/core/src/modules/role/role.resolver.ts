@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
 
-import { Allow, InputValidation } from "../../decorators";
+import { Allow } from "../../decorators";
 import { Permission } from "../../common/permission.enum";
 import { RoleEntity } from "./role.entity";
 import { RoleService } from "./role.service";
@@ -12,10 +12,10 @@ import {
   RoleResponse,
   UpdateRoleResponse,
 } from "./responses";
+import { InputValidationPipe } from "../../middleware/input-validation.pipe";
 
 @Resolver()
 @Injectable()
-@InputValidation()
 export class RoleResolver {
   constructor(private roleService: RoleService) {}
 
@@ -35,7 +35,9 @@ export class RoleResolver {
 
   @Mutation(() => CreateRoleResponse)
   @Allow(Permission.CreateRole)
-  createRole(@Args("input") input: NewRoleInput): Promise<RoleEntity> {
+  createRole(
+    @Args("input", InputValidationPipe) input: NewRoleInput
+  ): Promise<RoleEntity> {
     return this.roleService.insert(input);
   }
 
@@ -43,7 +45,7 @@ export class RoleResolver {
   @Allow(Permission.UpdateRole)
   async updateRole(
     @Args("id", { type: () => Int }) id: number,
-    @Args("input") input: UpdateRoleInput
+    @Args("input", InputValidationPipe) input: UpdateRoleInput
   ): Promise<typeof UpdateRoleResponse> {
     return this.roleService.updateOne(id, input);
   }

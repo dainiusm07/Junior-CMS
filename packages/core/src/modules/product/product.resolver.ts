@@ -3,7 +3,8 @@ import { Injectable } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
 
 import { Permission } from "../../common/permission.enum";
-import { Allow, InputValidation } from "../../decorators";
+import { Allow } from "../../decorators";
+import { InputValidationPipe } from "../../middleware/input-validation.pipe";
 import { NewProductInput, ProductListOptions, UpdateProductInput } from "./dto";
 import { ProductService } from "./product.service";
 import {
@@ -15,7 +16,6 @@ import {
 
 @Resolver()
 @Injectable()
-@InputValidation()
 export class ProductResolver {
   constructor(private productService: ProductService) {}
 
@@ -27,7 +27,7 @@ export class ProductResolver {
     return this.productService.findOneOrFail(
       { id },
       {
-        populate: ["attributesValues.attribute"],
+        populate: { attributesValues: { attribute: true } },
         strategy: LoadStrategy.JOINED,
       }
     );
@@ -54,7 +54,7 @@ export class ProductResolver {
   @Allow(Permission.CreateProduct)
   @Mutation(() => CreateProductResponse)
   async createProduct(
-    @Args("input") input: NewProductInput
+    @Args("input", InputValidationPipe) input: NewProductInput
   ): Promise<typeof CreateProductResponse> {
     const { categoryId, attributesValuesIds, ...restInput } = input;
 
@@ -69,7 +69,7 @@ export class ProductResolver {
   @Mutation(() => UpdateProductResponse)
   updateProduct(
     @Args("id", { type: () => Int }) id: number,
-    @Args("input") input: UpdateProductInput
+    @Args("input", InputValidationPipe) input: UpdateProductInput
   ): Promise<typeof UpdateProductResponse> {
     const { categoryId, attributesValuesIds, ...restInput } = input;
 

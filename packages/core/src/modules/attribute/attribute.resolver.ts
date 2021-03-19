@@ -3,7 +3,8 @@ import { Injectable } from "@nestjs/common";
 import { Args, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 
 import { Permission } from "../../common/permission.enum";
-import { Allow, InputValidation } from "../../decorators";
+import { Allow } from "../../decorators";
+import { InputValidationPipe } from "../../middleware/input-validation.pipe";
 import { AttributeEntity } from "./attribute.entity";
 import { AttributeService } from "./attribute.service";
 import { NewAttributeInput, UpdateAttributeInput } from "./dto";
@@ -15,7 +16,6 @@ import {
 
 @Resolver()
 @Injectable()
-@InputValidation()
 export class AttributeResolver {
   constructor(private attributeService: AttributeService) {}
 
@@ -42,7 +42,7 @@ export class AttributeResolver {
   @Allow(Permission.CreateAttribute)
   @Mutation(() => CreateAttributeResponse)
   createAttribute(
-    @Args("input") input: NewAttributeInput
+    @Args("input", InputValidationPipe) input: NewAttributeInput
   ): Promise<typeof CreateAttributeResponse> {
     return this.attributeService.insert(input);
   }
@@ -51,7 +51,7 @@ export class AttributeResolver {
   @Mutation(() => UpdateAttributeResponse)
   updateAttribute(
     @Args("id", { type: () => Int }) id: number,
-    @Args("input") input: UpdateAttributeInput
+    @Args("input", InputValidationPipe) input: UpdateAttributeInput
   ): Promise<typeof UpdateAttributeResponse> {
     return this.attributeService.updateOne(id, input);
   }

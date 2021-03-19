@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { Args, Resolver, Query, Mutation, Int } from "@nestjs/graphql";
 
 import { Permission } from "../../common/permission.enum";
-import { Allow, InputValidation } from "../../decorators";
+import { Allow } from "../../decorators";
+import { InputValidationPipe } from "../../middleware/input-validation.pipe";
 import { NewUserInput, UpdateUserInput, UserListOptions } from "./dto";
 import {
   CreateUserResponse,
@@ -14,7 +15,6 @@ import { UserService } from "./user.service";
 
 @Resolver()
 @Injectable()
-@InputValidation()
 export class UserResolver {
   constructor(private userService: UserService) {}
 
@@ -35,7 +35,7 @@ export class UserResolver {
   @Allow(Permission.CreateUser)
   @Mutation(() => CreateUserResponse)
   async createUser(
-    @Args("input")
+    @Args("input", InputValidationPipe)
     input: NewUserInput
   ): Promise<typeof CreateUserResponse> {
     const { roleId, ...user } = input;
@@ -47,7 +47,7 @@ export class UserResolver {
   @Mutation(() => UpdateUserResponse)
   updateUser(
     @Args("id", { type: () => Int }) id: number,
-    @Args("input") input: UpdateUserInput
+    @Args("input", InputValidationPipe) input: UpdateUserInput
   ): Promise<typeof UpdateUserResponse> {
     const { roleId, ...restInput } = input;
 
