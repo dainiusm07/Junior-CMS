@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { Context, Parent, ResolveField, Resolver } from "@nestjs/graphql";
+import { Injectable } from '@nestjs/common';
+import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 
-import { AttributeEntity } from "../attribute/attribute.entity";
-import { ProductEntity } from "./product.entity";
-import { ProductService } from "./product.service";
+import { AttributeEntity } from '../attribute/attribute.entity';
+import { ProductEntity } from './product.entity';
+import { ProductService } from './product.service';
 
 @Resolver(() => ProductEntity)
 @Injectable()

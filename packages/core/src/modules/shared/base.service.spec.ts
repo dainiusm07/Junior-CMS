@@ -1,18 +1,14 @@
-import { EntityRepository } from "@mikro-orm/core";
-import { getRepositoryToken } from "@mikro-orm/nestjs";
-import { Test } from "@nestjs/testing";
-import {
-  DEFAULT_RESULTS_PER_PAGE_LIMIT,
-  MAX_RESULTS_PER_PAGE_LIMIT,
-} from "../../common/constants";
-import { NotFoundError } from "../../common/errors/not-found.error";
+import { EntityRepository } from '@mikro-orm/core';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { Test } from '@nestjs/testing';
 
-import { mockEntities } from "../../test-utils/mock-entities";
-import { mockRepository } from "../../test-utils/mock-repository";
-
-import { BaseEntity } from "./base.entity";
-import { BaseService } from "./base.service";
-import { IListResponse, SortOrder } from "./list-utils";
+import { DEFAULT_RESULTS_PER_PAGE_LIMIT, MAX_RESULTS_PER_PAGE_LIMIT } from '../../common/constants';
+import { NotFoundError } from '../../common/errors/not-found.error';
+import { mockEntities } from '../../test-utils/mock-entities';
+import { mockRepository } from '../../test-utils/mock-repository';
+import { BaseEntity } from './base.entity';
+import { BaseService } from './base.service';
+import { IListResponse, SortOrder } from './list-utils';
 
 class MyBaseEntity extends BaseEntity {}
 
@@ -99,6 +95,8 @@ describe("BaseService", () => {
       const result = await service.findList({
         limit: entities.length,
         page: 1,
+        filter: {},
+        sort: {},
       });
 
       expect(result).toStrictEqual(listResponse);
@@ -126,7 +124,7 @@ describe("BaseService", () => {
       it(description, () => {
         const findAndCount = jest.spyOn(repo, "findAndCount");
 
-        service.findList({ limit, page: 1 });
+        service.findList({ limit, page: 1, filter: {}, sort: {} });
 
         const { limit: calledWithLimit } = findAndCount.mock.calls[0][1] as any;
         expect(calledWithLimit).toBe(expectedValue);
@@ -134,13 +132,23 @@ describe("BaseService", () => {
     });
 
     it("should set page to 1 if requested page number is less than 1", async () => {
-      const result = await service.findList({ limit: 1, page: 0 });
+      const result = await service.findList({
+        limit: 1,
+        page: 0,
+        filter: {},
+        sort: {},
+      });
 
       expect(result.pagination.currentPage).toBe(1);
     });
 
     it("should set page to 1 if requested page number is less than 1", async () => {
-      const result = await service.findList({ limit: 1, page: 0 });
+      const result = await service.findList({
+        limit: 1,
+        page: 0,
+        filter: {},
+        sort: {},
+      });
 
       expect(result.pagination.currentPage).toBe(1);
     });
@@ -153,7 +161,12 @@ describe("BaseService", () => {
         .spyOn(repo, "findAndCount")
         .mockReturnValue(Promise.resolve([entities, totalItems]));
 
-      const result = await service.findList({ limit, page: 1 });
+      const result = await service.findList({
+        limit,
+        page: 1,
+        filter: {},
+        sort: {},
+      });
 
       expect(result.pagination.totalPages).toBe(totalPages);
     });
@@ -161,7 +174,12 @@ describe("BaseService", () => {
     it(`if page number is more than total pages should call self
         with same params and page=1`, async () => {
       const findList = jest.spyOn(service, "findList");
-      const listOptions = { limit: entities.length, page: 99 };
+      const listOptions = {
+        limit: entities.length,
+        page: 99,
+        filter: {},
+        sort: {},
+      };
 
       await service.findList(listOptions);
 
@@ -195,7 +213,15 @@ describe("BaseService", () => {
       },
       {
         description: "should order by default sorting",
-        sort: undefined,
+        sort: {},
+        expected: {
+          id: SortOrder.ASC,
+        },
+      },
+      {
+        description:
+          "should order by default sorting and remove fields with null values",
+        sort: { id: null, createdAt: null },
         expected: {
           id: SortOrder.ASC,
         },
@@ -208,6 +234,7 @@ describe("BaseService", () => {
           limit: 1,
           page: 1,
           sort,
+          filter: {},
         });
 
         const { orderBy } = findAndCount.mock.calls[0][1] as any;

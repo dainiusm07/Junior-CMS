@@ -1,4 +1,4 @@
-import { Operators } from "../operators.enum";
+import { Operators } from '../operators.enum';
 
 const ReversedOperators: Record<string, string> = {};
 
@@ -6,7 +6,15 @@ Object.entries(Operators).forEach(([name, value]) => {
   ReversedOperators[value] = name;
 });
 
-export const parseFilterInput = (input: object) => {
+export const parseFilterInput = (input: any) => {
+  if (
+    typeof input === "number" ||
+    typeof input === "string" ||
+    input === null
+  ) {
+    return input;
+  }
+
   const result: Record<string, any> = {};
 
   Object.entries(input).forEach(([name, value]) => {
@@ -20,11 +28,18 @@ export const parseFilterInput = (input: object) => {
     if (Array.isArray(value)) {
       actualValue = value.map((val) => parseFilterInput(val));
     } else {
-      actualValue = typeof value === "object" ? parseFilterInput(value) : value;
+      actualValue =
+        typeof value === "object" && value !== null
+          ? parseFilterInput(value)
+          : value;
     }
 
     // Skip value because it is empty
-    if (typeof actualValue === "object" && !Object.keys(actualValue).length) {
+    if (
+      actualValue !== null &&
+      typeof actualValue === "object" &&
+      !Object.keys(actualValue as object).length
+    ) {
       return;
     }
 
