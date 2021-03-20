@@ -60,18 +60,6 @@ type ValidationError {
   messages: [String!]!
 }
 
-type UserListResponse {
-  items: [User!]!
-  totalItems: Int!
-  pagination: PaginationResult!
-}
-
-type RoleListResponse {
-  items: [Role!]!
-  totalItems: Int!
-  pagination: PaginationResult!
-}
-
 type Attribute {
   id: Int!
   name: String!
@@ -94,24 +82,6 @@ type Category {
   parent: Category
 }
 
-type Product {
-  id: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  deletedAt: DateTime
-  name: String!
-  slug: String!
-  description: String
-  price: Int!
-  attributes: [Attribute!]!
-}
-
-type ProductListResponse {
-  items: [Product!]!
-  totalItems: Int!
-  pagination: PaginationResult!
-}
-
 type CategoryListResponse {
   items: [Category!]!
   totalItems: Int!
@@ -128,6 +98,44 @@ type CategoryTreeResponse {
   active: Boolean!
   parent: Category
   children: [CategoryTreeResponse!]!
+}
+
+type Product {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  name: String!
+  description: String
+  variants: [ProductVariant!]!
+}
+
+type ProductVariant {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  slug: String!
+  price: Int!
+  attributes: [Attribute!]!
+}
+
+type ProductListResponse {
+  items: [Product!]!
+  totalItems: Int!
+  pagination: PaginationResult!
+}
+
+type RoleListResponse {
+  items: [Role!]!
+  totalItems: Int!
+  pagination: PaginationResult!
+}
+
+type UserListResponse {
+  items: [User!]!
+  totalItems: Int!
+  pagination: PaginationResult!
 }
 
 type Query {
@@ -293,8 +301,10 @@ type Mutation {
   getCategorySlug(name: String!): String!
   createCategory(input: NewCategoryInput!): CreateCategoryResponse!
   updateCategory(input: UpdateCategoryInput!, id: Int!): UpdateCategoryResponse!
-  isProductSlugAvailable(slug: String!): Boolean!
-  getProductSlug(name: String!): String!
+  isProductVariantSlugAvailable(slug: String!): Boolean!
+  getProductVariantSlug(name: String!): String!
+  createProductVariant(input: NewProductVariantInput!): CreateProductVariantResponse!
+  updateProductVariant(input: UpdateProductVariantInput!, id: Int!): UpdateProductVariantResponse!
   createProduct(input: NewProductInput!): CreateProductResponse!
   updateProduct(input: UpdateProductInput!, id: Int!): UpdateProductResponse!
   createUser(input: NewUserInput!): CreateUserResponse!
@@ -353,15 +363,30 @@ input UpdateCategoryInput {
   parentId: Int
 }
 
+union CreateProductVariantResponse = ProductVariant | InputValidationError
+
+input NewProductVariantInput {
+  productId: Int!
+  price: Int!
+  slug: String!
+  attributesValuesIds: [Int!]!
+}
+
+union UpdateProductVariantResponse = ProductVariant | InputValidationError | NotFoundError
+
+input UpdateProductVariantInput {
+  productId: Int
+  price: Int
+  slug: String
+  attributesValuesIds: [Int!]
+}
+
 union CreateProductResponse = Product | InputValidationError
 
 input NewProductInput {
   name: String!
   description: String
-  price: Int!
-  slug: String
-  categoryId: Float!
-  attributesValuesIds: [Int!]!
+  categoryId: Int!
 }
 
 union UpdateProductResponse = Product | InputValidationError | NotFoundError
@@ -369,10 +394,7 @@ union UpdateProductResponse = Product | InputValidationError | NotFoundError
 input UpdateProductInput {
   name: String
   description: String
-  price: Int
-  slug: String
-  categoryId: Float
-  attributesValuesIds: [Int!]
+  categoryId: Int
 }
 
 union CreateUserResponse = User | InputValidationError

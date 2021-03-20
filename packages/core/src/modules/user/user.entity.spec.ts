@@ -1,8 +1,9 @@
-jest.mock("../../common/environment", () => ({ BCRYPT_SALT: 0 }));
-import { UserEntity } from "./user.entity";
-import { mockEntity } from "../../test-utils/mock-entities";
-import { ChangeSet } from "@mikro-orm/core";
+import { ChangeSet } from '@mikro-orm/core';
 
+import { mockEntity } from '../../test-utils/mock-entities';
+import { UserEntity } from './user.entity';
+
+jest.mock("../../common/environment", () => ({ BCRYPT_SALT: 0 }));
 let user: UserEntity;
 
 const generateChangeSet = (payload: ChangeSet<UserEntity>["payload"]) => {

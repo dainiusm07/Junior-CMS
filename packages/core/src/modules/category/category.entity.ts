@@ -1,19 +1,13 @@
-import {
-  Cascade,
-  Entity,
-  LoadStrategy,
-  ManyToOne,
-  OneToMany,
-  Property,
-} from "@mikro-orm/core";
-import { Field, ObjectType } from "@nestjs/graphql";
-import { BaseEntity } from "../shared/base.entity";
+import { Cascade, Entity, LoadStrategy, ManyToOne, OneToMany, Property } from '@mikro-orm/core';
+import { Field, ObjectType } from '@nestjs/graphql';
+
+import { BaseEntity } from '../shared/base.entity';
 
 @ObjectType("Category")
 @Entity({ tableName: "categories" })
 export class CategoryEntity extends BaseEntity {
   @Field(() => Date, { nullable: true })
-  @Property({ nullable: true })
+  @Property({ type: Date, nullable: true })
   deletedAt: Date | null;
 
   @Field()

@@ -1,10 +1,10 @@
-import { MikroOrmModule } from "@mikro-orm/nestjs";
-import { Module } from "@nestjs/common";
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Module } from '@nestjs/common';
 
-import { ProductEntity } from "./product.entity";
-import { ProductEntityResolver } from "./product-entity.resolver";
-import { ProductResolver } from "./product.resolver";
-import { ProductService } from "./product.service";
+import { ProductEntityResolver } from './product-entity.resolver';
+import { ProductEntity } from './product.entity';
+import { ProductResolver } from './product.resolver';
+import { ProductService } from './product.service';
 
 @Module({
   imports: [MikroOrmModule.forFeature([ProductEntity])],

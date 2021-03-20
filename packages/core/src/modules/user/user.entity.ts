@@ -1,24 +1,17 @@
-import * as bcrypt from "bcrypt";
-import {
-  Entity,
-  Property,
-  BeforeCreate,
-  BeforeUpdate,
-  EventArgs,
-  OneToOne,
-} from "@mikro-orm/core";
-import { Field, ObjectType } from "@nestjs/graphql";
+import { BeforeCreate, BeforeUpdate, Entity, EventArgs, OneToOne, Property } from '@mikro-orm/core';
+import { Field, ObjectType } from '@nestjs/graphql';
+import * as bcrypt from 'bcrypt';
 
-import { BCRYPT_SALT } from "../../common/environment";
-import { BaseEntity } from "../shared/base.entity";
-import { RoleEntity } from "../role/role.entity";
-import { capitalizeFirstLetter } from "../../utils/capitalize-first-letter";
+import { BCRYPT_SALT } from '../../common/environment';
+import { capitalizeFirstLetter } from '../../utils/capitalize-first-letter';
+import { RoleEntity } from '../role/role.entity';
+import { BaseEntity } from '../shared/base.entity';
 
 @Entity({ tableName: "users" })
 @ObjectType("User")
 export class UserEntity extends BaseEntity {
   @Field(() => Date, { nullable: true })
-  @Property({ nullable: true })
+  @Property({ type: Date, nullable: true })
   deletedAt: Date | null;
 
   @Field()

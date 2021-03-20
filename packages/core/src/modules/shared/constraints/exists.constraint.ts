@@ -1,7 +1,7 @@
-import { Constructor, RequestContext } from "@mikro-orm/core";
-import { registerDecorator, ValidationArguments } from "class-validator";
+import { Constructor, RequestContext } from '@mikro-orm/core';
+import { registerDecorator, ValidationArguments } from 'class-validator';
 
-import { capitalizeFirstLetter } from "../../../utils/capitalize-first-letter";
+import { capitalizeFirstLetter } from '../../../utils/capitalize-first-letter';
 
 export function Exists<T extends {}>(
   entity: Constructor<T>,
@@ -17,12 +17,14 @@ export function Exists<T extends {}>(
       propertyName: propertyName.toString(),
       async: true,
       validator: {
-        async validate(value: string, args: ValidationArguments) {
+        async validate(value: string | string[], args: ValidationArguments) {
           const em = RequestContext.getEntityManager()!;
           // Using em.count to not pollute the context
           const result = await em.count(entity, { [findBy]: value });
 
-          return Boolean(result);
+          const shouldReceiveCount = Array.isArray(value) ? value.length : 1;
+
+          return result === shouldReceiveCount;
         },
       },
       options: { message: `${name} doesn't exist` },

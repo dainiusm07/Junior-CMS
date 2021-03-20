@@ -1,10 +1,10 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import { GqlExecutionContext } from "@nestjs/graphql";
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
-import { PERMISSIONS_METADATA_KEY } from "../common/constants";
-import { AuthService } from "../modules/auth/auth.service";
-import { Permission } from "../common/permission.enum";
+import { PERMISSIONS_METADATA_KEY } from '../common/constants';
+import { Permission } from '../common/permission.enum';
+import { AuthService } from '../modules/auth/auth.service';
 
 const matchPermissions = (
   permissions: Permission[],

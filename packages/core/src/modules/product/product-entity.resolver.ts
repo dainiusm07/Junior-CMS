@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 
-import { AttributeEntity } from '../attribute/attribute.entity';
+import { ProductVariantEntity } from '../product-variant/product-variant.entity';
 import { ProductEntity } from './product.entity';
 import { ProductService } from './product.service';
 
@@ -10,8 +10,8 @@ import { ProductService } from './product.service';
 export class ProductEntityResolver {
   constructor(private productService: ProductService) {}
 
-  @ResolveField(() => [AttributeEntity])
-  attributes(@Parent() product: ProductEntity, @Context() ctx: any) {
-    return this.productService.getAttributes(ctx, product);
+  @ResolveField(() => [ProductVariantEntity])
+  variants(@Context() ctx: any, @Parent() product: ProductEntity) {
+    return this.productService.getVariants(ctx, product);
   }
 }
