@@ -2,6 +2,8 @@ import { EntityData, EntityRepository } from "@mikro-orm/core";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 
+import { PRODUCT_ATTRIBUTES_LOADER } from "../../common/constants";
+import { usePopulationLoader } from "../../utils/use-population-loader";
 import { BaseService } from "../shared/base.service";
 import { slugHelperMixin } from "../shared/mixins/slug-helper.mixin";
 import { ProductEntity } from "./product.entity";
@@ -25,5 +27,34 @@ export class ProductService extends Mixins {
     }
 
     return super.insert(data);
+  }
+
+  async getAttributes(ctx: any, product: ProductEntity) {
+    return usePopulationLoader(
+      ctx,
+      this.productRepo,
+      PRODUCT_ATTRIBUTES_LOADER,
+      { attributesValues: { attribute: true } }
+    )
+      .load(product)
+      .then((result) => this.mapLoadedAttributes(result));
+  }
+
+  private mapLoadedAttributes(product: ProductEntity) {
+    const attributesValues = product.attributesValues.getItems(false);
+
+    const attributes = [
+      ...new Set(attributesValues.map(({ attribute }) => attribute)),
+    ]
+      .filter((attribute) => attribute)
+      .map((attribute) => {
+        const values = attributesValues.filter(
+          (value) => value.attribute.id === attribute.id
+        );
+
+        return Object.assign(attribute, { values });
+      });
+
+    return attributes;
   }
 }

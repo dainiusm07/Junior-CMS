@@ -43,25 +43,10 @@ export class ProductEntity extends BaseEntity {
     joinColumn: "product_id",
     inverseJoinColumn: "attribute_value_id",
     pivotTable: "products_attributes_values",
+    owner: true,
   })
   attributesValues = new Collection<AttributeValueEntity>(this);
 
   @Field(() => [AttributeEntity])
-  protected attributes: AttributeEntity[] = [];
-
-  mapAttributes() {
-    const attributesValues = this.attributesValues.getItems(false);
-
-    const attributes = [
-      ...new Set(attributesValues.map(({ attribute }) => attribute)),
-    ].map((attribute) => {
-      const values = attributesValues.filter(
-        (value) => value.attribute.id === attribute.id
-      );
-
-      return Object.assign(attribute, { values });
-    });
-
-    return attributes;
-  }
+  protected attributes: AttributeEntity[];
 }

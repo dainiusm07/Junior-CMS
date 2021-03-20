@@ -49,6 +49,9 @@ export class BaseService<T extends object> {
       limit = DEFAULT_RESULTS_PER_PAGE_LIMIT;
     }
 
+    // TODO: Temporary solution
+    filter = JSON.parse(JSON.stringify(filter || {}));
+
     const orderBy = this.getOrderBy(sort);
 
     const [items, totalItems] = await this.repo.findAndCount(filter || {}, {
