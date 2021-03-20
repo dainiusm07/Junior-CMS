@@ -13,8 +13,9 @@ import {
   MAX_RESULTS_PER_PAGE_LIMIT,
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
 } from "../../common/constants";
-import { IListOptions, IListResponse, SortOrder } from "./list-utils";
+import { IListOptions, IListResponse } from "./list-utils";
 import { deleteUndefinedProperties } from "../../utils/delete-undefined-properties";
+import { parseSortInput, parseFilterInput } from "./helpers";
 
 export class BaseService<T extends object> {
   constructor(private repo: EntityRepository<T>, private name: string) {}
@@ -42,19 +43,17 @@ export class BaseService<T extends object> {
   }
 
   async findList(options: IListOptions<T>): Promise<IListResponse<T>> {
-    let { filter, page, limit, sort } = options;
+    let { filter: rawFilter, page, limit, sort } = options;
 
     page = page > 0 ? page : 1;
     if (limit <= 0 || limit > MAX_RESULTS_PER_PAGE_LIMIT) {
       limit = DEFAULT_RESULTS_PER_PAGE_LIMIT;
     }
 
-    // TODO: Temporary solution
-    filter = JSON.parse(JSON.stringify(filter || {}));
+    const filter = parseFilterInput(rawFilter);
+    const orderBy = parseSortInput(sort);
 
-    const orderBy = this.getOrderBy(sort);
-
-    const [items, totalItems] = await this.repo.findAndCount(filter || {}, {
+    const [items, totalItems] = await this.repo.findAndCount(filter, {
       offset: (page - 1) * limit,
       limit,
       orderBy,
@@ -112,27 +111,5 @@ export class BaseService<T extends object> {
 
     await this.repo.persistAndFlush(entities);
     return entities;
-  }
-
-  private getOrderBy(
-    sort: Record<string, SortOrder | null | undefined> | null | undefined
-  ) {
-    const orderBy: Record<string, SortOrder> = {};
-    if (sort) {
-      Object.entries(sort)
-        .reverse()
-        .forEach(([field, value]) => {
-          if (value) {
-            orderBy[field] = value;
-          }
-        });
-    }
-
-    // Default sorting
-    if (orderBy.id === undefined) {
-      orderBy.id = SortOrder.ASC;
-    }
-
-    return orderBy;
   }
 }

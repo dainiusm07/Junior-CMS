@@ -1,5 +1,5 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from "@nestjs/common";
-import { classToPlain, plainToClass } from "class-transformer";
+import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 
 import {
@@ -43,10 +43,6 @@ export class InputValidationPipe implements PipeTransform {
       throw new InputValidationError(errors);
     }
 
-    // Converting back to object because MikroORM requires plain objects
-    return classToPlain(plain, {
-      exposeUnsetFields: false,
-      ignoreDecorators: true,
-    });
+    return plain;
   }
 }

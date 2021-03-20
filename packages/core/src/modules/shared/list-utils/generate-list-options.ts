@@ -19,8 +19,8 @@ type ConvertTypes<T> = {
 export type FilterOptions<T> = ExcludeNever<ConvertTypes<T>>;
 
 export type IListOptions<T, P = Record<string, unknown>> = {
-  filter?: FilterOptions<T> | null;
-  sort?: SortOptions<P> | null;
+  filter: FilterOptions<T>;
+  sort: SortOptions<P>;
   page: number;
   limit: number;
 };
@@ -33,12 +33,12 @@ export const generateListOptions = <T, P>(
   @InputType({ isAbstract: true })
   class ListOptions implements IListOptions<T, P> {
     @Type(() => filterInputCls)
-    @Field(() => filterInputCls, { nullable: true })
-    filter?: T | null;
+    @Field(() => filterInputCls)
+    filter: T;
 
     @Type(() => sortOrderCls)
-    @Field(() => sortOrderCls, { nullable: true })
-    sort?: P | null;
+    @Field(() => sortOrderCls)
+    sort: P;
 
     @Field(() => Int)
     page: number;

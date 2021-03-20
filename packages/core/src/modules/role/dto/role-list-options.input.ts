@@ -1,5 +1,4 @@
 import { ArgsType, Field, InputType } from "@nestjs/graphql";
-import { Type } from "class-transformer";
 
 import { BaseFilterOptions } from "../../shared/dto/base-filter-options.input";
 import { BaseSortOptions } from "../../shared/dto/base-sort-options";
@@ -21,7 +20,6 @@ class RoleSortOptions
 class RoleFilterOptions
   extends BaseFilterOptions
   implements FilterOptions<RoleEntity> {
-  @Type(() => StringOperators)
   @Field(() => StringOperators, { nullable: true })
   name: StringOperators;
 }

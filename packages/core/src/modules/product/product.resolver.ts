@@ -35,10 +35,7 @@ export class ProductResolver {
 
   @Allow(Permission.ReadProduct)
   @Query(() => ProductListResponse)
-  products(
-    // TODO: Change it to something else
-    @Args(InputValidationPipe) options: ProductListOptions
-  ): Promise<ProductListResponse> {
+  products(@Args() options: ProductListOptions): Promise<ProductListResponse> {
     return this.productService.findList(options);
   }
 

@@ -135,13 +135,13 @@ type Query {
   attributes: [Attribute!]!
   categoriesTree(id: Int): [CategoryTreeResponse!]!
   category(id: Int!): CategoryResponse!
-  categories(filter: ExtendedCategoryFilterOptions, sort: CategorySortOptions, page: Int!, limit: Int!): CategoryListResponse!
+  categories(filter: ExtendedCategoryFilterOptions!, sort: CategorySortOptions!, page: Int!, limit: Int!): CategoryListResponse!
   product(id: Int!): ProductResponse!
-  products(filter: ExtendedProductFilterOptions, sort: ProductSortOptions, page: Int!, limit: Int!): ProductListResponse!
+  products(filter: ExtendedProductFilterOptions!, sort: ProductSortOptions!, page: Int!, limit: Int!): ProductListResponse!
   user(id: Int!): UserResponse!
-  users(filter: ExtendedUserFilterOptions, sort: UserSortOptions, page: Int!, limit: Int!): UserListResponse!
+  users(filter: ExtendedUserFilterOptions!, sort: UserSortOptions!, page: Int!, limit: Int!): UserListResponse!
   userProfile: User
-  roles(filter: ExtendedRoleFilterOptions, sort: RoleSortOptions, page: Int!, limit: Int!): RoleListResponse!
+  roles(filter: ExtendedRoleFilterOptions!, sort: RoleSortOptions!, page: Int!, limit: Int!): RoleListResponse!
   role(id: Int!): RoleResponse!
 }
 
