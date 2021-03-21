@@ -27,4 +27,7 @@ export const mockRepository = (Entity: new (...args: any[]) => any) => ({
   nativeUpdate: jest.fn(),
   nativeDelete: jest.fn(),
   aggregate: jest.fn(),
+  _em: {
+    findOne: jest.fn(),
+  },
 });

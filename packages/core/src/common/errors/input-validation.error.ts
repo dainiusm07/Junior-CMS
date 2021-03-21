@@ -1,5 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+
 import { BaseError } from './base.error';
+import { ErrorCode } from './error-code';
 
 @ObjectType('ValidationError')
 export class CmsValidationError {
@@ -12,7 +14,7 @@ export class CmsValidationError {
 
 @ObjectType()
 export class InputValidationError extends BaseError {
-  readonly errorCode = 'INPUT_VALIDATION_ERROR';
+  readonly errorCode = ErrorCode.INPUT_VALIDATION;
   readonly message = 'Invalid input';
 
   @Field(() => [CmsValidationError])

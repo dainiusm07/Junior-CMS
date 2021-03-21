@@ -3,12 +3,8 @@ import {
   EntityRepository,
   FilterQuery,
   FindOneOptions,
-  FindOptions,
-  Populate,
-  Primary,
 } from '@mikro-orm/core';
 
-import { NotFoundError } from '../../common/errors/not-found.error';
 import {
   MAX_RESULTS_PER_PAGE_LIMIT,
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
@@ -16,30 +12,11 @@ import {
 import { IListOptions, IListResponse } from './list-utils';
 import { deleteUndefinedProperties } from '../../utils/delete-undefined-properties';
 import { parseSortInput, parseFilterInput } from './helpers';
+export abstract class BaseService<T extends object> {
+  constructor(private _repo: EntityRepository<T>) {}
 
-export class BaseService<T extends object> {
-  constructor(private repo: EntityRepository<T>, private name: string) {}
-
-  getReference(id: Primary<T>) {
-    return this.repo.getReference(id);
-  }
-
-  findOne(where: FilterQuery<T>, populate?: FindOneOptions<T, any>) {
-    return this.repo.findOne(where, populate);
-  }
-
-  async findOneOrFail(
-    where: FilterQuery<T>,
-    populate?: FindOneOptions<T, any>,
-  ) {
-    return this.findOne(where, populate).then((res) => {
-      if (!res) return new NotFoundError(this.name);
-      return res;
-    });
-  }
-
-  find(where: FilterQuery<T>, options?: FindOptions<T, Populate<T>>) {
-    return this.repo.find(where, options);
+  findOneOrFail(where: FilterQuery<T>, options?: FindOneOptions<T>) {
+    return this._repo.findOneOrFail(where, options);
   }
 
   async findList(options: IListOptions<T>): Promise<IListResponse<T>> {
@@ -54,7 +31,7 @@ export class BaseService<T extends object> {
     const filter = parseFilterInput(rawFilter);
     const orderBy = parseSortInput(sort);
 
-    const [items, totalItems] = await this.repo.findAndCount(filter, {
+    const [items, totalItems] = await this._repo.findAndCount(filter, {
       offset: (page - 1) * limit,
       limit,
       orderBy,
@@ -76,16 +53,12 @@ export class BaseService<T extends object> {
     };
   }
 
-  create(data: EntityData<T>) {
-    return this.repo.create(data);
-  }
-
-  async insert(data: EntityData<Omit<T, ''>>) {
+  async insert(data: EntityData<T>) {
     deleteUndefinedProperties(data);
 
-    const entity = this.repo.create(data);
+    const entity = this._repo.create(data);
 
-    await this.repo.persistAndFlush(entity);
+    await this._repo.persistAndFlush(entity);
     return entity;
   }
 
@@ -94,23 +67,10 @@ export class BaseService<T extends object> {
 
     const entity = await this.findOneOrFail(filter);
 
-    if (entity instanceof NotFoundError) {
-      return entity;
-    }
+    this._repo.assign(entity, data);
 
-    this.repo.assign(entity, data);
+    await this._repo.persistAndFlush(entity);
 
-    await this.repo.persistAndFlush(entity);
-    return entity;
-  }
-
-  async updateMany(filter: FilterQuery<T>, data: EntityData<T>) {
-    deleteUndefinedProperties(data);
-
-    const entities = await this.repo.find(filter);
-    entities.forEach((entity) => this.repo.assign(entity, data));
-
-    await this.repo.persistAndFlush(entities);
-    return entities;
+    return this.findOneOrFail(entity);
   }
 }

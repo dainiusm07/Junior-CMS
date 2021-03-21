@@ -11,6 +11,6 @@ export class RoleService extends BaseService<Role> {
     @InjectRepository(Role)
     private roleRepo: EntityRepository<Role>,
   ) {
-    super(roleRepo, 'Role');
+    super(roleRepo);
   }
 }

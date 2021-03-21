@@ -1,4 +1,4 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityRepository, NotFoundError } from '@mikro-orm/core';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { Test } from '@nestjs/testing';
 
@@ -6,7 +6,6 @@ import {
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
   MAX_RESULTS_PER_PAGE_LIMIT,
 } from '../../common/constants';
-import { NotFoundError } from '../../common/errors/not-found.error';
 import { mockEntities } from '../../test-utils/mock-entities';
 import { mockRepository } from '../../test-utils/mock-repository';
 import { BaseEntity } from './base.entity';
@@ -37,7 +36,7 @@ describe('BaseService', () => {
 
   class MyBaseService extends BaseService<BaseEntity> {
     constructor(private baseRepo: EntityRepository<BaseEntity>) {
-      super(baseRepo, 'Base');
+      super(baseRepo);
     }
   }
 
@@ -58,26 +57,6 @@ describe('BaseService', () => {
   describe('instance', () => {
     it('should be defined', () => {
       expect(service).toBeDefined();
-    });
-  });
-
-  describe('getReference', () => {
-    it('should call repository getReference method', () => {
-      const getReference = jest.spyOn(repo, 'getReference');
-
-      service.getReference(1);
-
-      expect(getReference).toBeCalled();
-    });
-  });
-
-  describe('create', () => {
-    it('should create entity instance', () => {
-      const entity = {};
-
-      const result = service.create(entity);
-
-      expect(result).toBeInstanceOf(MyBaseEntity);
     });
   });
 
@@ -246,33 +225,28 @@ describe('BaseService', () => {
     });
   });
 
-  describe('findOne', () => {
-    it('should return entity', async () => {
-      jest.spyOn(repo, 'findOne').mockReturnValue(Promise.resolve(entities[0]));
-
-      const result = await service.findOne({});
-
-      expect(result).toBeInstanceOf(MyBaseEntity);
-      expect(result).toBe(entities[0]);
-    });
-  });
-
   describe('findOneOrFail', () => {
     it('should return entity', async () => {
-      jest.spyOn(repo, 'findOne').mockReturnValue(Promise.resolve(entities[0]));
+      jest
+        .spyOn(repo, 'findOneOrFail')
+        .mockReturnValue(Promise.resolve(entities[0]));
 
-      const result = await service.findOne({});
+      const result = await service.findOneOrFail({});
 
       expect(result).toBeInstanceOf(MyBaseEntity);
       expect(result).toBe(entities[0]);
     });
 
-    it('should return NotFoundError', async () => {
-      jest.spyOn(repo, 'findOne').mockReturnValue(Promise.resolve(null));
+    it('should throw NotFoundError', async () => {
+      jest.spyOn(repo, 'findOneOrFail').mockImplementation(() => {
+        throw new NotFoundError('testing');
+      });
 
-      const response = await service.findOneOrFail({});
-
-      expect(response).toBeInstanceOf(NotFoundError);
+      try {
+        await service.findOneOrFail({});
+      } catch (err) {
+        expect(err).toBeInstanceOf(NotFoundError);
+      }
     });
   });
 
@@ -280,13 +254,15 @@ describe('BaseService', () => {
     const entity = entities[1];
 
     beforeEach(() => {
-      jest.spyOn(repo, 'findOne').mockReturnValue(Promise.resolve(entity));
+      jest
+        .spyOn(service, 'findOneOrFail')
+        .mockReturnValue(Promise.resolve(entity));
     });
 
-    it('should try to get entity first', async () => {
+    it('should try to fetch entity, then fetch it again if something is changed', async () => {
       await service.updateOne({}, {});
 
-      expect(repo.findOne).toBeCalled();
+      expect(service.findOneOrFail).toBeCalledTimes(2);
     });
 
     it('should return updated entity', async () => {
@@ -295,38 +271,6 @@ describe('BaseService', () => {
       const result = await service.updateOne({}, update);
 
       expect(result).toBe(Object.assign(entity, update));
-    });
-
-    it('should return NotFoundError if entity is not found', async () => {
-      jest.spyOn(repo, 'findOne').mockReturnValue(Promise.resolve(null));
-
-      const result = await service.updateOne({}, {});
-
-      expect(result).toBeInstanceOf(NotFoundError);
-    });
-  });
-
-  describe('updateMany', () => {
-    beforeEach(() => {
-      jest.spyOn(repo, 'find').mockReturnValue(Promise.resolve(entities));
-    });
-
-    it('should get entities first', async () => {
-      await service.updateMany({}, {});
-
-      expect(repo.find).toBeCalled();
-    });
-
-    it('should return updated entities', async () => {
-      const update = { id: 999 };
-      const updatedEntities = mockEntities(
-        entities.map((entity) => ({ ...entity, ...update })),
-        MyBaseEntity,
-      );
-
-      const result = await service.updateMany({}, update);
-
-      expect(result).toStrictEqual(updatedEntities);
     });
   });
 

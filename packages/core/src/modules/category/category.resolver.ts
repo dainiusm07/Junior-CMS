@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 
 import { Permission } from '../../common/permission.enum';
@@ -17,9 +17,11 @@ import {
   CategoryTreeResponse,
 } from './responses';
 import { InputValidationPipe } from '../../middleware/input-validation.pipe';
+import { InputValidationFilter, NotFoundFilter } from '../../filters';
 
 @Resolver()
 @Injectable()
+@UseFilters(InputValidationFilter, NotFoundFilter)
 export class CategoryResolver {
   constructor(private categoryService: CategoryService) {}
 

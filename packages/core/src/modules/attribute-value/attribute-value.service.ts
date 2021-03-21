@@ -11,6 +11,6 @@ export class AttributeValueService extends BaseService<AttributeValue> {
     @InjectRepository(AttributeValue)
     private attributeValueRepo: EntityRepository<AttributeValue>,
   ) {
-    super(attributeValueRepo, 'Attribute value');
+    super(attributeValueRepo);
   }
 }

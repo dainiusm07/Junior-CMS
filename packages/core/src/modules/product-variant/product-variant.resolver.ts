@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
 
 import { Permission } from '../../common/permission.enum';
 import { Allow } from '../../decorators';
+import { InputValidationFilter, NotFoundFilter } from '../../filters';
 import { InputValidationPipe } from '../../middleware/input-validation.pipe';
 import { NewProductVariantInput, UpdateProductVariantInput } from './dto';
 import { ProductVariantService } from './product-variant.service';
@@ -13,6 +14,7 @@ import {
 
 @Resolver()
 @Injectable()
+@UseFilters(InputValidationFilter, NotFoundFilter)
 export class ProductVariantResolver {
   constructor(private productVariantService: ProductVariantService) {}
 

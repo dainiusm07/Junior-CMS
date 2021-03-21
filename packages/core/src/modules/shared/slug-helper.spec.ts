@@ -1,6 +1,6 @@
-import { slugHelperMixin } from './slug-helper.mixin';
+import { SlugHelper } from './slug-helper';
 
-class BaseServiceDerived {
+class SimpleRepo {
   findOne = jest.fn();
   find = jest.fn();
 }
@@ -12,7 +12,8 @@ const getBaseEntity = (slug: string) => ({
   slug,
 });
 
-const helper = new (slugHelperMixin(BaseServiceDerived as any))();
+const helper = new SlugHelper();
+const repo = new SimpleRepo();
 
 describe('Slug-helper-mixin', () => {
   describe('checkSlugAvailability', () => {
@@ -31,10 +32,10 @@ describe('Slug-helper-mixin', () => {
     ].forEach(({ description, returnValue, expectedResult }) => {
       it(description, async () => {
         jest
-          .spyOn(helper, 'findOne')
+          .spyOn(repo, 'findOne')
           .mockReturnValue(Promise.resolve(returnValue));
 
-        const result = await helper.checkSlugAvailability('');
+        const result = await helper.checkSlugAvailability(repo as never, '');
 
         expect(result).toBe(expectedResult);
       });
@@ -73,11 +74,9 @@ describe('Slug-helper-mixin', () => {
             returnValue.push(getBaseEntity(`${slug}-${i}`));
           }
         }
-        jest
-          .spyOn(helper, 'find')
-          .mockReturnValue(Promise.resolve(returnValue));
+        jest.spyOn(repo, 'find').mockReturnValue(Promise.resolve(returnValue));
 
-        const resultSlug = await helper.getAvailableSlug(slug);
+        const resultSlug = await helper.getAvailableSlug(repo as never, slug);
 
         expect(resultSlug).toBe(expectedResult);
       });

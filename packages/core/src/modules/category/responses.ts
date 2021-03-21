@@ -1,18 +1,18 @@
 import { createUnionType, Field, ObjectType } from '@nestjs/graphql';
 
 import { InputValidationError } from '../../common/errors/input-validation.error';
-import { NotFoundError } from '../../common/errors/not-found.error';
+import { ResultError } from '../../common/errors/result.error';
 import { generateListResponse } from '../shared/list-utils';
 import { Category } from './category.entity';
 
 export const CategoryResponse = createUnionType({
   name: 'CategoryResponse',
-  types: () => [Category, NotFoundError],
+  types: () => [Category, ResultError],
 });
 
 export const UpdateCategoryResponse = createUnionType({
   name: 'UpdateCategoryResponse',
-  types: () => [Category, InputValidationError, NotFoundError],
+  types: () => [Category, InputValidationError, ResultError],
 });
 
 export const CreateCategoryResponse = createUnionType({

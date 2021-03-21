@@ -1,18 +1,18 @@
 import { createUnionType, ObjectType } from '@nestjs/graphql';
 
 import { InputValidationError } from '../../common/errors/input-validation.error';
-import { NotFoundError } from '../../common/errors/not-found.error';
+import { ResultError } from '../../common/errors/result.error';
 import { generateListResponse } from '../shared/list-utils';
 import { Role } from './role.entity';
 
 export const RoleResponse = createUnionType({
   name: 'RoleResponse',
-  types: () => [Role, NotFoundError],
+  types: () => [Role, ResultError],
 });
 
 export const UpdateRoleResponse = createUnionType({
   name: 'UpdateRoleResponse',
-  types: () => [Role, InputValidationError, NotFoundError],
+  types: () => [Role, InputValidationError, ResultError],
 });
 
 export const CreateRoleResponse = createUnionType({

@@ -4,25 +4,29 @@ import { Injectable } from '@nestjs/common';
 import { CATEGORIES_TREE_DEPTH } from '../../common/constants';
 
 import { BaseService } from '../shared/base.service';
-import { slugHelperMixin } from '../shared/mixins/slug-helper.mixin';
+import { SlugHelper } from '../shared/slug-helper';
 import { Category } from './category.entity';
-
-// Mixins
-class BaseServiceDerived extends BaseService<Category> {}
-
-const Mixins = slugHelperMixin(BaseServiceDerived);
 
 // Settings
 const categoriesPopulate =
   'children' + '.children'.repeat(CATEGORIES_TREE_DEPTH - 1);
 
 @Injectable()
-export class CategoryService extends Mixins {
+export class CategoryService extends BaseService<Category> {
   constructor(
     @InjectRepository(Category)
     private categoryRepo: EntityRepository<Category>,
+    private slugHelper: SlugHelper,
   ) {
-    super(categoryRepo, 'Category');
+    super(categoryRepo);
+  }
+
+  getAvailableSlug(name: string) {
+    return this.slugHelper.getAvailableSlug(this.categoryRepo, name);
+  }
+
+  checkSlugAvailability(slug: string) {
+    return this.slugHelper.checkSlugAvailability(this.categoryRepo, slug);
   }
 
   async insert(data: EntityData<Category>) {
@@ -34,7 +38,7 @@ export class CategoryService extends Mixins {
   }
 
   getCategoriesTree(id?: number) {
-    return this.find(id ? { id } : { parent: null }, {
+    return this.categoryRepo.find(id ? { id } : { parent: null }, {
       populate: [categoriesPopulate],
     });
   }

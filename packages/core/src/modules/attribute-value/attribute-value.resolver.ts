@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
 
 import { Allow } from '../../decorators';
@@ -10,9 +10,11 @@ import {
   UpdateAttributeValueResponse,
 } from './responses';
 import { InputValidationPipe } from '../../middleware/input-validation.pipe';
+import { InputValidationFilter, NotFoundFilter } from '../../filters';
 
 @Resolver()
 @Injectable()
+@UseFilters(InputValidationFilter, NotFoundFilter)
 export class AttributeValueResolver {
   constructor(private attributeValueService: AttributeValueService) {}
 

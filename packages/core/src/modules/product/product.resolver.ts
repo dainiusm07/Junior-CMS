@@ -1,9 +1,9 @@
-import { LoadStrategy } from '@mikro-orm/core';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { Permission } from '../../common/permission.enum';
 import { Allow } from '../../decorators';
+import { InputValidationFilter, NotFoundFilter } from '../../filters';
 import { InputValidationPipe } from '../../middleware/input-validation.pipe';
 import { NewProductInput, ProductListOptions, UpdateProductInput } from './dto';
 import { ProductService } from './product.service';
@@ -16,6 +16,7 @@ import {
 
 @Resolver()
 @Injectable()
+@UseFilters(InputValidationFilter, NotFoundFilter)
 export class ProductResolver {
   constructor(private productService: ProductService) {}
 
@@ -24,13 +25,7 @@ export class ProductResolver {
   async product(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<typeof ProductResponse> {
-    return this.productService.findOneOrFail(
-      { id },
-      {
-        populate: { variants: true },
-        strategy: LoadStrategy.JOINED,
-      },
-    );
+    return this.productService.findOneOrFail({ id });
   }
 
   @Allow(Permission.ReadProduct)
@@ -59,7 +54,6 @@ export class ProductResolver {
     @Args('input', InputValidationPipe) input: UpdateProductInput,
   ): Promise<typeof UpdateProductResponse> {
     const { categoryId, ...restInput } = input;
-    // ProductVariantService
 
     return this.productService.updateOne(id, {
       ...restInput,

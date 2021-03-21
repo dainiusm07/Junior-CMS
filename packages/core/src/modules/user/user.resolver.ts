@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { Args, Resolver, Query, Mutation, Int } from '@nestjs/graphql';
 
 import { Permission } from '../../common/permission.enum';
@@ -12,9 +12,11 @@ import {
   UserResponse,
 } from './responses';
 import { UserService } from './user.service';
+import { InputValidationFilter, NotFoundFilter } from '../../filters';
 
 @Resolver()
 @Injectable()
+@UseFilters(InputValidationFilter, NotFoundFilter)
 export class UserResolver {
   constructor(private userService: UserService) {}
 

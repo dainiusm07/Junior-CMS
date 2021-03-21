@@ -2,6 +2,7 @@ import { EntityRepository, LoadStrategy } from '@mikro-orm/core';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { Test } from '@nestjs/testing';
 import { mockEntities } from '../../test-utils/mock-entities';
+import { mockRepository } from '../../test-utils/mock-repository';
 
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -42,10 +43,7 @@ describe('UserService tests', () => {
         UserService,
         {
           provide: getRepositoryToken(User),
-          useValue: {
-            find: jest.fn(),
-            findOne: jest.fn(),
-          },
+          useValue: mockRepository(User),
         },
       ],
     }).compile();
@@ -72,21 +70,15 @@ describe('UserService tests', () => {
     });
   });
 
-  describe('find', () => {
-    beforeEach(() => {
-      jest.spyOn(repo, 'find').mockReturnValue(Promise.resolve(usersMock));
-    });
+  describe('findOneOrFail', () => {
+    it('should load user roles', async () => {
+      const options = {};
 
-    it('should return many users', async () => {
-      const users = await service.find({});
+      await service.findOneOrFail(options);
 
-      expect(users).toBe(usersMock);
-    });
-
-    it('should return array', async () => {
-      const users = await service.find({});
-
-      expect(Array.isArray(users)).toBe(true);
+      expect(repo.findOneOrFail).toBeCalledWith(options, {
+        populate: { role: LoadStrategy.JOINED },
+      });
     });
   });
 });

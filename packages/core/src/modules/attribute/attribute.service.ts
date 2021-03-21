@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityRepository, FilterQuery, LoadStrategy } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 
 import { Attribute } from './attribute.entity';
@@ -11,6 +11,15 @@ export class AttributeService extends BaseService<Attribute> {
     @InjectRepository(Attribute)
     private attributeRepo: EntityRepository<Attribute>,
   ) {
-    super(attributeRepo, 'Attribute');
+    super(attributeRepo);
+  }
+
+  findOneOrFail(where: FilterQuery<Attribute>) {
+    return super.findOneOrFail(where, {
+      populate: { values: LoadStrategy.JOINED },
+    });
+  }
+  findAll() {
+    return this.attributeRepo.findAll({ populate: { values: true } });
   }
 }

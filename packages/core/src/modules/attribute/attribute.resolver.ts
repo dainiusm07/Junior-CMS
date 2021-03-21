@@ -1,9 +1,9 @@
-import { LoadStrategy } from '@mikro-orm/core';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { Permission } from '../../common/permission.enum';
 import { Allow } from '../../decorators';
+import { InputValidationFilter, NotFoundFilter } from '../../filters';
 import { InputValidationPipe } from '../../middleware/input-validation.pipe';
 import { Attribute } from './attribute.entity';
 import { AttributeService } from './attribute.service';
@@ -16,6 +16,7 @@ import {
 
 @Resolver()
 @Injectable()
+@UseFilters(InputValidationFilter, NotFoundFilter)
 export class AttributeResolver {
   constructor(private attributeService: AttributeService) {}
 
@@ -24,19 +25,13 @@ export class AttributeResolver {
   attribute(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<typeof AttributeResponse> {
-    return this.attributeService.findOneOrFail(
-      { id },
-      { populate: { values: LoadStrategy.JOINED } },
-    );
+    return this.attributeService.findOneOrFail({ id });
   }
 
   @Allow(Permission.ReadAttribute)
   @Query(() => [Attribute])
   attributes(): Promise<Attribute[]> {
-    return this.attributeService.find(
-      {},
-      { populate: { values: LoadStrategy.JOINED } },
-    );
+    return this.attributeService.findAll();
   }
 
   @Allow(Permission.CreateAttribute)

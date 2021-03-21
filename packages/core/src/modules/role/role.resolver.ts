@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 
 import { Allow } from '../../decorators';
@@ -13,9 +13,11 @@ import {
   UpdateRoleResponse,
 } from './responses';
 import { InputValidationPipe } from '../../middleware/input-validation.pipe';
+import { InputValidationFilter, NotFoundFilter } from '../../filters';
 
 @Resolver()
 @Injectable()
+@UseFilters(InputValidationFilter, NotFoundFilter)
 export class RoleResolver {
   constructor(private roleService: RoleService) {}
 

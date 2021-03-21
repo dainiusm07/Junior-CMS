@@ -1,5 +1,6 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
+import { SlugHelper } from '../shared/slug-helper';
 
 import { ProductVariantEntityResolver } from './product-variant-entity.resolver';
 import { ProductVariant } from './product-variant.entity';
@@ -12,6 +13,7 @@ import { ProductVariantService } from './product-variant.service';
     ProductVariantService,
     ProductVariantResolver,
     ProductVariantEntityResolver,
+    SlugHelper,
   ],
   exports: [ProductVariantService],
 })

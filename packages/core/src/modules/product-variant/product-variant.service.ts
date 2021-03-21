@@ -5,20 +5,25 @@ import { Injectable } from '@nestjs/common';
 import { PRODUCT_VARIANT_ATTRIBUTES_LOADER } from '../../common/constants';
 import { usePopulationLoader } from '../../utils/use-population-loader';
 import { BaseService } from '../shared/base.service';
-import { slugHelperMixin } from '../shared/mixins/slug-helper.mixin';
+import { SlugHelper } from '../shared/slug-helper';
 import { ProductVariant } from './product-variant.entity';
 
-class BaseServiceDerived extends BaseService<ProductVariant> {}
-
-const Mixins = slugHelperMixin(BaseServiceDerived);
-
 @Injectable()
-export class ProductVariantService extends Mixins {
+export class ProductVariantService extends BaseService<ProductVariant> {
   constructor(
     @InjectRepository(ProductVariant)
     private productVariantRepo: EntityRepository<ProductVariant>,
+    private slugHelper: SlugHelper,
   ) {
-    super(productVariantRepo, 'Product variant');
+    super(productVariantRepo);
+  }
+
+  getAvailableSlug(name: string) {
+    return this.slugHelper.getAvailableSlug(this.productVariantRepo, name);
+  }
+
+  checkSlugAvailability(slug: string) {
+    return this.slugHelper.checkSlugAvailability(this.productVariantRepo, slug);
   }
 
   async getAttributes(ctx: any, product: ProductVariant) {
