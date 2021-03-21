@@ -1,6 +1,6 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType } from '@nestjs/graphql';
 
-import { Permission } from "../../../common/permission.enum";
+import { Permission } from '../../../common/permission.enum';
 
 @InputType()
 export class NewRoleInput {

@@ -1,6 +1,6 @@
-import { BaseEntity } from "../modules/shared/base.entity";
+import { BaseEntity } from '../modules/shared/base.entity';
 
-export type BaseKeys = keyof BaseEntity | "deletedAt";
+export type BaseKeys = keyof BaseEntity | 'deletedAt';
 
 export type Unpacked<T> = T extends (infer U)[] ? U : T;
 

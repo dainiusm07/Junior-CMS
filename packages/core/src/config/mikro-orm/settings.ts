@@ -1,4 +1,4 @@
-import { MikroOrmModuleOptions } from "@mikro-orm/nestjs";
+import { MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 
 import {
   DB_DATABASE,
@@ -7,7 +7,7 @@ import {
   DB_PORT,
   DB_USER,
   NODE_ENV,
-} from "../../common/environment";
+} from '../../common/environment';
 
 interface Environment {
   [key: string]: MikroOrmModuleOptions;
@@ -15,12 +15,12 @@ interface Environment {
 
 const configs: Environment = {
   development: {
-    dbName: "cms",
-    host: "localhost",
+    dbName: 'cms',
+    host: 'localhost',
     port: 5432,
-    user: "",
-    password: "",
-    debug: ["query", "query-params"],
+    user: '',
+    password: '',
+    debug: ['query', 'query-params'],
   },
   production: {
     dbName: DB_DATABASE,
@@ -32,9 +32,9 @@ const configs: Environment = {
 };
 
 const MikroORMConfig: MikroOrmModuleOptions = {
-  type: "postgresql",
+  type: 'postgresql',
   ...configs[NODE_ENV],
-  entities: ["./src/modules/**/*.entity.ts"],
+  entities: ['./src/modules/**/*.entity.ts'],
   migrations: {
     pattern: /^\d+_[\w-]+.ts$/,
   },

@@ -11,9 +11,9 @@ import { ProductEntity } from './product.entity';
 export class ProductService extends BaseService<ProductEntity> {
   constructor(
     @InjectRepository(ProductEntity)
-    private productRepo: EntityRepository<ProductEntity>
+    private productRepo: EntityRepository<ProductEntity>,
   ) {
-    super(productRepo, "Product");
+    super(productRepo, 'Product');
   }
 
   getVariants(ctx: any, product: ProductEntity) {

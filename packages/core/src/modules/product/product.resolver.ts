@@ -7,7 +7,12 @@ import { Allow } from '../../decorators';
 import { InputValidationPipe } from '../../middleware/input-validation.pipe';
 import { NewProductInput, ProductListOptions, UpdateProductInput } from './dto';
 import { ProductService } from './product.service';
-import { CreateProductResponse, ProductListResponse, ProductResponse, UpdateProductResponse } from './responses';
+import {
+  CreateProductResponse,
+  ProductListResponse,
+  ProductResponse,
+  UpdateProductResponse,
+} from './responses';
 
 @Resolver()
 @Injectable()
@@ -17,14 +22,14 @@ export class ProductResolver {
   @Allow(Permission.ReadProduct)
   @Query(() => ProductResponse)
   async product(
-    @Args("id", { type: () => Int }) id: number
+    @Args('id', { type: () => Int }) id: number,
   ): Promise<typeof ProductResponse> {
     return this.productService.findOneOrFail(
       { id },
       {
         populate: { variants: true },
         strategy: LoadStrategy.JOINED,
-      }
+      },
     );
   }
 
@@ -37,7 +42,7 @@ export class ProductResolver {
   @Allow(Permission.CreateProduct)
   @Mutation(() => CreateProductResponse)
   async createProduct(
-    @Args("input", InputValidationPipe) input: NewProductInput
+    @Args('input', InputValidationPipe) input: NewProductInput,
   ): Promise<typeof CreateProductResponse> {
     const { categoryId, ...restInput } = input;
 
@@ -50,10 +55,11 @@ export class ProductResolver {
   @Allow(Permission.UpdateProduct)
   @Mutation(() => UpdateProductResponse)
   updateProduct(
-    @Args("id", { type: () => Int }) id: number,
-    @Args("input", InputValidationPipe) input: UpdateProductInput
+    @Args('id', { type: () => Int }) id: number,
+    @Args('input', InputValidationPipe) input: UpdateProductInput,
   ): Promise<typeof UpdateProductResponse> {
     const { categoryId, ...restInput } = input;
+    // ProductVariantService
 
     return this.productService.updateOne(id, {
       ...restInput,

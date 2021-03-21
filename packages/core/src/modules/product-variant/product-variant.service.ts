@@ -16,9 +16,9 @@ const Mixins = slugHelperMixin(BaseServiceDerived);
 export class ProductVariantService extends Mixins {
   constructor(
     @InjectRepository(ProductVariantEntity)
-    private productVariantRepo: EntityRepository<ProductVariantEntity>
+    private productVariantRepo: EntityRepository<ProductVariantEntity>,
   ) {
-    super(productVariantRepo, "Product variant");
+    super(productVariantRepo, 'Product variant');
   }
 
   async getAttributes(ctx: any, product: ProductVariantEntity) {
@@ -26,7 +26,7 @@ export class ProductVariantService extends Mixins {
       ctx,
       this.productVariantRepo,
       PRODUCT_VARIANT_ATTRIBUTES_LOADER,
-      { attributesValues: { attribute: true } }
+      { attributesValues: { attribute: true } },
     )
       .load(product)
       .then((result) => this.mapLoadedAttributes(result));
@@ -43,7 +43,7 @@ export class ProductVariantService extends Mixins {
       ...new Set(attributesValues.map(({ attribute }) => attribute)),
     ].map((attribute) => {
       const values = attributesValues.filter(
-        (value) => value.attribute.id === attribute.id
+        (value) => value.attribute.id === attribute.id,
       );
 
       return Object.assign(attribute, { values });

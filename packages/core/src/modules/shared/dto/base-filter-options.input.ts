@@ -1,8 +1,8 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { Type } from "class-transformer";
-import { BaseEntity } from "../base.entity";
-import { FilterOptions } from "../list-utils";
-import { DateOperators, NumberOperators } from "../operators";
+import { Field, InputType } from '@nestjs/graphql';
+import { Type } from 'class-transformer';
+import { BaseEntity } from '../base.entity';
+import { FilterOptions } from '../list-utils';
+import { DateOperators, NumberOperators } from '../operators';
 
 @InputType({ isAbstract: true })
 export abstract class BaseFilterOptions implements FilterOptions<BaseEntity> {

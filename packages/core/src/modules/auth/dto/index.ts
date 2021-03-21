@@ -1,1 +1,1 @@
-export * from "./native-auth.input";
+export * from './native-auth.input';

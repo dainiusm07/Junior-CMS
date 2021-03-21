@@ -10,18 +10,18 @@ import { ProductVariantEntity } from '../product-variant.entity';
 @InputType()
 export class NewProductVariantInput
   implements PartialEntity<ProductVariantEntity> {
-  @Exists(ProductEntity, "id", "Product")
+  @Exists(ProductEntity, 'id', 'Product')
   @Field(() => Int)
   productId: number;
 
   @Field(() => Int)
   price: number;
 
-  @Unique(ProductVariantEntity, "slug")
+  @Unique(ProductVariantEntity, 'slug')
   @Field()
   slug: string;
 
-  @Exists(AttributeValueEntity, "id", "AttributeValue")
+  @Exists(AttributeValueEntity, 'id', 'AttributeValue')
   @Field(() => [Int])
   attributesValuesIds: number[];
 }

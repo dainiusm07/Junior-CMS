@@ -1,6 +1,6 @@
-import { Catch } from "@nestjs/common";
+import { Catch } from '@nestjs/common';
 
-import { InputValidationError } from "../common/errors/input-validation.error";
+import { InputValidationError } from '../common/errors/input-validation.error';
 
 @Catch(InputValidationError)
 export class InputValidationFilter {

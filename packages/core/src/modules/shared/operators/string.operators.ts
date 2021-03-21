@@ -1,6 +1,6 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType } from '@nestjs/graphql';
 
-import { Operators } from "../operators.enum";
+import { Operators } from '../operators.enum';
 
 @InputType()
 export class StringOperators {

@@ -13,7 +13,7 @@ export class NewProductInput implements PartialEntity<ProductEntity> {
   @Field({ nullable: true })
   description?: string;
 
-  @Exists(CategoryEntity, "id", "Category")
+  @Exists(CategoryEntity, 'id', 'Category')
   @Field(() => Int)
   categoryId: number;
 }

@@ -1,14 +1,14 @@
-import { Constructor, RequestContext } from "@mikro-orm/core";
-import { registerDecorator, ValidationArguments } from "class-validator";
-import { capitalizeFirstLetter } from "../../../utils/capitalize-first-letter";
+import { Constructor, RequestContext } from '@mikro-orm/core';
+import { registerDecorator } from 'class-validator';
+import { capitalizeFirstLetter } from '../../../utils/capitalize-first-letter';
 
-import { BaseEntity } from "../base.entity";
+import { BaseEntity } from '../base.entity';
 
 export function Unique<T extends BaseEntity>(
   entity: Constructor<T>,
-  field: keyof T
+  field: keyof T,
 ): PropertyDecorator {
-  return (object: Object, propertyName: string | symbol) => {
+  return (object: object, propertyName: string | symbol) => {
     const fieldName = capitalizeFirstLetter(field);
 
     registerDecorator({
@@ -17,10 +17,10 @@ export function Unique<T extends BaseEntity>(
       propertyName: propertyName.toString(),
       async: true,
       validator: {
-        async validate(value: string, args: ValidationArguments) {
-          const em = RequestContext.getEntityManager()!;
+        async validate(value: string) {
+          const em = RequestContext.getEntityManager();
           // Using em.count to not pollute the context
-          const result = await em.count(entity, { [field]: value });
+          const result = await em?.count(entity, { [field]: value });
 
           return !Boolean(result);
         },

@@ -1,8 +1,8 @@
-import { EntityRepository } from "@mikro-orm/core";
-import { PopulateChildren } from "@mikro-orm/core/typings";
-import DataLoader from "dataloader";
+import { EntityRepository } from '@mikro-orm/core';
+import { PopulateChildren } from '@mikro-orm/core/typings';
+import DataLoader from 'dataloader';
 
-const key = Symbol("population_loaders");
+const key = Symbol('population_loaders');
 
 export const usePopulationLoader = <T>(
   ctx: any,
@@ -14,7 +14,7 @@ export const usePopulationLoader = <T>(
     | readonly string[]
     | keyof T
     | readonly (keyof T)[]
-    | PopulateChildren<T>
+    | PopulateChildren<T>,
 ) => {
   // Returning existing loader
   if (ctx[key] && ctx[key][loaderName]) {

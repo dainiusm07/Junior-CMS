@@ -6,16 +6,16 @@ import {
   FindOptions,
   Populate,
   Primary,
-} from "@mikro-orm/core";
+} from '@mikro-orm/core';
 
-import { NotFoundError } from "../../common/errors/not-found.error";
+import { NotFoundError } from '../../common/errors/not-found.error';
 import {
   MAX_RESULTS_PER_PAGE_LIMIT,
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
-} from "../../common/constants";
-import { IListOptions, IListResponse } from "./list-utils";
-import { deleteUndefinedProperties } from "../../utils/delete-undefined-properties";
-import { parseSortInput, parseFilterInput } from "./helpers";
+} from '../../common/constants';
+import { IListOptions, IListResponse } from './list-utils';
+import { deleteUndefinedProperties } from '../../utils/delete-undefined-properties';
+import { parseSortInput, parseFilterInput } from './helpers';
 
 export class BaseService<T extends object> {
   constructor(private repo: EntityRepository<T>, private name: string) {}
@@ -30,7 +30,7 @@ export class BaseService<T extends object> {
 
   async findOneOrFail(
     where: FilterQuery<T>,
-    populate?: FindOneOptions<T, any>
+    populate?: FindOneOptions<T, any>,
   ) {
     return this.findOne(where, populate).then((res) => {
       if (!res) return new NotFoundError(this.name);
@@ -43,7 +43,8 @@ export class BaseService<T extends object> {
   }
 
   async findList(options: IListOptions<T>): Promise<IListResponse<T>> {
-    let { filter: rawFilter, page, limit, sort } = options;
+    const { filter: rawFilter, sort } = options;
+    let { page, limit } = options;
 
     page = page > 0 ? page : 1;
     if (limit <= 0 || limit > MAX_RESULTS_PER_PAGE_LIMIT) {
@@ -79,7 +80,7 @@ export class BaseService<T extends object> {
     return this.repo.create(data);
   }
 
-  async insert(data: EntityData<Omit<T, "">>) {
+  async insert(data: EntityData<Omit<T, ''>>) {
     deleteUndefinedProperties(data);
 
     const entity = this.repo.create(data);

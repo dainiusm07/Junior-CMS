@@ -1,13 +1,13 @@
-import { registerEnumType } from "@nestjs/graphql";
+import { registerEnumType } from '@nestjs/graphql';
 
-import { ExcludeNever } from "../../../types";
+import { ExcludeNever } from '../../../types';
 
 export enum SortOrder {
-  ASC = "ASC",
-  DESC = "DESC",
+  ASC = 'ASC',
+  DESC = 'DESC',
 }
 
-registerEnumType(SortOrder, { name: "SortOrder" });
+registerEnumType(SortOrder, { name: 'SortOrder' });
 
 export type SortOptions<T> = ExcludeNever<
   {

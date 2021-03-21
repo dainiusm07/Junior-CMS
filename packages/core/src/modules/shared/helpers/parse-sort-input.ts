@@ -1,7 +1,7 @@
-import { SortOrder } from "../list-utils";
+import { SortOrder } from '../list-utils';
 
 export const parseSortInput = (
-  sort: Record<string, SortOrder | null | undefined>
+  sort: Record<string, SortOrder | null | undefined>,
 ) => {
   const orderBy: Record<string, SortOrder> = {};
 

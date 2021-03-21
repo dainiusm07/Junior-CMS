@@ -2,7 +2,7 @@ import {
   Injectable,
   CacheOptionsFactory,
   CacheModuleOptions,
-} from "@nestjs/common";
+} from '@nestjs/common';
 
 @Injectable()
 export class CacheService implements CacheOptionsFactory {

@@ -1,12 +1,12 @@
-import { Test } from "@nestjs/testing";
-import { Reflector } from "@nestjs/core";
-import { GqlExecutionContext } from "@nestjs/graphql";
+import { Test } from '@nestjs/testing';
+import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
-import { mockedExecutionContext } from "../test-utils/mocked-execution-context";
-import { AuthGuard } from "./auth-guard";
-import { UserEntity } from "../modules/user/user.entity";
-import { AuthService } from "../modules/auth/auth.service";
-import { Permission } from "../common/permission.enum";
+import { mockedExecutionContext } from '../test-utils/mocked-execution-context';
+import { AuthGuard } from './auth-guard';
+import { UserEntity } from '../modules/user/user.entity';
+import { AuthService } from '../modules/auth/auth.service';
+import { Permission } from '../common/permission.enum';
 const { ReadUser, CreateUser } = Permission;
 
 let authGuard: AuthGuard;
@@ -15,7 +15,7 @@ let reflector: Reflector;
 
 const mockUserWithPermissions = (
   rolesPermissions: Permission[],
-  isAdmin = false
+  isAdmin = false,
 ) => {
   const user = {
     role: {
@@ -25,7 +25,7 @@ const mockUserWithPermissions = (
   } as UserEntity;
 
   jest
-    .spyOn(authService, "getCurrentUser")
+    .spyOn(authService, 'getCurrentUser')
     .mockReturnValue(Promise.resolve(user));
 
   return user;
@@ -34,17 +34,17 @@ const mockUserWithPermissions = (
 const mockContextWithUserId = (userId: number) => {
   const context = { req: { session: { userId } } };
 
-  jest.spyOn(GqlExecutionContext, "create").mockReturnValue({
+  jest.spyOn(GqlExecutionContext, 'create').mockReturnValue({
     getContext: jest.fn().mockReturnValue(context),
   } as any);
   return context as any;
 };
 
 const mockRequiredPermissions = (permissions: Permission[] | undefined) => {
-  jest.spyOn(reflector, "get").mockReturnValue(permissions);
+  jest.spyOn(reflector, 'get').mockReturnValue(permissions);
 };
 
-describe("AuthGuard", () => {
+describe('AuthGuard', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -68,7 +68,7 @@ describe("AuthGuard", () => {
     reflector = moduleRef.get(Reflector);
   });
 
-  describe("user is logged in", () => {
+  describe('user is logged in', () => {
     it(`if doesn't have required permissions
         should return false`, async () => {
       mockUserWithPermissions([]);
@@ -122,10 +122,10 @@ describe("AuthGuard", () => {
     });
   });
 
-  describe("session userId is set", () => {
+  describe('session userId is set', () => {
     beforeEach(() => {
       jest
-        .spyOn(authService, "getCurrentUser")
+        .spyOn(authService, 'getCurrentUser')
         .mockReturnValue(Promise.resolve(null));
     });
     it(`if user with that id isn't found / is deleted
@@ -140,7 +140,7 @@ describe("AuthGuard", () => {
   describe(`user isn't logged in`, () => {
     beforeEach(() => {
       jest
-        .spyOn(authService, "getCurrentUser")
+        .spyOn(authService, 'getCurrentUser')
         .mockReturnValue(Promise.resolve(null));
     });
     it(`if permissions are not needed should return true`, async () => {

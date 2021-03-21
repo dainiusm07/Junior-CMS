@@ -1,17 +1,17 @@
-import { Injectable } from "@nestjs/common";
-import { Args, Resolver, Query, Mutation, Int } from "@nestjs/graphql";
+import { Injectable } from '@nestjs/common';
+import { Args, Resolver, Query, Mutation, Int } from '@nestjs/graphql';
 
-import { Permission } from "../../common/permission.enum";
-import { Allow } from "../../decorators";
-import { InputValidationPipe } from "../../middleware/input-validation.pipe";
-import { NewUserInput, UpdateUserInput, UserListOptions } from "./dto";
+import { Permission } from '../../common/permission.enum';
+import { Allow } from '../../decorators';
+import { InputValidationPipe } from '../../middleware/input-validation.pipe';
+import { NewUserInput, UpdateUserInput, UserListOptions } from './dto';
 import {
   CreateUserResponse,
   UpdateUserResponse,
   UserListResponse,
   UserResponse,
-} from "./responses";
-import { UserService } from "./user.service";
+} from './responses';
+import { UserService } from './user.service';
 
 @Resolver()
 @Injectable()
@@ -21,7 +21,7 @@ export class UserResolver {
   @Allow(Permission.ReadUser)
   @Query(() => UserResponse)
   user(
-    @Args("id", { type: () => Int }) id: number
+    @Args('id', { type: () => Int }) id: number,
   ): Promise<typeof UserResponse> {
     return this.userService.findOneOrFail({ id });
   }
@@ -35,8 +35,8 @@ export class UserResolver {
   @Allow(Permission.CreateUser)
   @Mutation(() => CreateUserResponse)
   async createUser(
-    @Args("input", InputValidationPipe)
-    input: NewUserInput
+    @Args('input', InputValidationPipe)
+    input: NewUserInput,
   ): Promise<typeof CreateUserResponse> {
     const { roleId, ...user } = input;
 
@@ -46,8 +46,8 @@ export class UserResolver {
   @Allow(Permission.UpdateUser)
   @Mutation(() => UpdateUserResponse)
   updateUser(
-    @Args("id", { type: () => Int }) id: number,
-    @Args("input", InputValidationPipe) input: UpdateUserInput
+    @Args('id', { type: () => Int }) id: number,
+    @Args('input', InputValidationPipe) input: UpdateUserInput,
   ): Promise<typeof UpdateUserResponse> {
     const { roleId, ...restInput } = input;
 

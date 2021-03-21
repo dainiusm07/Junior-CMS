@@ -3,37 +3,37 @@ import { ChangeSet } from '@mikro-orm/core';
 import { mockEntity } from '../../test-utils/mock-entities';
 import { UserEntity } from './user.entity';
 
-jest.mock("../../common/environment", () => ({ BCRYPT_SALT: 0 }));
+jest.mock('../../common/environment', () => ({ BCRYPT_SALT: 0 }));
 let user: UserEntity;
 
-const generateChangeSet = (payload: ChangeSet<UserEntity>["payload"]) => {
+const generateChangeSet = (payload: ChangeSet<UserEntity>['payload']) => {
   return {
     payload,
   };
 };
 
-describe("UserEntity", () => {
+describe('UserEntity', () => {
   beforeEach(() => {
     user = mockEntity(
       {
-        password: "currentPassword",
-        firstname: "will",
-        lastname: "smith",
+        password: 'currentPassword',
+        firstname: 'will',
+        lastname: 'smith',
       },
-      UserEntity
+      UserEntity,
     );
   });
 
-  describe("hashPassword", () => {
-    it("should hash user password", async () => {
-      const password = "newPassword";
+  describe('hashPassword', () => {
+    it('should hash user password', async () => {
+      const password = 'newPassword';
       const changeSet = generateChangeSet({ password });
 
       await (user as any).hashPassword({ changeSet });
 
       expect(user.password === password).toBe(false);
     });
-    it("should not change user password", async () => {
+    it('should not change user password', async () => {
       const changeSet = generateChangeSet({});
       const currentPassword = user.password;
 
@@ -43,12 +43,12 @@ describe("UserEntity", () => {
     });
   });
 
-  describe("capitalize", () => {
-    it("should set capitalized lastname and firstname", () => {
-      const firstname = "firstname";
-      const capitalizedFirstname = "Firstname";
-      const lastname = "lastname";
-      const capitalizedLastname = "Lastname";
+  describe('capitalize', () => {
+    it('should set capitalized lastname and firstname', () => {
+      const firstname = 'firstname';
+      const capitalizedFirstname = 'Firstname';
+      const lastname = 'lastname';
+      const capitalizedLastname = 'Lastname';
 
       const changeSet = generateChangeSet({ firstname, lastname });
 
@@ -58,7 +58,7 @@ describe("UserEntity", () => {
       expect(user.lastname === capitalizedLastname).toBe(true);
     });
 
-    it("should not capitalize lastname and firstname", () => {
+    it('should not capitalize lastname and firstname', () => {
       const { firstname, lastname } = user;
       const changeSet = generateChangeSet({});
 

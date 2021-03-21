@@ -1,7 +1,7 @@
-import { Field, ObjectType } from "@nestjs/graphql";
-import { BaseError } from "./base.error";
+import { Field, ObjectType } from '@nestjs/graphql';
+import { BaseError } from './base.error';
 
-@ObjectType("ValidationError")
+@ObjectType('ValidationError')
 export class CmsValidationError {
   @Field()
   path: string;
@@ -12,8 +12,8 @@ export class CmsValidationError {
 
 @ObjectType()
 export class InputValidationError extends BaseError {
-  readonly errorCode = "INPUT_VALIDATION_ERROR";
-  readonly message = "Invalid input";
+  readonly errorCode = 'INPUT_VALIDATION_ERROR';
+  readonly message = 'Invalid input';
 
   @Field(() => [CmsValidationError])
   errors: CmsValidationError[];

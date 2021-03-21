@@ -1,12 +1,12 @@
-import { compare } from "bcrypt";
-import { Injectable } from "@nestjs/common";
+import { compare } from 'bcrypt';
+import { Injectable } from '@nestjs/common';
 
-import { UserService } from "../user/user.service";
-import { UserEntity } from "../user/user.entity";
-import { NativeAuthInput } from "./dto/native-auth.input";
+import { UserService } from '../user/user.service';
+import { UserEntity } from '../user/user.entity';
+import { NativeAuthInput } from './dto/native-auth.input';
 
 type SessionData = {
-  userId: UserEntity["id"] | null;
+  userId: UserEntity['id'] | null;
 };
 
 @Injectable()
@@ -27,13 +27,13 @@ export class AuthService {
     return this.getSessionFromCtx(ctx).userId || null;
   }
 
-  private setUserId(ctx: any, userId: UserEntity["id"] | null) {
+  private setUserId(ctx: any, userId: UserEntity['id'] | null) {
     this.assignToSession(ctx, { userId });
   }
 
   private async validateNativeAuth<T extends NativeAuthInput>(
     promise: Promise<T | null>,
-    password: string
+    password: string,
   ): Promise<T | null> {
     const entity = await promise;
 
@@ -53,7 +53,7 @@ export class AuthService {
   validateUser({ email, password }: NativeAuthInput) {
     return this.validateNativeAuth(
       this.userService.findOne({ email }),
-      password
+      password,
     );
   }
 

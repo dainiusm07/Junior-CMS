@@ -9,7 +9,7 @@ import {
   UseInterceptors,
   CacheInterceptor,
   Logger,
-} from "@nestjs/common";
+} from '@nestjs/common';
 // import { InjectQueue } from '@nestjs/bull'
 // import { Queue } from 'bull'
 
@@ -21,9 +21,9 @@ export class AppController {
   // 	@Inject(CACHE_MANAGER) private cacheManager
   // ) {}
 
-  @Get("getHello")
+  @Get('getHello')
   getHello() {
-    return "Hello World!";
+    return 'Hello World!';
   }
 
   // @Get(`static/:fileId`)
@@ -38,7 +38,7 @@ export class AppController {
   //   return res.body;
   // }
 
-  @Get("cache")
+  @Get('cache')
   @UseInterceptors(CacheInterceptor)
   incrementCounter() {
     this.counter++;

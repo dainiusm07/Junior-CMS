@@ -1,19 +1,19 @@
-import { ArgsType, Field, InputType } from "@nestjs/graphql";
+import { ArgsType, Field, InputType } from '@nestjs/graphql';
 
-import { BaseFilterOptions } from "../../shared/dto/base-filter-options.input";
-import { BaseSortOptions } from "../../shared/dto/base-sort-options";
+import { BaseFilterOptions } from '../../shared/dto/base-filter-options.input';
+import { BaseSortOptions } from '../../shared/dto/base-sort-options';
 import {
   FilterOptions,
   generateListOptions,
   SortOptions,
-} from "../../shared/list-utils";
-import { conditionOperatorsMixin } from "../../shared/mixins";
+} from '../../shared/list-utils';
+import { conditionOperatorsMixin } from '../../shared/mixins';
 import {
   DateOperators,
   NumberOperators,
   StringOperators,
-} from "../../shared/operators";
-import { ProductEntity } from "../product.entity";
+} from '../../shared/operators';
+import { ProductEntity } from '../product.entity';
 
 @InputType()
 class ProductSortOptions
@@ -39,11 +39,11 @@ export class ProductFilterOptions
 
 @InputType()
 class ExtendedProductFilterOptions extends conditionOperatorsMixin(
-  ProductFilterOptions
+  ProductFilterOptions,
 ) {}
 
 @ArgsType()
 export class ProductListOptions extends generateListOptions(
   ExtendedProductFilterOptions,
-  ProductSortOptions
+  ProductSortOptions,
 ) {}

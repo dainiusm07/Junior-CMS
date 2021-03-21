@@ -8,14 +8,14 @@ Object.entries(Operators).forEach(([name, value]) => {
 
 export const parseFilterInput = (input: any) => {
   if (
-    typeof input === "number" ||
-    typeof input === "string" ||
+    typeof input === 'number' ||
+    typeof input === 'string' ||
     input === null
   ) {
     return input;
   }
 
-  const result: Record<string, any> = {};
+  const result: Record<string, unknown> = {};
 
   Object.entries(input).forEach(([name, value]) => {
     let actualValue;
@@ -29,7 +29,7 @@ export const parseFilterInput = (input: any) => {
       actualValue = value.map((val) => parseFilterInput(val));
     } else {
       actualValue =
-        typeof value === "object" && value !== null
+        typeof value === 'object' && value !== null
           ? parseFilterInput(value)
           : value;
     }
@@ -37,8 +37,8 @@ export const parseFilterInput = (input: any) => {
     // Skip value because it is empty
     if (
       actualValue !== null &&
-      typeof actualValue === "object" &&
-      !Object.keys(actualValue as object).length
+      typeof actualValue === 'object' &&
+      !Object.keys(actualValue).length
     ) {
       return;
     }

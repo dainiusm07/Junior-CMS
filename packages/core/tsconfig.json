@@ -10,7 +10,7 @@
     "coverage",
     "document",
     "dist",
-    "backup",
-    "**/*.spec.ts"
+    "backup"
+    // "**/*.spec.ts"
   ]
 }

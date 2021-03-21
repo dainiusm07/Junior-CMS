@@ -1,23 +1,20 @@
-import { ArgumentMetadata, Injectable, PipeTransform } from "@nestjs/common";
-import { plainToClass } from "class-transformer";
-import { validate } from "class-validator";
+import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
+import { validate } from 'class-validator';
 
 import {
   CmsValidationError,
   InputValidationError,
-} from "../common/errors/input-validation.error";
+} from '../common/errors/input-validation.error';
 
-const isClass = (v?: unknown) => {
-  return typeof v === "function" && /^\s*class\s+/.test(v.toString());
-};
 @Injectable()
 export class InputValidationPipe implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
-    if (!isClass(metadata.metatype)) {
-      return value;
+    if (!metadata.metatype) {
+      throw Error('Invalid metatype of argument!');
     }
 
-    const plain = plainToClass(metadata.metatype!, value, {
+    const plain = plainToClass(metadata.metatype, value, {
       exposeUnsetFields: false,
     });
 

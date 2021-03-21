@@ -4,5 +4,5 @@ import { NewProductVariantInput } from './new-product-variant.input';
 
 @InputType()
 export class UpdateProductVariantInput extends PartialType(
-  NewProductVariantInput
+  NewProductVariantInput,
 ) {}

@@ -1,5 +1,5 @@
-import { Entity, Property, PrimaryKey } from "@mikro-orm/core";
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Entity, Property, PrimaryKey } from '@mikro-orm/core';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @Entity({ abstract: true })
 @ObjectType({ isAbstract: true })

@@ -1,14 +1,14 @@
 import { Constructor, RequestContext } from '@mikro-orm/core';
-import { registerDecorator, ValidationArguments } from 'class-validator';
+import { registerDecorator } from 'class-validator';
 
 import { capitalizeFirstLetter } from '../../../utils/capitalize-first-letter';
 
-export function Exists<T extends {}>(
+export function Exists<T extends object>(
   entity: Constructor<T>,
   findBy: keyof T,
-  typeName: string
+  typeName: string,
 ): PropertyDecorator {
-  return (object: Object, propertyName: string | symbol) => {
+  return (object: object, propertyName: string | symbol) => {
     const name = capitalizeFirstLetter(typeName);
 
     registerDecorator({
@@ -17,10 +17,10 @@ export function Exists<T extends {}>(
       propertyName: propertyName.toString(),
       async: true,
       validator: {
-        async validate(value: string | string[], args: ValidationArguments) {
-          const em = RequestContext.getEntityManager()!;
+        async validate(value: string | string[]) {
+          const em = RequestContext.getEntityManager();
           // Using em.count to not pollute the context
-          const result = await em.count(entity, { [findBy]: value });
+          const result = await em?.count(entity, { [findBy]: value });
 
           const shouldReceiveCount = Array.isArray(value) ? value.length : 1;
 

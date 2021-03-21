@@ -1,2 +1,2 @@
-export * from "./date.scalar";
-export * from "./upload.scalar";
+export * from './date.scalar';
+export * from './upload.scalar';

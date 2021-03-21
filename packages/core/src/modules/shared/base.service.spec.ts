@@ -2,7 +2,10 @@ import { EntityRepository } from '@mikro-orm/core';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { Test } from '@nestjs/testing';
 
-import { DEFAULT_RESULTS_PER_PAGE_LIMIT, MAX_RESULTS_PER_PAGE_LIMIT } from '../../common/constants';
+import {
+  DEFAULT_RESULTS_PER_PAGE_LIMIT,
+  MAX_RESULTS_PER_PAGE_LIMIT,
+} from '../../common/constants';
 import { NotFoundError } from '../../common/errors/not-found.error';
 import { mockEntities } from '../../test-utils/mock-entities';
 import { mockRepository } from '../../test-utils/mock-repository';
@@ -25,16 +28,16 @@ const entities = mockEntities(
       updatedAt: new Date(),
     },
   ],
-  MyBaseEntity
+  MyBaseEntity,
 );
 
-describe("BaseService", () => {
+describe('BaseService', () => {
   let service: MyBaseService;
   let repo: EntityRepository<BaseEntity>;
 
   class MyBaseService extends BaseService<BaseEntity> {
     constructor(private baseRepo: EntityRepository<BaseEntity>) {
-      super(baseRepo, "Base");
+      super(baseRepo, 'Base');
     }
   }
 
@@ -52,15 +55,15 @@ describe("BaseService", () => {
     service = new MyBaseService(repo);
   });
 
-  describe("instance", () => {
-    it("should be defined", () => {
+  describe('instance', () => {
+    it('should be defined', () => {
       expect(service).toBeDefined();
     });
   });
 
-  describe("getReference", () => {
-    it("should call repository getReference method", () => {
-      const getReference = jest.spyOn(repo, "getReference");
+  describe('getReference', () => {
+    it('should call repository getReference method', () => {
+      const getReference = jest.spyOn(repo, 'getReference');
 
       service.getReference(1);
 
@@ -68,8 +71,8 @@ describe("BaseService", () => {
     });
   });
 
-  describe("create", () => {
-    it("should create entity instance", () => {
+  describe('create', () => {
+    it('should create entity instance', () => {
       const entity = {};
 
       const result = service.create(entity);
@@ -78,7 +81,7 @@ describe("BaseService", () => {
     });
   });
 
-  describe("findList", () => {
+  describe('findList', () => {
     const listResponse: IListResponse<MyBaseEntity> = {
       items: entities,
       pagination: { currentPage: 1, totalPages: 1 },
@@ -87,11 +90,11 @@ describe("BaseService", () => {
 
     beforeEach(() => {
       jest
-        .spyOn(repo, "findAndCount")
+        .spyOn(repo, 'findAndCount')
         .mockReturnValue(Promise.resolve([entities, entities.length]));
     });
 
-    it("should return list results", async () => {
+    it('should return list results', async () => {
       const result = await service.findList({
         limit: entities.length,
         page: 1,
@@ -105,24 +108,24 @@ describe("BaseService", () => {
     [
       {
         description:
-          "should set limit to default value when requested limit less or equal to 0",
+          'should set limit to default value when requested limit less or equal to 0',
         limit: 0,
         expectedValue: DEFAULT_RESULTS_PER_PAGE_LIMIT,
       },
       {
         description:
-          "should set limit to default value when requested limit is bigger than max limit",
+          'should set limit to default value when requested limit is bigger than max limit',
         limit: MAX_RESULTS_PER_PAGE_LIMIT + 1,
         expectedValue: DEFAULT_RESULTS_PER_PAGE_LIMIT,
       },
       {
-        description: "should not modify limit when given limit is good",
+        description: 'should not modify limit when given limit is good',
         limit: 15,
         expectedValue: 15,
       },
     ].forEach(({ description, limit, expectedValue }) => {
       it(description, () => {
-        const findAndCount = jest.spyOn(repo, "findAndCount");
+        const findAndCount = jest.spyOn(repo, 'findAndCount');
 
         service.findList({ limit, page: 1, filter: {}, sort: {} });
 
@@ -131,7 +134,7 @@ describe("BaseService", () => {
       });
     });
 
-    it("should set page to 1 if requested page number is less than 1", async () => {
+    it('should set page to 1 if requested page number is less than 1', async () => {
       const result = await service.findList({
         limit: 1,
         page: 0,
@@ -142,7 +145,7 @@ describe("BaseService", () => {
       expect(result.pagination.currentPage).toBe(1);
     });
 
-    it("should set page to 1 if requested page number is less than 1", async () => {
+    it('should set page to 1 if requested page number is less than 1', async () => {
       const result = await service.findList({
         limit: 1,
         page: 0,
@@ -153,12 +156,12 @@ describe("BaseService", () => {
       expect(result.pagination.currentPage).toBe(1);
     });
 
-    it("should return correct totalPages", async () => {
+    it('should return correct totalPages', async () => {
       const limit = 12;
       const totalItems = 13;
       const totalPages = 2;
       jest
-        .spyOn(repo, "findAndCount")
+        .spyOn(repo, 'findAndCount')
         .mockReturnValue(Promise.resolve([entities, totalItems]));
 
       const result = await service.findList({
@@ -173,7 +176,7 @@ describe("BaseService", () => {
 
     it(`if page number is more than total pages should call self
         with same params and page=1`, async () => {
-      const findList = jest.spyOn(service, "findList");
+      const findList = jest.spyOn(service, 'findList');
       const listOptions = {
         limit: entities.length,
         page: 99,
@@ -193,7 +196,7 @@ describe("BaseService", () => {
 
     [
       {
-        description: "should order by sort input",
+        description: 'should order by sort input',
         sort: {
           id: SortOrder.DESC,
         },
@@ -202,7 +205,7 @@ describe("BaseService", () => {
         },
       },
       {
-        description: "should order by sort input and add default sorting",
+        description: 'should order by sort input and add default sorting',
         sort: {
           email: SortOrder.DESC,
         },
@@ -212,7 +215,7 @@ describe("BaseService", () => {
         },
       },
       {
-        description: "should order by default sorting",
+        description: 'should order by default sorting',
         sort: {},
         expected: {
           id: SortOrder.ASC,
@@ -220,7 +223,7 @@ describe("BaseService", () => {
       },
       {
         description:
-          "should order by default sorting and remove fields with null values",
+          'should order by default sorting and remove fields with null values',
         sort: { id: null, createdAt: null },
         expected: {
           id: SortOrder.ASC,
@@ -228,7 +231,7 @@ describe("BaseService", () => {
       },
     ].forEach(({ description, sort, expected }) => {
       it(description, async () => {
-        const findAndCount = jest.spyOn(repo, "findAndCount");
+        const findAndCount = jest.spyOn(repo, 'findAndCount');
 
         await service.findList({
           limit: 1,
@@ -243,9 +246,9 @@ describe("BaseService", () => {
     });
   });
 
-  describe("findOne", () => {
-    it("should return entity", async () => {
-      jest.spyOn(repo, "findOne").mockReturnValue(Promise.resolve(entities[0]));
+  describe('findOne', () => {
+    it('should return entity', async () => {
+      jest.spyOn(repo, 'findOne').mockReturnValue(Promise.resolve(entities[0]));
 
       const result = await service.findOne({});
 
@@ -254,9 +257,9 @@ describe("BaseService", () => {
     });
   });
 
-  describe("findOneOrFail", () => {
-    it("should return entity", async () => {
-      jest.spyOn(repo, "findOne").mockReturnValue(Promise.resolve(entities[0]));
+  describe('findOneOrFail', () => {
+    it('should return entity', async () => {
+      jest.spyOn(repo, 'findOne').mockReturnValue(Promise.resolve(entities[0]));
 
       const result = await service.findOne({});
 
@@ -264,8 +267,8 @@ describe("BaseService", () => {
       expect(result).toBe(entities[0]);
     });
 
-    it("should return NotFoundError", async () => {
-      jest.spyOn(repo, "findOne").mockReturnValue(Promise.resolve(null));
+    it('should return NotFoundError', async () => {
+      jest.spyOn(repo, 'findOne').mockReturnValue(Promise.resolve(null));
 
       const response = await service.findOneOrFail({});
 
@@ -273,20 +276,20 @@ describe("BaseService", () => {
     });
   });
 
-  describe("updateOne", () => {
+  describe('updateOne', () => {
     const entity = entities[1];
 
     beforeEach(() => {
-      jest.spyOn(repo, "findOne").mockReturnValue(Promise.resolve(entity));
+      jest.spyOn(repo, 'findOne').mockReturnValue(Promise.resolve(entity));
     });
 
-    it("should try to get entity first", async () => {
+    it('should try to get entity first', async () => {
       await service.updateOne({}, {});
 
       expect(repo.findOne).toBeCalled();
     });
 
-    it("should return updated entity", async () => {
+    it('should return updated entity', async () => {
       const update = { id: 999 };
 
       const result = await service.updateOne({}, update);
@@ -294,8 +297,8 @@ describe("BaseService", () => {
       expect(result).toBe(Object.assign(entity, update));
     });
 
-    it("should return NotFoundError if entity is not found", async () => {
-      jest.spyOn(repo, "findOne").mockReturnValue(Promise.resolve(null));
+    it('should return NotFoundError if entity is not found', async () => {
+      jest.spyOn(repo, 'findOne').mockReturnValue(Promise.resolve(null));
 
       const result = await service.updateOne({}, {});
 
@@ -303,22 +306,22 @@ describe("BaseService", () => {
     });
   });
 
-  describe("updateMany", () => {
+  describe('updateMany', () => {
     beforeEach(() => {
-      jest.spyOn(repo, "find").mockReturnValue(Promise.resolve(entities));
+      jest.spyOn(repo, 'find').mockReturnValue(Promise.resolve(entities));
     });
 
-    it("should get entities first", async () => {
+    it('should get entities first', async () => {
       await service.updateMany({}, {});
 
       expect(repo.find).toBeCalled();
     });
 
-    it("should return updated entities", async () => {
+    it('should return updated entities', async () => {
       const update = { id: 999 };
       const updatedEntities = mockEntities(
         entities.map((entity) => ({ ...entity, ...update })),
-        MyBaseEntity
+        MyBaseEntity,
       );
 
       const result = await service.updateMany({}, update);
@@ -327,14 +330,14 @@ describe("BaseService", () => {
     });
   });
 
-  describe("insert", () => {
-    it("should save entity to database", async () => {
+  describe('insert', () => {
+    it('should save entity to database', async () => {
       await service.insert({});
 
       expect(repo.persistAndFlush).toBeCalled();
     });
 
-    it("should return entity", async () => {
+    it('should return entity', async () => {
       const result = await service.insert(entities[0]);
 
       expect(result).toBeInstanceOf(MyBaseEntity);

@@ -8,7 +8,7 @@ import { AuthService } from '../modules/auth/auth.service';
 
 const matchPermissions = (
   permissions: Permission[],
-  userPermissions: Permission[]
+  userPermissions: Permission[],
 ) => permissions.every((permission) => userPermissions.includes(permission));
 
 @Injectable()
@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
 
     const permissions = this.reflector.get<Permission[]>(
       PERMISSIONS_METADATA_KEY,
-      context.getHandler()
+      context.getHandler(),
     );
 
     if (!permissions) return true;

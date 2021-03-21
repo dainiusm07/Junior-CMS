@@ -1,18 +1,18 @@
-import { Injectable } from "@nestjs/common";
-import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
+import { Injectable } from '@nestjs/common';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 
-import { Allow } from "../../decorators";
-import { Permission } from "../../common/permission.enum";
-import { RoleEntity } from "./role.entity";
-import { RoleService } from "./role.service";
-import { NewRoleInput, RoleListOptions, UpdateRoleInput } from "./dto";
+import { Allow } from '../../decorators';
+import { Permission } from '../../common/permission.enum';
+import { RoleEntity } from './role.entity';
+import { RoleService } from './role.service';
+import { NewRoleInput, RoleListOptions, UpdateRoleInput } from './dto';
 import {
   CreateRoleResponse,
   RoleListResponse,
   RoleResponse,
   UpdateRoleResponse,
-} from "./responses";
-import { InputValidationPipe } from "../../middleware/input-validation.pipe";
+} from './responses';
+import { InputValidationPipe } from '../../middleware/input-validation.pipe';
 
 @Resolver()
 @Injectable()
@@ -28,7 +28,7 @@ export class RoleResolver {
   @Query(() => RoleResponse)
   @Allow(Permission.ReadRole)
   role(
-    @Args("id", { type: () => Int }) id: number
+    @Args('id', { type: () => Int }) id: number,
   ): Promise<typeof RoleResponse> {
     return this.roleService.findOneOrFail(id);
   }
@@ -36,7 +36,7 @@ export class RoleResolver {
   @Mutation(() => CreateRoleResponse)
   @Allow(Permission.CreateRole)
   createRole(
-    @Args("input", InputValidationPipe) input: NewRoleInput
+    @Args('input', InputValidationPipe) input: NewRoleInput,
   ): Promise<RoleEntity> {
     return this.roleService.insert(input);
   }
@@ -44,8 +44,8 @@ export class RoleResolver {
   @Mutation(() => UpdateRoleResponse)
   @Allow(Permission.UpdateRole)
   async updateRole(
-    @Args("id", { type: () => Int }) id: number,
-    @Args("input", InputValidationPipe) input: UpdateRoleInput
+    @Args('id', { type: () => Int }) id: number,
+    @Args('input', InputValidationPipe) input: UpdateRoleInput,
   ): Promise<typeof UpdateRoleResponse> {
     return this.roleService.updateOne(id, input);
   }

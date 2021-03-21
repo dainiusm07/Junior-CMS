@@ -1,5 +1,5 @@
-import { Constructor } from "@mikro-orm/core";
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Constructor } from '@mikro-orm/core';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 type Pagination = {
   currentPage: number;

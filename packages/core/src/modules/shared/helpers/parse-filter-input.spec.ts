@@ -1,8 +1,8 @@
 import { Operators } from '../operators.enum';
 import { parseFilterInput } from './parse-filter-input';
 
-describe("parseFilterInput", () => {
-  it("should remove non-operator property if it has null value", () => {
+describe('parseFilterInput', () => {
+  it('should remove non-operator property if it has null value', () => {
     const filter = { id: null };
 
     const result = parseFilterInput(filter);
@@ -10,7 +10,7 @@ describe("parseFilterInput", () => {
     expect(result).toStrictEqual({});
   });
 
-  it("should remove non-operator property if it is empty object", () => {
+  it('should remove non-operator property if it is empty object', () => {
     const filter = { id: {} };
 
     const result = parseFilterInput(filter);
@@ -21,7 +21,7 @@ describe("parseFilterInput", () => {
   it(`should convert input value to database ready filter`, () => {
     const filter = {
       number: { [Operators.$eq]: 2 },
-      string: { [Operators.$ilike]: "string" },
+      string: { [Operators.$ilike]: 'string' },
       boolean: { [Operators.$ne]: false },
       null: { [Operators.$or]: null },
     };
@@ -30,7 +30,7 @@ describe("parseFilterInput", () => {
 
     expect(result).toStrictEqual({
       number: { $eq: 2 },
-      string: { $ilike: "string" },
+      string: { $ilike: 'string' },
       boolean: { $ne: false },
       null: { $or: null },
     });
@@ -55,7 +55,7 @@ describe("parseFilterInput", () => {
           },
         },
         {
-          name: { [Operators.$ilike]: "test%" },
+          name: { [Operators.$ilike]: 'test%' },
         },
       ],
     };
@@ -71,7 +71,7 @@ describe("parseFilterInput", () => {
         },
         {
           name: {
-            $ilike: "test%",
+            $ilike: 'test%',
           },
         },
       ],

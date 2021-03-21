@@ -1,10 +1,10 @@
-import { ObjectType } from "@nestjs/graphql";
-import { getFieldsAndDecoratorForType } from "@nestjs/graphql/dist/schema-builder/utils/get-fields-and-decorator.util";
+import { ObjectType } from '@nestjs/graphql';
+import { getFieldsAndDecoratorForType } from '@nestjs/graphql/dist/schema-builder/utils/get-fields-and-decorator.util';
 
 import {
   generateListResponse,
   PaginationResult,
-} from "./generate-list-response";
+} from './generate-list-response';
 
 class Test {}
 ObjectType()(Test);
@@ -12,21 +12,23 @@ ObjectType()(Test);
 class TestResponse extends generateListResponse(Test) {}
 ObjectType()(TestResponse);
 const { fields: TestResponseFields } = getFieldsAndDecoratorForType(
-  TestResponse
+  TestResponse,
 );
 
-describe("GenerateListResponse", () => {
-  it("should generate list response with provided class", () => {
-    const itemsProp = TestResponseFields.find(({ name }) => name === "items")!;
+describe('GenerateListResponse', () => {
+  it('should generate list response with provided class', () => {
+    const itemsProp = TestResponseFields.find(({ name }) => name === 'items');
 
-    expect(itemsProp.typeFn()).toBe(Test);
+    expect(itemsProp).toBeDefined();
+    expect(itemsProp?.typeFn()).toBe(Test);
   });
 
   it(`should generate list response with pagination field that is typeof ${PaginationResult.name}`, () => {
     const itemsProp = TestResponseFields.find(
-      ({ name }) => name === "pagination"
-    )!;
+      ({ name }) => name === 'pagination',
+    );
 
-    expect(itemsProp.typeFn()).toBe(PaginationResult);
+    expect(itemsProp).toBeDefined();
+    expect(itemsProp?.typeFn()).toBe(PaginationResult);
   });
 });

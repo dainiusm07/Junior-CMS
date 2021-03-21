@@ -1,10 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 // import { Cron, CronExpression, Interval, Timeout } from '@nestjs/schedule'
 
 @Injectable()
 export class AppService {
   getHello(): string {
-    return "Hello World!";
+    return 'Hello World!';
   }
 
   // @Cron('45 * * * * *')

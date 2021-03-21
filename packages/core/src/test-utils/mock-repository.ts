@@ -21,7 +21,7 @@ export const mockRepository = (Entity: new (...args: any[]) => any) => ({
   assign: jest
     .fn()
     .mockImplementation((entity: unknown, obj: unknown) =>
-      Object.assign(entity, obj)
+      Object.assign(entity, obj),
     ),
   nativeInsert: jest.fn(),
   nativeUpdate: jest.fn(),

@@ -1,4 +1,4 @@
-import { Logger } from "@nestjs/common";
+import { Logger } from '@nestjs/common';
 
 export class MyLogger extends Logger {
   log(message: string) {

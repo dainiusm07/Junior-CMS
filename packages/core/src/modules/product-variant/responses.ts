@@ -5,11 +5,11 @@ import { NotFoundError } from '../../common/errors/not-found.error';
 import { ProductVariantEntity } from './product-variant.entity';
 
 export const UpdateProductVariantResponse = createUnionType({
-  name: "UpdateProductVariantResponse",
+  name: 'UpdateProductVariantResponse',
   types: () => [ProductVariantEntity, InputValidationError, NotFoundError],
 });
 
 export const CreateProductVariantResponse = createUnionType({
-  name: "CreateProductVariantResponse",
+  name: 'CreateProductVariantResponse',
   types: () => [ProductVariantEntity, InputValidationError],
 });

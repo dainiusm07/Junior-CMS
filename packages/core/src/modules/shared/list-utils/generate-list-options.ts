@@ -1,10 +1,10 @@
-import { Constructor } from "@mikro-orm/core";
-import { ArgsType, Field, InputType, Int } from "@nestjs/graphql";
-import { Type } from "class-transformer";
+import { Constructor } from '@mikro-orm/core';
+import { ArgsType, Field, InputType, Int } from '@nestjs/graphql';
+import { Type } from 'class-transformer';
 
-import { ExcludeNever } from "../../../types";
-import { DateOperators, NumberOperators, StringOperators } from "../operators";
-import { SortOptions } from "./sort-order";
+import { ExcludeNever } from '../../../types';
+import { DateOperators, NumberOperators, StringOperators } from '../operators';
+import { SortOptions } from './sort-order';
 
 type ConvertTypes<T> = {
   [K in keyof T]?: T[K] extends string | null
@@ -27,7 +27,7 @@ export type IListOptions<T, P = Record<string, unknown>> = {
 
 export const generateListOptions = <T, P>(
   filterInputCls: Constructor<T>,
-  sortOrderCls: Constructor<P>
+  sortOrderCls: Constructor<P>,
 ) => {
   @ArgsType()
   @InputType({ isAbstract: true })

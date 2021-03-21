@@ -1,10 +1,17 @@
-import { Cascade, Entity, LoadStrategy, ManyToOne, OneToMany, Property } from '@mikro-orm/core';
+import {
+  Cascade,
+  Entity,
+  LoadStrategy,
+  ManyToOne,
+  OneToMany,
+  Property,
+} from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { BaseEntity } from '../shared/base.entity';
 
-@ObjectType("Category")
-@Entity({ tableName: "categories" })
+@ObjectType('Category')
+@Entity({ tableName: 'categories' })
 export class CategoryEntity extends BaseEntity {
   @Field(() => Date, { nullable: true })
   @Property({ type: Date, nullable: true })
@@ -30,7 +37,7 @@ export class CategoryEntity extends BaseEntity {
   })
   parent: CategoryEntity;
 
-  @OneToMany(() => CategoryEntity, "parent", {
+  @OneToMany(() => CategoryEntity, 'parent', {
     strategy: LoadStrategy.SELECT_IN,
   })
   children: CategoryEntity[];

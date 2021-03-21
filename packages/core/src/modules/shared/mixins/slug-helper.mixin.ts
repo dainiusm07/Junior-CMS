@@ -1,16 +1,18 @@
-import slugify from "slugify";
+import slugify from 'slugify';
 
-import { BaseEntity } from "../base.entity";
-import { BaseService } from "../base.service";
+import { BaseEntity } from '../base.entity';
+import { BaseService } from '../base.service';
 
-type Constructor<T = {}, A extends any[] = any[]> = new (...args: A) => T;
+type Constructor<T = Record<string, unknown>, A extends any[] = any[]> = new (
+  ...args: A
+) => T;
 type EntityWithSlug = BaseEntity & { slug: string };
 
 export const slugHelperMixin = <T extends EntityWithSlug, P extends any[]>(
-  Service: Constructor<BaseService<T>, P>
+  Service: Constructor<BaseService<T>, P>,
 ) => {
   return class SlugHelperMixin extends Service {
-    async checkSlugAvailability(slug: string): Promise<Boolean> {
+    async checkSlugAvailability(slug: string): Promise<boolean> {
       const entity = await this.findOne({ slug } as never);
 
       return Boolean(!entity);
@@ -29,13 +31,17 @@ export const slugHelperMixin = <T extends EntityWithSlug, P extends any[]>(
         const slugSequence = new Set<number>();
 
         entities.forEach(({ slug }) => {
-          const [_, strNumber] = slug.match(regexp)!;
-          if (strNumber) {
-            const number = parseInt(strNumber);
+          const match = slug.match(regexp);
+          if (match) {
+            const strNumber = match[1];
 
-            slugSequence.add(number);
-          } else {
-            slugSequence.add(0);
+            if (strNumber) {
+              const number = parseInt(strNumber);
+
+              slugSequence.add(number);
+            } else {
+              slugSequence.add(0);
+            }
           }
         });
 
