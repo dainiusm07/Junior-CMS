@@ -10,7 +10,6 @@ import {
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
 } from '../../common/constants';
 import { IListOptions, IListResponse } from './list-utils';
-import { deleteUndefinedProperties } from '../../utils/delete-undefined-properties';
 import { parseSortInput, parseFilterInput } from './helpers';
 export abstract class BaseService<T extends object> {
   constructor(private _repo: EntityRepository<T>) {}
@@ -54,7 +53,7 @@ export abstract class BaseService<T extends object> {
   }
 
   async insert(data: EntityData<T>) {
-    deleteUndefinedProperties(data);
+    this.deleteUndefinedProperties(data);
 
     const entity = this._repo.create(data);
 
@@ -63,7 +62,7 @@ export abstract class BaseService<T extends object> {
   }
 
   async updateOne(filter: FilterQuery<T>, data: EntityData<T>) {
-    deleteUndefinedProperties(data);
+    this.deleteUndefinedProperties(data);
 
     const entity = await this.findOneOrFail(filter);
 
@@ -72,5 +71,13 @@ export abstract class BaseService<T extends object> {
     await this._repo.persistAndFlush(entity);
 
     return this.findOneOrFail(entity);
+  }
+
+  private deleteUndefinedProperties<T extends Record<string, unknown>>(obj: T) {
+    Object.entries(obj).forEach(([key, value]) => {
+      if (value === undefined) {
+        delete obj[key];
+      }
+    });
   }
 }
