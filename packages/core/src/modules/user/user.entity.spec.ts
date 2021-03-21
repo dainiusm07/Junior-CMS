@@ -1,12 +1,12 @@
 import { ChangeSet } from '@mikro-orm/core';
 
 import { mockEntity } from '../../test-utils/mock-entities';
-import { UserEntity } from './user.entity';
+import { User } from './user.entity';
 
 jest.mock('../../common/environment', () => ({ BCRYPT_SALT: 0 }));
-let user: UserEntity;
+let user: User;
 
-const generateChangeSet = (payload: ChangeSet<UserEntity>['payload']) => {
+const generateChangeSet = (payload: ChangeSet<User>['payload']) => {
   return {
     payload,
   };
@@ -20,7 +20,7 @@ describe('UserEntity', () => {
         firstname: 'will',
         lastname: 'smith',
       },
-      UserEntity,
+      User,
     );
   });
 

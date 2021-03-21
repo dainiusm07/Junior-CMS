@@ -8,21 +8,18 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { BaseService } from '../shared/base.service';
-import { UserEntity } from './user.entity';
+import { User } from './user.entity';
 
 @Injectable()
-export class UserService extends BaseService<UserEntity> {
+export class UserService extends BaseService<User> {
   constructor(
-    @InjectRepository(UserEntity)
-    private userRepo: EntityRepository<UserEntity>,
+    @InjectRepository(User)
+    private userRepo: EntityRepository<User>,
   ) {
     super(userRepo, 'User');
   }
 
-  findOne(
-    options: FilterQuery<UserEntity>,
-    populate?: FindOneOptions<UserEntity, any>,
-  ) {
+  findOne(options: FilterQuery<User>, populate?: FindOneOptions<User, any>) {
     return super.findOne(options, {
       populate: { role: LoadStrategy.JOINED },
       ...populate,

@@ -3,13 +3,13 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { BaseService } from '../shared/base.service';
-import { RoleEntity } from './role.entity';
+import { Role } from './role.entity';
 
 @Injectable()
-export class RoleService extends BaseService<RoleEntity> {
+export class RoleService extends BaseService<Role> {
   constructor(
-    @InjectRepository(RoleEntity)
-    private roleRepo: EntityRepository<RoleEntity>,
+    @InjectRepository(Role)
+    private roleRepo: EntityRepository<Role>,
   ) {
     super(roleRepo, 'Role');
   }

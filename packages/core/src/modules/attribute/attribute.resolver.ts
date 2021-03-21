@@ -5,7 +5,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Permission } from '../../common/permission.enum';
 import { Allow } from '../../decorators';
 import { InputValidationPipe } from '../../middleware/input-validation.pipe';
-import { AttributeEntity } from './attribute.entity';
+import { Attribute } from './attribute.entity';
 import { AttributeService } from './attribute.service';
 import { NewAttributeInput, UpdateAttributeInput } from './dto';
 import {
@@ -31,8 +31,8 @@ export class AttributeResolver {
   }
 
   @Allow(Permission.ReadAttribute)
-  @Query(() => [AttributeEntity])
-  attributes(): Promise<AttributeEntity[]> {
+  @Query(() => [Attribute])
+  attributes(): Promise<Attribute[]> {
     return this.attributeService.find(
       {},
       { populate: { values: LoadStrategy.JOINED } },

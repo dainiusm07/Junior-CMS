@@ -2,13 +2,13 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 import { MinLength } from 'class-validator';
 
 import { PartialEntity } from '../../../types';
-import { RoleEntity } from '../../role/role.entity';
+import { Role } from '../../role/role.entity';
 import { Email, NoWhiteSpace, Password } from '../../shared/constraints';
 import { Exists } from '../../shared/constraints/exists.constraint';
-import { UserEntity } from '../user.entity';
+import { User } from '../user.entity';
 
 @InputType()
-export class NewUserInput implements PartialEntity<UserEntity> {
+export class NewUserInput implements PartialEntity<User> {
   @MinLength(3)
   @NoWhiteSpace()
   @Field()
@@ -19,7 +19,7 @@ export class NewUserInput implements PartialEntity<UserEntity> {
   @Field()
   lastname: string;
 
-  @Email(UserEntity)
+  @Email(User)
   @Field()
   email: string;
 
@@ -27,7 +27,7 @@ export class NewUserInput implements PartialEntity<UserEntity> {
   @Field()
   password: string;
 
-  @Exists(RoleEntity, 'id', 'Role')
+  @Exists(Role, 'id', 'Role')
   @Field(() => Int)
   roleId: number;
 }

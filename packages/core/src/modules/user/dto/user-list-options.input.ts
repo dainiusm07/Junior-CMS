@@ -10,12 +10,10 @@ import {
 } from '../../shared/list-utils';
 import { conditionOperatorsMixin } from '../../shared/mixins';
 import { DateOperators, StringOperators } from '../../shared/operators';
-import { UserEntity } from '../user.entity';
+import { User } from '../user.entity';
 
 @InputType()
-class UserSortOptions
-  extends BaseSortOptions
-  implements SortOptions<UserEntity> {
+class UserSortOptions extends BaseSortOptions implements SortOptions<User> {
   @Field(() => SortOrder, { nullable: true })
   email?: SortOrder;
 }
@@ -23,7 +21,7 @@ class UserSortOptions
 @InputType()
 export class UserFilterOptions
   extends BaseFilterOptions
-  implements FilterOptions<UserEntity> {
+  implements FilterOptions<User> {
   @Field(() => StringOperators, { nullable: true })
   email: StringOperators;
 

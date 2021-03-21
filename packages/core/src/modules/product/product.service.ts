@@ -5,18 +5,18 @@ import { Injectable } from '@nestjs/common';
 import { PRODUCT_VARIANTS_LOADER } from '../../common/constants';
 import { usePopulationLoader } from '../../utils/use-population-loader';
 import { BaseService } from '../shared/base.service';
-import { ProductEntity } from './product.entity';
+import { Product } from './product.entity';
 
 @Injectable()
-export class ProductService extends BaseService<ProductEntity> {
+export class ProductService extends BaseService<Product> {
   constructor(
-    @InjectRepository(ProductEntity)
-    private productRepo: EntityRepository<ProductEntity>,
+    @InjectRepository(Product)
+    private productRepo: EntityRepository<Product>,
   ) {
     super(productRepo, 'Product');
   }
 
-  getVariants(ctx: any, product: ProductEntity) {
+  getVariants(ctx: any, product: Product) {
     return usePopulationLoader(ctx, this.productRepo, PRODUCT_VARIANTS_LOADER, {
       variants: true,
     })

@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { Test } from '@nestjs/testing';
 
 import { AuthService } from './auth.service';
-import { UserEntity } from '../user/user.entity';
+import { User } from '../user/user.entity';
 import { mockEntity } from '../../test-utils/mock-entities';
 import { UserService } from '../user/user.service';
 
@@ -19,7 +19,7 @@ const userMock = mockEntity(
     updatedAt: new Date(),
     deletedAt: null,
   },
-  UserEntity,
+  User,
 );
 
 describe('AuthService', () => {
@@ -92,7 +92,7 @@ describe('AuthService', () => {
         email: '',
         password: userMockPassword,
       });
-      expect(result).toBeInstanceOf(UserEntity);
+      expect(result).toBeInstanceOf(User);
     });
   });
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
-import { UserEntity } from '../user/user.entity';
+import { User } from '../user/user.entity';
 
 import { AuthService } from './auth.service';
 import { NativeAuthInput } from './dto';
@@ -10,16 +10,16 @@ import { NativeAuthInput } from './dto';
 export class AuthResolver {
   constructor(private authService: AuthService) {}
 
-  @Query(() => UserEntity, { nullable: true })
-  userProfile(@Context() ctx: any): Promise<UserEntity | null> {
+  @Query(() => User, { nullable: true })
+  userProfile(@Context() ctx: any): Promise<User | null> {
     return this.authService.getCurrentUser(ctx);
   }
 
-  @Mutation(() => UserEntity, { nullable: true })
+  @Mutation(() => User, { nullable: true })
   async userLogin(
     @Context() ctx: any,
     @Args('input') input: NativeAuthInput,
-  ): Promise<UserEntity | null> {
+  ): Promise<User | null> {
     const user = await this.authService.validateUser(input);
 
     if (!user) {

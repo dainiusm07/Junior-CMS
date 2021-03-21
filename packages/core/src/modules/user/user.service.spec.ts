@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { Test } from '@nestjs/testing';
 import { mockEntities } from '../../test-utils/mock-entities';
 
-import { UserEntity } from './user.entity';
+import { User } from './user.entity';
 import { UserService } from './user.service';
 
 const usersMock = mockEntities(
@@ -29,19 +29,19 @@ const usersMock = mockEntities(
       deletedAt: null,
     },
   ],
-  UserEntity,
+  User,
 );
 
 describe('UserService tests', () => {
   let service: UserService;
-  let repo: EntityRepository<UserEntity>;
+  let repo: EntityRepository<User>;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         UserService,
         {
-          provide: getRepositoryToken(UserEntity),
+          provide: getRepositoryToken(User),
           useValue: {
             find: jest.fn(),
             findOne: jest.fn(),
@@ -51,7 +51,7 @@ describe('UserService tests', () => {
     }).compile();
 
     service = moduleRef.get(UserService);
-    repo = moduleRef.get(getRepositoryToken(UserEntity));
+    repo = moduleRef.get(getRepositoryToken(User));
   });
 
   describe('instance', () => {

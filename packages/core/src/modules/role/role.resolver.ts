@@ -3,7 +3,7 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 
 import { Allow } from '../../decorators';
 import { Permission } from '../../common/permission.enum';
-import { RoleEntity } from './role.entity';
+import { Role } from './role.entity';
 import { RoleService } from './role.service';
 import { NewRoleInput, RoleListOptions, UpdateRoleInput } from './dto';
 import {
@@ -37,7 +37,7 @@ export class RoleResolver {
   @Allow(Permission.CreateRole)
   createRole(
     @Args('input', InputValidationPipe) input: NewRoleInput,
-  ): Promise<RoleEntity> {
+  ): Promise<Role> {
     return this.roleService.insert(input);
   }
 

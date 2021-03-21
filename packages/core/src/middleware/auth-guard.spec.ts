@@ -4,7 +4,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 
 import { mockedExecutionContext } from '../test-utils/mocked-execution-context';
 import { AuthGuard } from './auth-guard';
-import { UserEntity } from '../modules/user/user.entity';
+import { User } from '../modules/user/user.entity';
 import { AuthService } from '../modules/auth/auth.service';
 import { Permission } from '../common/permission.enum';
 const { ReadUser, CreateUser } = Permission;
@@ -22,7 +22,7 @@ const mockUserWithPermissions = (
       isAdmin,
       permissions: rolesPermissions,
     },
-  } as UserEntity;
+  } as User;
 
   jest
     .spyOn(authService, 'getCurrentUser')

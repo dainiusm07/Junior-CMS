@@ -2,11 +2,11 @@ import { compare } from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 
 import { UserService } from '../user/user.service';
-import { UserEntity } from '../user/user.entity';
+import { User } from '../user/user.entity';
 import { NativeAuthInput } from './dto/native-auth.input';
 
 type SessionData = {
-  userId: UserEntity['id'] | null;
+  userId: User['id'] | null;
 };
 
 @Injectable()
@@ -27,7 +27,7 @@ export class AuthService {
     return this.getSessionFromCtx(ctx).userId || null;
   }
 
-  private setUserId(ctx: any, userId: UserEntity['id'] | null) {
+  private setUserId(ctx: any, userId: User['id'] | null) {
     this.assignToSession(ctx, { userId });
   }
 
@@ -57,7 +57,7 @@ export class AuthService {
     );
   }
 
-  async getCurrentUser(ctx: any): Promise<UserEntity | null> {
+  async getCurrentUser(ctx: any): Promise<User | null> {
     const userId = this.getUserId(ctx);
 
     if (userId) return this.userService.findOne(userId);
@@ -65,7 +65,7 @@ export class AuthService {
     return null;
   }
 
-  loginUser(ctx: any, user: UserEntity) {
+  loginUser(ctx: any, user: User) {
     this.setUserId(ctx, user.id);
   }
 

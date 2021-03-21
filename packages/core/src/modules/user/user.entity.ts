@@ -11,12 +11,12 @@ import * as bcrypt from 'bcrypt';
 
 import { BCRYPT_SALT } from '../../common/environment';
 import { capitalizeFirstLetter } from '../../utils/capitalize-first-letter';
-import { RoleEntity } from '../role/role.entity';
+import { Role } from '../role/role.entity';
 import { BaseEntity } from '../shared/base.entity';
 
 @Entity({ tableName: 'users' })
 @ObjectType('User')
-export class UserEntity extends BaseEntity {
+export class User extends BaseEntity {
   @Field(() => Date, { nullable: true })
   @Property({ type: Date, nullable: true })
   deletedAt: Date | null;
@@ -37,16 +37,16 @@ export class UserEntity extends BaseEntity {
   @Property()
   password: string;
 
-  @Field(() => RoleEntity)
+  @Field(() => Role)
   @OneToOne({
-    entity: () => RoleEntity,
+    entity: () => Role,
     unique: false,
   })
-  role: RoleEntity;
+  role: Role;
 
   @BeforeCreate()
   @BeforeUpdate()
-  private async hashPassword({ changeSet }: EventArgs<UserEntity>) {
+  private async hashPassword({ changeSet }: EventArgs<User>) {
     const { password: newPassword } = changeSet?.payload || {};
 
     if (newPassword) {
@@ -56,7 +56,7 @@ export class UserEntity extends BaseEntity {
 
   @BeforeCreate()
   @BeforeUpdate()
-  private async capitalize({ changeSet }: EventArgs<UserEntity>) {
+  private async capitalize({ changeSet }: EventArgs<User>) {
     const { firstname, lastname } = changeSet?.payload || {};
 
     if (firstname) {

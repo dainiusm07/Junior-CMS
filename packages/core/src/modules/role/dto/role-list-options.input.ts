@@ -9,17 +9,15 @@ import {
 } from '../../shared/list-utils';
 import { conditionOperatorsMixin } from '../../shared/mixins';
 import { StringOperators } from '../../shared/operators';
-import { RoleEntity } from '../role.entity';
+import { Role } from '../role.entity';
 
 @InputType()
-class RoleSortOptions
-  extends BaseSortOptions
-  implements SortOptions<RoleEntity> {}
+class RoleSortOptions extends BaseSortOptions implements SortOptions<Role> {}
 
 @InputType()
 class RoleFilterOptions
   extends BaseFilterOptions
-  implements FilterOptions<RoleEntity> {
+  implements FilterOptions<Role> {
   @Field(() => StringOperators, { nullable: true })
   name: StringOperators;
 }

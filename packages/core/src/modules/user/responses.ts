@@ -3,22 +3,22 @@ import { createUnionType, ObjectType } from '@nestjs/graphql';
 import { InputValidationError } from '../../common/errors/input-validation.error';
 import { NotFoundError } from '../../common/errors/not-found.error';
 import { generateListResponse } from '../shared/list-utils';
-import { UserEntity } from './user.entity';
+import { User } from './user.entity';
 
 export const UserResponse = createUnionType({
   name: 'UserResponse',
-  types: () => [UserEntity, NotFoundError],
+  types: () => [User, NotFoundError],
 });
 
 export const UpdateUserResponse = createUnionType({
   name: 'UpdateUserResponse',
-  types: () => [UserEntity, InputValidationError, NotFoundError],
+  types: () => [User, InputValidationError, NotFoundError],
 });
 
 export const CreateUserResponse = createUnionType({
   name: 'CreateUserResponse',
-  types: () => [UserEntity, InputValidationError],
+  types: () => [User, InputValidationError],
 });
 
 @ObjectType()
-export class UserListResponse extends generateListResponse(UserEntity) {}
+export class UserListResponse extends generateListResponse(User) {}

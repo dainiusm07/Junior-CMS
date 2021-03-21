@@ -4,9 +4,9 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseEntity } from '../shared/base.entity';
 import { Permission } from '../../common/permission.enum';
 
+@ObjectType()
 @Entity({ tableName: 'roles' })
-@ObjectType('Role')
-export class RoleEntity extends BaseEntity {
+export class Role extends BaseEntity {
   @Field()
   @Property()
   name: string;

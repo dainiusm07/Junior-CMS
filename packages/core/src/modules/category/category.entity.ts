@@ -10,9 +10,9 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 import { BaseEntity } from '../shared/base.entity';
 
-@ObjectType('Category')
+@ObjectType()
 @Entity({ tableName: 'categories' })
-export class CategoryEntity extends BaseEntity {
+export class Category extends BaseEntity {
   @Field(() => Date, { nullable: true })
   @Property({ type: Date, nullable: true })
   deletedAt: Date | null;
@@ -29,16 +29,16 @@ export class CategoryEntity extends BaseEntity {
   @Property({ default: true })
   active: boolean;
 
-  @Field(() => CategoryEntity, { nullable: true })
-  @ManyToOne(() => CategoryEntity, {
+  @Field(() => Category, { nullable: true })
+  @ManyToOne(() => Category, {
     cascade: [Cascade.ALL],
     nullable: true,
     unique: false,
   })
-  parent: CategoryEntity;
+  parent: Category;
 
-  @OneToMany(() => CategoryEntity, 'parent', {
+  @OneToMany(() => Category, 'parent', {
     strategy: LoadStrategy.SELECT_IN,
   })
-  children: CategoryEntity[];
+  children: Category[];
 }

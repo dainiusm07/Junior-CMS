@@ -6,22 +6,22 @@ import { PRODUCT_VARIANT_ATTRIBUTES_LOADER } from '../../common/constants';
 import { usePopulationLoader } from '../../utils/use-population-loader';
 import { BaseService } from '../shared/base.service';
 import { slugHelperMixin } from '../shared/mixins/slug-helper.mixin';
-import { ProductVariantEntity } from './product-variant.entity';
+import { ProductVariant } from './product-variant.entity';
 
-class BaseServiceDerived extends BaseService<ProductVariantEntity> {}
+class BaseServiceDerived extends BaseService<ProductVariant> {}
 
 const Mixins = slugHelperMixin(BaseServiceDerived);
 
 @Injectable()
 export class ProductVariantService extends Mixins {
   constructor(
-    @InjectRepository(ProductVariantEntity)
-    private productVariantRepo: EntityRepository<ProductVariantEntity>,
+    @InjectRepository(ProductVariant)
+    private productVariantRepo: EntityRepository<ProductVariant>,
   ) {
     super(productVariantRepo, 'Product variant');
   }
 
-  async getAttributes(ctx: any, product: ProductVariantEntity) {
+  async getAttributes(ctx: any, product: ProductVariant) {
     return usePopulationLoader(
       ctx,
       this.productVariantRepo,
@@ -32,7 +32,7 @@ export class ProductVariantService extends Mixins {
       .then((result) => this.mapLoadedAttributes(result));
   }
 
-  private mapLoadedAttributes(product: ProductVariantEntity) {
+  private mapLoadedAttributes(product: ProductVariant) {
     if (!product.attributesValues.isInitialized(true)) {
       return [];
     }

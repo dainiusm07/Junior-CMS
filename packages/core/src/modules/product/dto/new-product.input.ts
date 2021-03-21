@@ -1,19 +1,19 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 
 import { PartialEntity } from '../../../types';
-import { CategoryEntity } from '../../category/category.entity';
+import { Category } from '../../category/category.entity';
 import { Exists } from '../../shared/constraints/exists.constraint';
-import { ProductEntity } from '../product.entity';
+import { Product } from '../product.entity';
 
 @InputType()
-export class NewProductInput implements PartialEntity<ProductEntity> {
+export class NewProductInput implements PartialEntity<Product> {
   @Field()
   name: string;
 
   @Field({ nullable: true })
   description?: string;
 
-  @Exists(CategoryEntity, 'id', 'Category')
+  @Exists(Category, 'id', 'Category')
   @Field(() => Int)
   categoryId: number;
 }

@@ -13,17 +13,17 @@ import {
   NumberOperators,
   StringOperators,
 } from '../../shared/operators';
-import { ProductEntity } from '../product.entity';
+import { Product } from '../product.entity';
 
 @InputType()
 class ProductSortOptions
   extends BaseSortOptions
-  implements SortOptions<ProductEntity> {}
+  implements SortOptions<Product> {}
 
 @InputType()
 export class ProductFilterOptions
   extends BaseFilterOptions
-  implements FilterOptions<ProductEntity> {
+  implements FilterOptions<Product> {
   @Field(() => StringOperators, { nullable: true })
   name: StringOperators;
 

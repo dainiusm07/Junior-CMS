@@ -7,13 +7,13 @@ import {
 } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { CategoryEntity } from '../category/category.entity';
-import { ProductVariantEntity } from '../product-variant/product-variant.entity';
+import { Category } from '../category/category.entity';
+import { ProductVariant } from '../product-variant/product-variant.entity';
 import { BaseEntity } from '../shared/base.entity';
 
-@ObjectType('Product')
+@ObjectType()
 @Entity({ tableName: 'products' })
-export class ProductEntity extends BaseEntity {
+export class Product extends BaseEntity {
   @Field(() => Date, { nullable: true })
   @Property({ type: Date, nullable: true })
   deletedAt: Date | null;
@@ -26,10 +26,10 @@ export class ProductEntity extends BaseEntity {
   @Property({ nullable: true })
   description?: string;
 
-  @ManyToOne(() => CategoryEntity)
-  category: CategoryEntity;
+  @ManyToOne(() => Category)
+  category: Category;
 
-  @Field(() => [ProductVariantEntity])
-  @OneToMany(() => ProductVariantEntity, 'product')
-  variants = new Collection<ProductVariantEntity>(this);
+  @Field(() => [ProductVariant])
+  @OneToMany(() => ProductVariant, 'product')
+  variants = new Collection<ProductVariant>(this);
 }

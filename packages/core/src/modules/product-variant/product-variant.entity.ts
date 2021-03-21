@@ -7,14 +7,14 @@ import {
 } from '@mikro-orm/core';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
-import { AttributeValueEntity } from '../attribute-value/attribute-value.entity';
-import { AttributeEntity } from '../attribute/attribute.entity';
-import { ProductEntity } from '../product/product.entity';
+import { AttributeValue } from '../attribute-value/attribute-value.entity';
+import { Attribute } from '../attribute/attribute.entity';
+import { Product } from '../product/product.entity';
 import { BaseEntity } from '../shared/base.entity';
 
-@ObjectType('ProductVariant')
+@ObjectType()
 @Entity({ tableName: 'product_variants' })
-export class ProductVariantEntity extends BaseEntity {
+export class ProductVariant extends BaseEntity {
   @Field(() => Date, { nullable: true })
   @Property({ type: Date, nullable: true })
   deletedAt: Date | null;
@@ -28,17 +28,17 @@ export class ProductVariantEntity extends BaseEntity {
   price: number;
 
   @ManyToMany({
-    entity: () => AttributeValueEntity,
+    entity: () => AttributeValue,
     joinColumn: 'product_variant_id',
     inverseJoinColumn: 'attribute_value_id',
     pivotTable: 'product_variants_attributes_values',
     owner: true,
   })
-  attributesValues = new Collection<AttributeValueEntity>(this);
+  attributesValues = new Collection<AttributeValue>(this);
 
-  @Field(() => [AttributeEntity])
-  protected attributes: AttributeEntity[];
+  @Field(() => [Attribute])
+  protected attributes: Attribute[];
 
-  @ManyToOne(() => ProductEntity)
-  product: ProductEntity;
+  @ManyToOne(() => Product)
+  product: Product;
 }

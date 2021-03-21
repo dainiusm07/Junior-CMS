@@ -6,11 +6,11 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { AttributeValueEntity } from '../attribute-value/attribute-value.entity';
+import { AttributeValue } from '../attribute-value/attribute-value.entity';
 
-@ObjectType('Attribute')
+@ObjectType()
 @Entity({ tableName: 'attributes' })
-export class AttributeEntity {
+export class Attribute {
   @Field(() => Int)
   @PrimaryKey()
   id: number;
@@ -19,7 +19,7 @@ export class AttributeEntity {
   @Property()
   name: string;
 
-  @Field(() => [AttributeValueEntity])
-  @OneToMany(() => AttributeValueEntity, 'attribute')
-  values = new Collection<AttributeValueEntity>(this);
+  @Field(() => [AttributeValue])
+  @OneToMany(() => AttributeValue, 'attribute')
+  values = new Collection<AttributeValue>(this);
 }

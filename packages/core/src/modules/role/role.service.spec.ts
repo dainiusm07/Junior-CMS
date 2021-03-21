@@ -1,6 +1,6 @@
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { Test } from '@nestjs/testing';
-import { RoleEntity } from './role.entity';
+import { Role } from './role.entity';
 import { RoleService } from './role.service';
 
 describe('RoleService', () => {
@@ -11,7 +11,7 @@ describe('RoleService', () => {
       providers: [
         RoleService,
         {
-          provide: getRepositoryToken(RoleEntity),
+          provide: getRepositoryToken(Role),
           useValue: {
             findAll: jest.fn(),
             findOne: jest.fn(),

@@ -3,13 +3,13 @@ import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 
 import { BaseService } from '../shared/base.service';
-import { AttributeValueEntity } from './attribute-value.entity';
+import { AttributeValue } from './attribute-value.entity';
 
 @Injectable()
-export class AttributeValueService extends BaseService<AttributeValueEntity> {
+export class AttributeValueService extends BaseService<AttributeValue> {
   constructor(
-    @InjectRepository(AttributeValueEntity)
-    private attributeValueRepo: EntityRepository<AttributeValueEntity>,
+    @InjectRepository(AttributeValue)
+    private attributeValueRepo: EntityRepository<AttributeValue>,
   ) {
     super(attributeValueRepo, 'Attribute value');
   }

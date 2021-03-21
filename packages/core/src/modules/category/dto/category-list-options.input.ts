@@ -10,17 +10,17 @@ import {
 } from '../../shared/list-utils';
 import { conditionOperatorsMixin } from '../../shared/mixins';
 import { DateOperators, StringOperators } from '../../shared/operators';
-import { CategoryEntity } from '../category.entity';
+import { Category } from '../category.entity';
 
 @InputType()
 class CategorySortOptions
   extends BaseSortOptions
-  implements SortOptions<CategoryEntity> {}
+  implements SortOptions<Category> {}
 
 @InputType()
 export class CategoryFilterOptions
   extends BaseFilterOptions
-  implements FilterOptions<CategoryEntity> {
+  implements FilterOptions<Category> {
   @Type(() => DateOperators)
   @Field(() => DateOperators, { nullable: true })
   createdAt: DateOperators;
