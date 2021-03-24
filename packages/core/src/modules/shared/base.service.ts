@@ -4,21 +4,30 @@ import {
   FilterQuery,
   FindOneOptions,
 } from '@mikro-orm/core';
+import { Populate } from '@mikro-orm/core/typings';
 
 import {
   MAX_RESULTS_PER_PAGE_LIMIT,
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
 } from '../../common/constants';
-import { IListOptions, IListResponse } from './list-utils';
-import { parseSortInput, parseFilterInput } from './helpers';
-export abstract class BaseService<T extends object> {
-  constructor(private _repo: EntityRepository<T>) {}
+import {
+  IListOptions,
+  IListResponse,
+  parseFilterInput,
+  parseSortInput,
+} from './list-utils';
 
-  findOneOrFail(where: FilterQuery<T>, options?: FindOneOptions<T>) {
+export abstract class BaseService<T extends object> {
+  protected abstract _repo: EntityRepository<T>;
+
+  async findOneOrFail(where: FilterQuery<T>, options?: FindOneOptions<T>) {
     return this._repo.findOneOrFail(where, options);
   }
 
-  async findList(options: IListOptions<T>): Promise<IListResponse<T>> {
+  async findList(
+    options: IListOptions<T>,
+    populate?: Populate<T>,
+  ): Promise<IListResponse<T>> {
     const { filter: rawFilter, sort } = options;
     let { page, limit } = options;
 
@@ -34,6 +43,7 @@ export abstract class BaseService<T extends object> {
       offset: (page - 1) * limit,
       limit,
       orderBy,
+      populate,
     });
 
     const totalPages = Math.ceil(totalItems / limit) || 1;
@@ -58,7 +68,8 @@ export abstract class BaseService<T extends object> {
     const entity = this._repo.create(data);
 
     await this._repo.persistAndFlush(entity);
-    return entity;
+
+    return this.findOneOrFail(entity);
   }
 
   async updateOne(filter: FilterQuery<T>, data: EntityData<T>) {
@@ -70,10 +81,12 @@ export abstract class BaseService<T extends object> {
 
     await this._repo.persistAndFlush(entity);
 
-    return this.findOneOrFail(entity);
+    return entity;
   }
 
-  private deleteUndefinedProperties<T extends Record<string, unknown>>(obj: T) {
+  protected deleteUndefinedProperties<T extends Record<string, unknown>>(
+    obj: T,
+  ) {
     Object.entries(obj).forEach(([key, value]) => {
       if (value === undefined) {
         delete obj[key];

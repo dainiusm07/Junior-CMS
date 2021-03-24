@@ -1,7 +1,9 @@
-export const SEARCH_SUMMARY_MV_NAME = 'search_summary_mv';
-
+// Metadata keys
 export const PERMISSIONS_METADATA_KEY = '__permissions__';
 
+export const SEARCH_SUMMARY_MV_NAME = 'search_summary_mv';
+
+// List options
 export const MAX_RESULTS_PER_PAGE_LIMIT = 100;
 export const DEFAULT_RESULTS_PER_PAGE_LIMIT = 10;
 

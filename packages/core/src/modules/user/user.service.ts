@@ -1,7 +1,6 @@
 import {
   EntityRepository,
   FilterQuery,
-  FindOneOptions,
   LoadStrategy,
   Populate,
 } from '@mikro-orm/core';
@@ -17,19 +16,19 @@ export class UserService extends BaseService<User> {
 
   constructor(
     @InjectRepository(User)
-    private userRepo: EntityRepository<User>,
+    protected _repo: EntityRepository<User>,
   ) {
-    super(userRepo);
+    super();
   }
 
   findOneOrFail(where: FilterQuery<User>) {
-    return this.userRepo.findOneOrFail(where, {
+    return this._repo.findOneOrFail(where, {
       populate: this.populationSettings,
     });
   }
 
   findOne(where: FilterQuery<User>) {
-    return this.userRepo.findOne(where, {
+    return this._repo.findOne(where, {
       populate: this.populationSettings,
     });
   }

@@ -15,18 +15,18 @@ const categoriesPopulate =
 export class CategoryService extends BaseService<Category> {
   constructor(
     @InjectRepository(Category)
-    private categoryRepo: EntityRepository<Category>,
+    protected _repo: EntityRepository<Category>,
     private slugHelper: SlugHelper,
   ) {
-    super(categoryRepo);
+    super();
   }
 
   getAvailableSlug(name: string) {
-    return this.slugHelper.getAvailableSlug(this.categoryRepo, name);
+    return this.slugHelper.getAvailableSlug(this._repo, name);
   }
 
   checkSlugAvailability(slug: string) {
-    return this.slugHelper.checkSlugAvailability(this.categoryRepo, slug);
+    return this.slugHelper.checkSlugAvailability(this._repo, slug);
   }
 
   async insert(data: EntityData<Category>) {
@@ -38,7 +38,7 @@ export class CategoryService extends BaseService<Category> {
   }
 
   getCategoriesTree(id?: number) {
-    return this.categoryRepo.find(id ? { id } : { parent: null }, {
+    return this._repo.find(id ? { id } : { parent: null }, {
       populate: [categoriesPopulate],
     });
   }

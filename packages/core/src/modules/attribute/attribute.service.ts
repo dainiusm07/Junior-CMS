@@ -9,9 +9,9 @@ import { BaseService } from '../shared/base.service';
 export class AttributeService extends BaseService<Attribute> {
   constructor(
     @InjectRepository(Attribute)
-    private attributeRepo: EntityRepository<Attribute>,
+    protected _repo: EntityRepository<Attribute>,
   ) {
-    super(attributeRepo);
+    super();
   }
 
   findOneOrFail(where: FilterQuery<Attribute>) {
@@ -20,6 +20,6 @@ export class AttributeService extends BaseService<Attribute> {
     });
   }
   findAll() {
-    return this.attributeRepo.findAll({ populate: { values: true } });
+    return this._repo.findAll({ populate: { values: true } });
   }
 }

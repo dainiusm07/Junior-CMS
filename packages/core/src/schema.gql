@@ -100,14 +100,29 @@ type CategoryTreeResponse {
   children: [CategoryTreeResponse!]!
 }
 
+type ProductTranslation {
+  languageCode: LanguageCode!
+  updatedAt: DateTime!
+  name: String!
+  slug: String!
+  description: String
+}
+
+enum LanguageCode {
+  EN
+}
+
 type Product {
   id: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
-  name: String!
-  description: String
   variants: [ProductVariant!]!
+  translations: ProductTranslation!
+  languageCode: LanguageCode!
+  name: String!
+  slug: String!
+  description: String
 }
 
 type ProductVariant {
@@ -312,6 +327,7 @@ type Mutation {
   updateProductVariant(input: UpdateProductVariantInput!, id: Int!): UpdateProductVariantResponse!
   createProduct(input: NewProductInput!): CreateProductResponse!
   updateProduct(input: UpdateProductInput!, id: Int!): UpdateProductResponse!
+  addProductTranslation(input: NewProductTranslationInput!): ProductTranslation!
   createUser(input: NewUserInput!): CreateUserResponse!
   updateUser(input: UpdateUserInput!, id: Int!): UpdateUserResponse!
   userLogin(input: NativeAuthInput!): User
@@ -389,7 +405,9 @@ input UpdateProductVariantInput {
 union CreateProductResponse = Product | InputValidationError
 
 input NewProductInput {
+  languageCode: LanguageCode!
   name: String!
+  slug: String
   description: String
   categoryId: Int!
 }
@@ -397,9 +415,19 @@ input NewProductInput {
 union UpdateProductResponse = Product | InputValidationError | ResultError
 
 input UpdateProductInput {
+  languageCode: LanguageCode
   name: String
+  slug: String
   description: String
   categoryId: Int
+}
+
+input NewProductTranslationInput {
+  languageCode: LanguageCode!
+  name: String!
+  slug: String
+  description: String
+  productId: Float!
 }
 
 union CreateUserResponse = User | InputValidationError

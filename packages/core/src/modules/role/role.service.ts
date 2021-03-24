@@ -9,8 +9,8 @@ import { Role } from './role.entity';
 export class RoleService extends BaseService<Role> {
   constructor(
     @InjectRepository(Role)
-    private roleRepo: EntityRepository<Role>,
+    protected _repo: EntityRepository<Role>,
   ) {
-    super(roleRepo);
+    super();
   }
 }

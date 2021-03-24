@@ -35,8 +35,8 @@ describe('BaseService', () => {
   let repo: EntityRepository<BaseEntity>;
 
   class MyBaseService extends BaseService<BaseEntity> {
-    constructor(private baseRepo: EntityRepository<BaseEntity>) {
-      super(baseRepo);
+    constructor(protected _repo: EntityRepository<BaseEntity>) {
+      super();
     }
   }
 
@@ -259,10 +259,10 @@ describe('BaseService', () => {
         .mockReturnValue(Promise.resolve(entity));
     });
 
-    it('should try to fetch entity, then fetch it again if something is changed', async () => {
+    it('should try to fetch entity', async () => {
       await service.updateOne({}, {});
 
-      expect(service.findOneOrFail).toBeCalledTimes(2);
+      expect(service.findOneOrFail).toBeCalledTimes(1);
     });
 
     it('should return updated entity', async () => {
@@ -282,6 +282,10 @@ describe('BaseService', () => {
     });
 
     it('should return entity', async () => {
+      jest
+        .spyOn(service, 'findOneOrFail')
+        .mockReturnValue(Promise.resolve(entities[0]));
+
       const result = await service.insert(entities[0]);
 
       expect(result).toBeInstanceOf(MyBaseEntity);

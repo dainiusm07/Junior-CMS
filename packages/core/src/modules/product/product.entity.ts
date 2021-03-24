@@ -6,25 +6,22 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { LanguageCode } from '../../config/i18n/LanguageCode';
+import { Translation } from '../../types/Translations';
 
 import { Category } from '../category/category.entity';
 import { ProductVariant } from '../product-variant/product-variant.entity';
 import { BaseEntity } from '../shared/base.entity';
+import { ProductTranslation } from './product-translation.entity';
 
 @ObjectType()
 @Entity({ tableName: 'products' })
-export class Product extends BaseEntity {
+export class Product
+  extends BaseEntity
+  implements Translation<ProductTranslation> {
   @Field(() => Date, { nullable: true })
   @Property({ type: Date, nullable: true })
   deletedAt: Date | null;
-
-  @Field()
-  @Property()
-  name: string;
-
-  @Field({ nullable: true })
-  @Property({ nullable: true })
-  description?: string;
 
   @ManyToOne(() => Category)
   category: Category;
@@ -32,4 +29,23 @@ export class Product extends BaseEntity {
   @Field(() => [ProductVariant])
   @OneToMany(() => ProductVariant, 'product')
   variants = new Collection<ProductVariant>(this);
+
+  @Field(() => ProductTranslation)
+  @OneToMany(() => ProductTranslation, 'product', {
+    eager: true,
+  })
+  translations = new Collection<ProductTranslation>(this);
+
+  // Translation properties
+  @Field(() => LanguageCode)
+  languageCode?: LanguageCode;
+
+  @Field()
+  name?: string;
+
+  @Field()
+  slug?: string;
+
+  @Field({ nullable: true })
+  description?: string;
 }

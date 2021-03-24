@@ -9,8 +9,8 @@ import { AttributeValue } from './attribute-value.entity';
 export class AttributeValueService extends BaseService<AttributeValue> {
   constructor(
     @InjectRepository(AttributeValue)
-    private attributeValueRepo: EntityRepository<AttributeValue>,
+    protected _repo: EntityRepository<AttributeValue>,
   ) {
-    super(attributeValueRepo);
+    super();
   }
 }

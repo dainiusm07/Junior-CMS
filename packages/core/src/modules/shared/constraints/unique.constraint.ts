@@ -1,10 +1,9 @@
 import { Constructor, RequestContext } from '@mikro-orm/core';
 import { registerDecorator } from 'class-validator';
+
 import { capitalizeFirstLetter } from '../../../utils/capitalize-first-letter';
 
-import { BaseEntity } from '../base.entity';
-
-export function Unique<T extends BaseEntity>(
+export function Unique<T extends object>(
   entity: Constructor<T>,
   field: keyof T,
 ): PropertyDecorator {

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as dotenv from 'dotenv';
+import { LanguageCode } from '../config/i18n/LanguageCode';
 dotenv.config();
 
 // Environment
@@ -8,6 +9,7 @@ export const IS_PROD = process.env.NODE_END === 'production';
 
 // Application
 // export const PRIMARY_COLOR: string = process.env.PRIMARY_COLOR || "#87e8de";
+export const DEFAULT_LANGUAGE_CODE = LanguageCode.EN;
 export const API_DOMAIN = process.env.API_DOMAIN || 'localhost';
 export const API_PORT = +process.env.API_PORT! || 4000;
 export const RATE_LIMIT_MAX = +process.env.RATE_LIMIT_MAX! || 10000;

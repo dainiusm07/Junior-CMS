@@ -12,24 +12,24 @@ import { ProductVariant } from './product-variant.entity';
 export class ProductVariantService extends BaseService<ProductVariant> {
   constructor(
     @InjectRepository(ProductVariant)
-    private productVariantRepo: EntityRepository<ProductVariant>,
+    protected _repo: EntityRepository<ProductVariant>,
     private slugHelper: SlugHelper,
   ) {
-    super(productVariantRepo);
+    super();
   }
 
   getAvailableSlug(name: string) {
-    return this.slugHelper.getAvailableSlug(this.productVariantRepo, name);
+    return this.slugHelper.getAvailableSlug(this._repo, name);
   }
 
   checkSlugAvailability(slug: string) {
-    return this.slugHelper.checkSlugAvailability(this.productVariantRepo, slug);
+    return this.slugHelper.checkSlugAvailability(this._repo, slug);
   }
 
   async getAttributes(ctx: any, product: ProductVariant) {
     return usePopulationLoader(
       ctx,
-      this.productVariantRepo,
+      this._repo,
       PRODUCT_VARIANT_ATTRIBUTES_LOADER,
       { attributesValues: { attribute: true } },
     )

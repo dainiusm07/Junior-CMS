@@ -1,35 +1,60 @@
-import { EntityRepository, FilterQuery, LoadStrategy } from '@mikro-orm/core';
+import { EntityData, EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { PRODUCT_VARIANTS_LOADER } from '../../common/constants';
+import { Translated } from '../../types/Translations';
 import { usePopulationLoader } from '../../utils/use-population-loader';
 import { BaseService } from '../shared/base.service';
-import { IListOptions } from '../shared/list-utils';
+import { translationsMixin } from '../shared/mixins/translations.mixin';
+import { SlugHelper } from '../shared/slug-helper';
+import { ProductTranslation } from './product-translation.entity';
 import { Product } from './product.entity';
 
 @Injectable()
-export class ProductService extends BaseService<Product> {
+export class ProductService extends translationsMixin<Product>(BaseService) {
   constructor(
     @InjectRepository(Product)
-    private productRepo: EntityRepository<Product>,
+    protected _repo: EntityRepository<Product>,
+    @InjectRepository(ProductTranslation)
+    protected _translationRepo: EntityRepository<ProductTranslation>,
+    private slugHelper: SlugHelper,
   ) {
-    super(productRepo);
+    super();
   }
 
-  async findOneOrFail(where: FilterQuery<Product>) {
-    return super.findOneOrFail(where, {
-      populate: { variants: true },
-      strategy: LoadStrategy.JOINED,
-    });
+  async findOneOrFail(
+    where: FilterQuery<Product>,
+  ): Promise<Translated<Product>> {
+    return super.findOneOrFail(where);
   }
 
-  async findList(options: IListOptions<Product>) {
-    return super.findList(options);
+  getAvailableSlug(name: string) {
+    return this.slugHelper.getAvailableSlug(this._translationRepo, name);
+  }
+
+  checkSlugAvailability(slug: string) {
+    return this.slugHelper.checkSlugAvailability(this._translationRepo, slug);
+  }
+
+  async insert(data: EntityData<Product>): Promise<Translated<Product>> {
+    if (!data.slug && data.name) {
+      data.slug = await this.getAvailableSlug(data.name);
+    }
+
+    return super.insert(data);
+  }
+
+  async addTranslation(data: EntityData<ProductTranslation>) {
+    if (!data.slug && data.name) {
+      data.slug = await this.getAvailableSlug(data.name);
+    }
+
+    return super.addTranslation(data);
   }
 
   getVariants(ctx: any, product: Product) {
-    return usePopulationLoader(ctx, this.productRepo, PRODUCT_VARIANTS_LOADER, {
+    return usePopulationLoader(ctx, this._repo, PRODUCT_VARIANTS_LOADER, {
       variants: true,
     })
       .load(product)
