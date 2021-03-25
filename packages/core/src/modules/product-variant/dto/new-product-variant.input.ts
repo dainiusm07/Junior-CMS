@@ -9,7 +9,7 @@ import { ProductVariant } from '../product-variant.entity';
 
 @InputType()
 export class NewProductVariantInput implements PartialEntity<ProductVariant> {
-  @Exists(Product, 'id', 'Product')
+  @Exists(Product, 'id')
   @Field(() => Int)
   productId: number;
 
@@ -20,7 +20,7 @@ export class NewProductVariantInput implements PartialEntity<ProductVariant> {
   @Field()
   slug: string;
 
-  @Exists(AttributeValue, 'id', 'AttributeValue')
+  @Exists(AttributeValue, 'id')
   @Field(() => [Int])
   attributesValuesIds: number[];
 }

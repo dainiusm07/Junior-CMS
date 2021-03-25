@@ -19,7 +19,7 @@ export class NewProductInput implements Partial<Product> {
   @Field({ nullable: true })
   description?: string;
 
-  @Exists(Category, 'id', 'Category')
+  @Exists(Category, 'id')
   @Field(() => Int)
   categoryId: number;
 }

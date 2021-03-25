@@ -21,7 +21,7 @@ export class NewProductTranslationInput implements Partial<ProductTranslation> {
   @Field({ nullable: true })
   description?: string;
 
-  @Exists(Product, 'id', 'Product')
+  @Exists(Product, 'id')
   @Field()
   productId: number;
 }

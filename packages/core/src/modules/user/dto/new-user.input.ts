@@ -27,7 +27,7 @@ export class NewUserInput implements PartialEntity<User> {
   @Field()
   password: string;
 
-  @Exists(Role, 'id', 'Role')
+  @Exists(Role, 'id')
   @Field(() => Int)
   roleId: number;
 }

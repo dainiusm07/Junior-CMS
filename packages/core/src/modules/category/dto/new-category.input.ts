@@ -14,7 +14,7 @@ export class NewCategoryInput implements PartialEntity<Category> {
   @Field({ nullable: true })
   slug?: string;
 
-  @Exists(Category, 'id', 'Category')
+  @Exists(Category, 'id')
   @Field(() => Int, { nullable: true })
   parentId: number;
 }

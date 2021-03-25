@@ -5,7 +5,7 @@ import { Exists } from '../../shared/constraints/exists.constraint';
 
 @InputType()
 export class NewAttributeValueInput {
-  @Exists(Attribute, 'id', 'Attribute')
+  @Exists(Attribute, 'id')
   @Field(() => Int)
   attributeId: number;
   @Field()

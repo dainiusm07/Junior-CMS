@@ -4,13 +4,12 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Permission } from '../../common/permission.enum';
 import { Allow } from '../../decorators';
 import { InputValidationFilter, NotFoundFilter } from '../../filters';
-import { UniqueConstraintFilter } from '../../filters/unique-constraint.filter';
 import { InputValidationPipe } from '../../middleware/input-validation.pipe';
 import { NewProductInput, ProductListOptions, UpdateProductInput } from './dto';
 import { NewProductTranslationInput } from './dto/new-product-translation.input';
-import { ProductTranslation } from './product-translation.entity';
 import { ProductService } from './product.service';
 import {
+  AddProductTranslationResponse,
   CreateProductResponse,
   ProductListResponse,
   ProductResponse,
@@ -19,7 +18,7 @@ import {
 
 @Resolver()
 @Injectable()
-@UseFilters(InputValidationFilter, NotFoundFilter, UniqueConstraintFilter)
+@UseFilters(InputValidationFilter, NotFoundFilter)
 export class ProductResolver {
   constructor(private productService: ProductService) {}
 
@@ -65,10 +64,10 @@ export class ProductResolver {
   }
 
   @Allow(Permission.UpdateProduct)
-  @Mutation(() => ProductTranslation)
+  @Mutation(() => AddProductTranslationResponse)
   addProductTranslation(
     @Args('input', InputValidationPipe) input: NewProductTranslationInput,
-  ): Promise<ProductTranslation> {
+  ): Promise<typeof AddProductTranslationResponse> {
     const { productId, ...restInput } = input;
 
     return this.productService.addTranslation({

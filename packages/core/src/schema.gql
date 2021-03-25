@@ -178,6 +178,7 @@ type ResultError {
 enum ErrorCode {
   NOT_FOUND
   INPUT_VALIDATION
+  ALREADY_EXISTS
 }
 
 union CategoryResponse = Category | ResultError
@@ -327,7 +328,7 @@ type Mutation {
   updateProductVariant(input: UpdateProductVariantInput!, id: Int!): UpdateProductVariantResponse!
   createProduct(input: NewProductInput!): CreateProductResponse!
   updateProduct(input: UpdateProductInput!, id: Int!): UpdateProductResponse!
-  addProductTranslation(input: NewProductTranslationInput!): ProductTranslation!
+  addProductTranslation(input: NewProductTranslationInput!): AddProductTranslationResponse!
   createUser(input: NewUserInput!): CreateUserResponse!
   updateUser(input: UpdateUserInput!, id: Int!): UpdateUserResponse!
   userLogin(input: NativeAuthInput!): User
@@ -421,6 +422,8 @@ input UpdateProductInput {
   description: String
   categoryId: Int
 }
+
+union AddProductTranslationResponse = ProductTranslation | InputValidationError | ResultError
 
 input NewProductTranslationInput {
   languageCode: LanguageCode!

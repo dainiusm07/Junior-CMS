@@ -8,6 +8,7 @@ import {
 } from '@mikro-orm/core';
 
 import { DEFAULT_LANGUAGE_CODE } from '../../../common/environment';
+import { ResultError } from '../../../common/errors/result.error';
 import {
   MaybeTranslatable,
   Translatable,
@@ -99,14 +100,20 @@ export const translationsMixin = <
       return super.updateOne(entity as never, entity) as Promise<Translated<T>>;
     }
 
-    async addTranslation(translation: EntityData<P>) {
-      this.deleteUndefinedProperties(translation);
+    async addTranslation(data: EntityData<P>) {
+      this.deleteUndefinedProperties(data);
 
-      const entity = this._translationRepo.create(translation);
+      const translation = this._translationRepo.create(data);
 
-      await this._translationRepo.persistAndFlush(entity);
+      const translationExists = await this._translationRepo.count(translation);
 
-      return entity;
+      if (translationExists) {
+        return ResultError.alreadyExists('translation');
+      }
+
+      await this._translationRepo.persistAndFlush(translation);
+
+      return translation;
     }
 
     /**
