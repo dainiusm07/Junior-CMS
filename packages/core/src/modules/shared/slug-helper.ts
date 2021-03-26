@@ -1,10 +1,4 @@
-import {
-  AnyEntity,
-  EntityManager,
-  EntityName,
-  EntityRepository,
-  MikroORM,
-} from '@mikro-orm/core';
+import { EntityRepository } from '@mikro-orm/core';
 import slugify from 'slugify';
 
 export class SlugHelper {

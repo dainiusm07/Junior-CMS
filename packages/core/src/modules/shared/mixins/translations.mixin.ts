@@ -29,6 +29,8 @@ export const translationsMixin = <
   abstract class TranslationsMixin extends (Cls as Constructor<
     BaseService<T>
   >) {
+    findOnePopulateOptions = { translations: LoadStrategy.JOINED };
+
     protected abstract _translationRepo: EntityRepository<P>;
     protected abstract _repo: EntityRepository<T>;
 
@@ -37,9 +39,9 @@ export const translationsMixin = <
       options: FindOneOptions<T> = {},
     ): Promise<Translated<T>> {
       if (typeof options.populate === 'object') {
-        Object.assign(options.populate, { translations: LoadStrategy.JOINED });
+        Object.assign(options.populate, this.findOnePopulateOptions);
       } else {
-        options.populate = { translations: LoadStrategy.JOINED };
+        options.populate = this.findOnePopulateOptions;
       }
 
       return super
