@@ -16,9 +16,9 @@ export class NewProductVariantInput implements PartialEntity<ProductVariant> {
   @Field(() => Int)
   price: number;
 
-  @Unique(ProductVariant, 'slug')
+  @Unique(ProductVariant, 'sku')
   @Field()
-  slug: string;
+  sku: string;
 
   @Exists(AttributeValue, 'id')
   @Field(() => [Int])

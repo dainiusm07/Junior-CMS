@@ -18,18 +18,6 @@ import {
 export class ProductVariantResolver {
   constructor(private productVariantService: ProductVariantService) {}
 
-  @Allow(Permission.UpdateProduct)
-  @Mutation(() => Boolean)
-  isProductVariantSlugAvailable(@Args('slug') slug: string): Promise<boolean> {
-    return this.productVariantService.checkSlugAvailability(slug);
-  }
-
-  @Allow(Permission.UpdateProduct)
-  @Mutation(() => String)
-  getProductVariantSlug(@Args('name') name: string): Promise<string> {
-    return this.productVariantService.getAvailableSlug(name);
-  }
-
   @Allow(Permission.UpdateProduct, Permission.CreateProduct)
   @Mutation(() => CreateProductVariantResponse)
   async createProductVariant(

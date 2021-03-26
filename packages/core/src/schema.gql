@@ -130,7 +130,7 @@ type ProductVariant {
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
-  slug: String!
+  sku: String!
   price: Int!
   attributes: [Attribute!]!
 }
@@ -322,8 +322,6 @@ type Mutation {
   getCategorySlug(name: String!): String!
   createCategory(input: NewCategoryInput!): CreateCategoryResponse!
   updateCategory(input: UpdateCategoryInput!, id: Int!): UpdateCategoryResponse!
-  isProductVariantSlugAvailable(slug: String!): Boolean!
-  getProductVariantSlug(name: String!): String!
   createProductVariant(input: NewProductVariantInput!): CreateProductVariantResponse!
   updateProductVariant(input: UpdateProductVariantInput!, id: Int!): UpdateProductVariantResponse!
   createProduct(input: NewProductInput!): CreateProductResponse!
@@ -390,7 +388,7 @@ union CreateProductVariantResponse = ProductVariant | InputValidationError
 input NewProductVariantInput {
   productId: Int!
   price: Int!
-  slug: String!
+  sku: String!
   attributesValuesIds: [Int!]!
 }
 
@@ -399,7 +397,7 @@ union UpdateProductVariantResponse = ProductVariant | InputValidationError | Res
 input UpdateProductVariantInput {
   productId: Int
   price: Int
-  slug: String
+  sku: String
   attributesValuesIds: [Int!]
 }
 

@@ -20,8 +20,8 @@ export class ProductVariant extends BaseEntity {
   deletedAt: Date | null;
 
   @Field()
-  @Property({ index: true, unique: true })
-  slug: string;
+  @Property({ unique: true })
+  sku: string;
 
   @Field(() => Int)
   @Property()
