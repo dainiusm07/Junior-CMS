@@ -20,7 +20,7 @@ import {
   SESSION_TTL,
 } from './common/environment';
 import { LoggerMiddleware } from './middleware';
-import { LoggingInterceptor, TimeoutInterceptor } from './interceptors';
+import { TimeoutInterceptor } from './interceptors';
 
 declare const module: any;
 
@@ -79,11 +79,7 @@ async function bootstrap() {
     NODE_ENV !== 'testing' && app.use(LoggerMiddleware);
 
     // NOTE: interceptors
-    app.useGlobalInterceptors(new LoggingInterceptor());
     app.useGlobalInterceptors(new TimeoutInterceptor());
-
-    // NOTE: global nest setup
-    // app.useGlobalPipes(new ValidationPipe());
 
     app.enableShutdownHooks();
 

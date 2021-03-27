@@ -6,6 +6,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { GraphqlService } from './config';
 import { CacheService } from './config/cache';
 import { MikroOrmService } from './config/mikro-orm';
+import { GraphqlLoggingPlugin } from './middleware/graphql-logging.plugin';
 import { AuthGuard } from './middleware/auth-guard';
 import { AttributeValueModule } from './modules/attribute-value/attribute-value.module';
 import { AttributeModule } from './modules/attribute/attribute.module';
@@ -46,6 +47,7 @@ const CustomModules = [
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    GraphqlLoggingPlugin,
   ],
 })
 export class AppModule {}
