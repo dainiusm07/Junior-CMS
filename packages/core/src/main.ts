@@ -1,3 +1,4 @@
+import path from 'path';
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import chalk from 'chalk';
@@ -8,19 +9,20 @@ import rateLimit from 'express-rate-limit';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import Redis from 'ioredis';
+import i18n from 'i18n';
 import { API_END_POINT } from '@junior-cms/common';
 
 import { AppModule } from './app.module';
 import {
   API_DOMAIN,
   API_PORT,
+  DEFAULT_LANGUAGE_CODE,
   NODE_ENV,
   RATE_LIMIT_MAX,
   SESSION_SECRET,
   SESSION_TTL,
 } from './common/environment';
-import { LoggerMiddleware } from './middleware';
-import { TimeoutInterceptor } from './interceptors';
+import { LoggerMiddleware, TimeoutInterceptor } from './middleware';
 
 declare const module: any;
 
@@ -74,6 +76,16 @@ async function bootstrap() {
           '⚠️  Too many request created from this IP, please try again after an hour',
       }),
     );
+
+    // Translations
+    i18n.configure({
+      defaultLocale: DEFAULT_LANGUAGE_CODE,
+      header: 'accept-language',
+      directory: path.join(__dirname, '/../locales'),
+      objectNotation: true,
+    });
+
+    app.use(i18n.init);
 
     // NOTE:loggerMiddleware
     NODE_ENV !== 'testing' && app.use(LoggerMiddleware);

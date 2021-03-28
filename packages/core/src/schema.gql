@@ -110,6 +110,7 @@ type ProductTranslation {
 
 enum LanguageCode {
   EN
+  LT
 }
 
 type Product {
@@ -168,20 +169,14 @@ type Query {
   role(id: Int!): RoleResponse!
 }
 
-union AttributeResponse = Attribute | ResultError
+union AttributeResponse = Attribute | ErrorResult
 
-type ResultError {
+type ErrorResult {
   message: String!
-  errorCode: ErrorCode!
+  errorCode: String!
 }
 
-enum ErrorCode {
-  NOT_FOUND
-  INPUT_VALIDATION
-  ALREADY_EXISTS
-}
-
-union CategoryResponse = Category | ResultError
+union CategoryResponse = Category | ErrorResult
 
 input ExtendedCategoryFilterOptions {
   id: NumberOperators
@@ -228,7 +223,7 @@ enum SortOrder {
   DESC
 }
 
-union ProductResponse = Product | ResultError
+union ProductResponse = Product | ErrorResult
 
 input ExtendedProductFilterOptions {
   id: NumberOperators
@@ -258,7 +253,7 @@ input ProductSortOptions {
   createdAt: SortOrder
 }
 
-union UserResponse = User | ResultError
+union UserResponse = User | ErrorResult
 
 input ExtendedUserFilterOptions {
   id: NumberOperators
@@ -311,7 +306,7 @@ input RoleSortOptions {
   createdAt: SortOrder
 }
 
-union RoleResponse = Role | ResultError
+union RoleResponse = Role | ErrorResult
 
 type Mutation {
   createAttributeValue(input: NewAttributeValueInput!): CreateAttributeValueResponse!
@@ -339,7 +334,7 @@ union CreateAttributeValueResponse = AttributeValue | InputValidationError
 
 type InputValidationError {
   message: String!
-  errorCode: ErrorCode!
+  errorCode: String!
   errors: [ValidationError!]!
 }
 
@@ -348,7 +343,7 @@ input NewAttributeValueInput {
   value: String!
 }
 
-union UpdateAttributeValueResponse = AttributeValue | InputValidationError | ResultError
+union UpdateAttributeValueResponse = AttributeValue | InputValidationError | ErrorResult
 
 input UpdateAttributeValueInput {
   attributeId: Int
@@ -361,7 +356,7 @@ input NewAttributeInput {
   name: String!
 }
 
-union UpdateAttributeResponse = Attribute | InputValidationError | ResultError
+union UpdateAttributeResponse = Attribute | InputValidationError | ErrorResult
 
 input UpdateAttributeInput {
   name: String
@@ -375,7 +370,7 @@ input NewCategoryInput {
   parentId: Int
 }
 
-union UpdateCategoryResponse = Category | InputValidationError | ResultError
+union UpdateCategoryResponse = Category | InputValidationError | ErrorResult
 
 input UpdateCategoryInput {
   name: String
@@ -392,7 +387,7 @@ input NewProductVariantInput {
   attributesValuesIds: [Int!]!
 }
 
-union UpdateProductVariantResponse = ProductVariant | InputValidationError | ResultError
+union UpdateProductVariantResponse = ProductVariant | InputValidationError | ErrorResult
 
 input UpdateProductVariantInput {
   productId: Int
@@ -404,24 +399,22 @@ input UpdateProductVariantInput {
 union CreateProductResponse = Product | InputValidationError
 
 input NewProductInput {
-  languageCode: LanguageCode!
   name: String!
   slug: String
   description: String
   categoryId: Int!
 }
 
-union UpdateProductResponse = Product | InputValidationError | ResultError
+union UpdateProductResponse = Product | InputValidationError | ErrorResult
 
 input UpdateProductInput {
-  languageCode: LanguageCode
   name: String
   slug: String
   description: String
   categoryId: Int
 }
 
-union AddProductTranslationResponse = ProductTranslation | InputValidationError | ResultError
+union AddProductTranslationResponse = ProductTranslation | InputValidationError | ErrorResult
 
 input NewProductTranslationInput {
   languageCode: LanguageCode!
@@ -441,7 +434,7 @@ input NewUserInput {
   roleId: Int!
 }
 
-union UpdateUserResponse = User | InputValidationError | ResultError
+union UpdateUserResponse = User | InputValidationError | ErrorResult
 
 input UpdateUserInput {
   firstname: String
@@ -463,7 +456,7 @@ input NewRoleInput {
   permissions: [Permission!]!
 }
 
-union UpdateRoleResponse = Role | InputValidationError | ResultError
+union UpdateRoleResponse = Role | InputValidationError | ErrorResult
 
 input UpdateRoleInput {
   name: String

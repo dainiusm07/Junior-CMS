@@ -10,7 +10,7 @@ export function Email<T extends BaseEntityWithEmail>(
   entity: Constructor<T>,
 ): PropertyDecorator {
   return (object: object, propertyName: string | symbol) => {
-    IsEmail()(object, propertyName);
+    IsEmail({}, { message: 'error.invalid-email' })(object, propertyName);
     Unique(entity, 'email')(object, propertyName);
   };
 }

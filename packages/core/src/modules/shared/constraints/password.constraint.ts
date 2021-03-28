@@ -6,15 +6,20 @@ const maxLength = 120;
 
 export function Password(): PropertyDecorator {
   return (object: object, propertyName: string | symbol) => {
-    MinLength(minLength)(object, propertyName);
-    MaxLength(maxLength)(object, propertyName);
+    MinLength(minLength, {
+      message: `error.min-length-constraint`,
+      context: { name: 'password', number: minLength },
+    })(object, propertyName);
+    MaxLength(maxLength, {
+      message: `error.max-length-constraint`,
+      context: { name: 'password', number: minLength },
+    })(object, propertyName);
     Matches(
       new RegExp(
         '^(?=.*[a-z])(?=.*[A-Z])((?=.*d)|(?=.*[@$!%*?&]))[A-Za-zd@$!%*?&]',
       ),
       {
-        message:
-          'Password must contain one lowercase letter, one uppercase letter and one number or special character',
+        message: 'error.password-constraint',
       },
     )(object, propertyName);
     NoWhiteSpace()(object, propertyName);

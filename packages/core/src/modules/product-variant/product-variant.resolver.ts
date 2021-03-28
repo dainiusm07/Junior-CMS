@@ -1,11 +1,11 @@
-import { Injectable, UseFilters } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
 
 import { Permission } from '../../common/permission.enum';
 import { Allow } from '../../decorators';
-import { InputValidationFilter, NotFoundFilter } from '../../filters';
-import { InputValidationPipe } from '../../middleware/input-validation.pipe';
+import { InputValidationPipe } from '../../middleware';
 import { NewProductVariantInput, UpdateProductVariantInput } from './dto';
+import { ProductVariant } from './product-variant.entity';
 import { ProductVariantService } from './product-variant.service';
 import {
   CreateProductVariantResponse,
@@ -14,7 +14,6 @@ import {
 
 @Resolver()
 @Injectable()
-@UseFilters(InputValidationFilter, NotFoundFilter)
 export class ProductVariantResolver {
   constructor(private productVariantService: ProductVariantService) {}
 
@@ -22,7 +21,7 @@ export class ProductVariantResolver {
   @Mutation(() => CreateProductVariantResponse)
   async createProductVariant(
     @Args('input', InputValidationPipe) input: NewProductVariantInput,
-  ): Promise<typeof CreateProductVariantResponse> {
+  ): Promise<ProductVariant> {
     const { attributesValuesIds, productId, ...restInput } = input;
 
     return this.productVariantService.insert({
@@ -37,7 +36,7 @@ export class ProductVariantResolver {
   updateProductVariant(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateProductVariantInput,
-  ): Promise<typeof UpdateProductVariantResponse> {
+  ): Promise<ProductVariant> {
     const { attributesValuesIds, productId, ...restInput } = input;
 
     return this.productVariantService.updateOne(id, {

@@ -1,4 +1,4 @@
-import { Injectable, UseFilters } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
 
 import { Allow } from '../../decorators';
@@ -9,12 +9,11 @@ import {
   CreateAttributeValueResponse,
   UpdateAttributeValueResponse,
 } from './responses';
-import { InputValidationPipe } from '../../middleware/input-validation.pipe';
-import { InputValidationFilter, NotFoundFilter } from '../../filters';
+import { InputValidationPipe } from '../../middleware';
+import { AttributeValue } from './attribute-value.entity';
 
 @Resolver()
 @Injectable()
-@UseFilters(InputValidationFilter, NotFoundFilter)
 export class AttributeValueResolver {
   constructor(private attributeValueService: AttributeValueService) {}
 
@@ -22,7 +21,7 @@ export class AttributeValueResolver {
   @Mutation(() => CreateAttributeValueResponse)
   createAttributeValue(
     @Args('input', InputValidationPipe) input: NewAttributeValueInput,
-  ): Promise<typeof CreateAttributeValueResponse> {
+  ): Promise<AttributeValue> {
     const { attributeId, ...restInput } = input;
 
     return this.attributeValueService.insert({
@@ -36,7 +35,7 @@ export class AttributeValueResolver {
   updateAttributeValue(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateAttributeValueInput,
-  ): Promise<typeof UpdateAttributeValueResponse> {
+  ): Promise<AttributeValue> {
     return this.attributeValueService.updateOne(id, input);
   }
 }

@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { GqlModuleOptions, GqlOptionsFactory } from '@nestjs/graphql';
-import { NODE_ENV } from '../../common/environment';
 import { join } from 'path';
+
+import { NODE_ENV } from '../../common/environment';
+import { CmsContext } from '../../types/CmsContext';
 
 Injectable();
 export class GraphqlService implements GqlOptionsFactory {
@@ -21,6 +23,10 @@ export class GraphqlService implements GqlOptionsFactory {
         stripFormattedExtensions: false,
         calculateHttpHeaders: false,
       },
+      context: ({ req }): CmsContext => ({
+        req,
+        languageCode: req.language,
+      }),
     };
   }
 }

@@ -1,9 +1,9 @@
-import { Injectable, UseFilters } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Args, Resolver, Query, Mutation, Int } from '@nestjs/graphql';
 
 import { Permission } from '../../common/permission.enum';
 import { Allow } from '../../decorators';
-import { InputValidationPipe } from '../../middleware/input-validation.pipe';
+import { InputValidationPipe } from '../../middleware';
 import { NewUserInput, UpdateUserInput, UserListOptions } from './dto';
 import {
   CreateUserResponse,
@@ -11,20 +11,17 @@ import {
   UserListResponse,
   UserResponse,
 } from './responses';
+import { User } from './user.entity';
 import { UserService } from './user.service';
-import { InputValidationFilter, NotFoundFilter } from '../../filters';
 
 @Resolver()
 @Injectable()
-@UseFilters(InputValidationFilter, NotFoundFilter)
 export class UserResolver {
   constructor(private userService: UserService) {}
 
   @Allow(Permission.ReadUser)
   @Query(() => UserResponse)
-  user(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<typeof UserResponse> {
+  user(@Args('id', { type: () => Int }) id: number): Promise<User> {
     return this.userService.findOneOrFail({ id });
   }
 
@@ -39,7 +36,7 @@ export class UserResolver {
   async createUser(
     @Args('input', InputValidationPipe)
     input: NewUserInput,
-  ): Promise<typeof CreateUserResponse> {
+  ): Promise<User> {
     const { roleId, ...user } = input;
 
     return this.userService.insert({ ...user, role: roleId });
@@ -50,7 +47,7 @@ export class UserResolver {
   updateUser(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateUserInput,
-  ): Promise<typeof UpdateUserResponse> {
+  ): Promise<User> {
     const { roleId, ...restInput } = input;
 
     return this.userService.updateOne(id, { ...restInput, role: roleId });

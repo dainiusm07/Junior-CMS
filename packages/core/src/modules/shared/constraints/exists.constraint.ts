@@ -1,6 +1,5 @@
 import { Constructor, RequestContext } from '@mikro-orm/core';
 import { registerDecorator } from 'class-validator';
-import { capitalizeFirstLetter } from '../../../utils/capitalize-first-letter';
 
 import { formatEntityName } from '../../../utils/format-entity-name';
 
@@ -12,7 +11,6 @@ export function Exists<T extends object>(
     const name = formatEntityName(entity);
 
     registerDecorator({
-      name: `does${capitalizeFirstLetter(name)}Exists`,
       target: object.constructor,
       propertyName: propertyName.toString(),
       async: true,
@@ -27,7 +25,7 @@ export function Exists<T extends object>(
           return result === shouldReceiveCount;
         },
       },
-      options: { message: `${name} doesn't exist` },
+      options: { message: `error.does-not-exist`, context: { name } },
     });
   };
 }

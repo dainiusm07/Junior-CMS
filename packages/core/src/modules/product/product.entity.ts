@@ -6,7 +6,7 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { LanguageCode } from '../../config/i18n/LanguageCode';
+import { LanguageCode } from '../i18n/language-code.enum';
 import { Translation } from '../../types/Translations';
 
 import { Category } from '../category/category.entity';

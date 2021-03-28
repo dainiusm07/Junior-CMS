@@ -1,7 +1,7 @@
 import { wrap } from '@mikro-orm/core';
 
 import { DEFAULT_LANGUAGE_CODE } from '../../../common/environment';
-import { LanguageCode } from '../../../config/i18n/LanguageCode';
+import { LanguageCode } from '../../i18n/language-code.enum';
 import { Translatable, Translated } from '../../../types/Translations';
 
 export const translateEntity = <T extends Translatable>(

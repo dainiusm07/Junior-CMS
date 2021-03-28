@@ -11,7 +11,7 @@ export function NoWhiteSpace(): PropertyDecorator {
           return !/ /g.test(value);
         },
       },
-      options: { message: 'white spaces are not allowed' },
+      options: { message: 'error.no-white-space' },
     });
   };
 }

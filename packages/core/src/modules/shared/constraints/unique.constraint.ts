@@ -1,17 +1,12 @@
 import { Constructor, RequestContext } from '@mikro-orm/core';
 import { registerDecorator } from 'class-validator';
 
-import { capitalizeFirstLetter } from '../../../utils/capitalize-first-letter';
-
 export function Unique<T extends object>(
   entity: Constructor<T>,
   field: keyof T,
 ): PropertyDecorator {
   return (object: object, propertyName: string | symbol) => {
-    const fieldName = capitalizeFirstLetter(field);
-
     registerDecorator({
-      name: `is${fieldName}Unique`,
       target: object.constructor,
       propertyName: propertyName.toString(),
       async: true,
@@ -24,7 +19,7 @@ export function Unique<T extends object>(
           return !Boolean(result);
         },
       },
-      options: { message: `${fieldName} must be unique` },
+      options: { message: 'error.must-be-unique', context: { name: field } },
     });
   };
 }

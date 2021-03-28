@@ -1,18 +1,17 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { LanguageCode } from '../../../config/i18n/LanguageCode';
 
 import { Category } from '../../category/category.entity';
 import { Exists } from '../../shared/constraints/exists.constraint';
+import { Unique } from '../../shared/constraints/unique.constraint';
+import { ProductTranslation } from '../product-translation.entity';
 import { Product } from '../product.entity';
 
 @InputType()
 export class NewProductInput implements Partial<Product> {
-  @Field(() => LanguageCode)
-  languageCode: LanguageCode;
-
   @Field()
   name: string;
 
+  @Unique(ProductTranslation, 'slug')
   @Field({ nullable: true })
   slug?: string;
 

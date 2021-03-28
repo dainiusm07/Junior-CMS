@@ -4,7 +4,6 @@ import {
   FilterQuery,
   FindOneOptions,
 } from '@mikro-orm/core';
-import { Populate } from '@mikro-orm/core/typings';
 
 import {
   MAX_RESULTS_PER_PAGE_LIMIT,
@@ -24,10 +23,7 @@ export abstract class BaseService<T extends object> {
     return this._repo.findOneOrFail(where, options);
   }
 
-  async findList(
-    options: IListOptions<T>,
-    populate?: Populate<T>,
-  ): Promise<IListResponse<T>> {
+  async findList(options: IListOptions<T>): Promise<IListResponse<T>> {
     const { filter: rawFilter, sort } = options;
     let { page, limit } = options;
 
@@ -43,7 +39,6 @@ export abstract class BaseService<T extends object> {
       offset: (page - 1) * limit,
       limit,
       orderBy,
-      populate,
     });
 
     const totalPages = Math.ceil(totalItems / limit) || 1;

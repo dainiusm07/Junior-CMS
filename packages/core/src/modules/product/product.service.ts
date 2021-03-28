@@ -3,6 +3,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { PRODUCT_VARIANTS_LOADER } from '../../common/constants';
+import { CmsContext } from '../../types/CmsContext';
 import { Translated } from '../../types/Translations';
 import { usePopulationLoader } from '../../utils/use-population-loader';
 import { BaseService } from '../shared/base.service';
@@ -25,8 +26,10 @@ export class ProductService extends translationsMixin<Product>(BaseService) {
 
   async findOneOrFail(
     where: FilterQuery<Product>,
+    options: undefined,
+    ctx: CmsContext,
   ): Promise<Translated<Product>> {
-    return super.findOneOrFail(where);
+    return super.findOneOrFail(where, options, ctx);
   }
 
   getAvailableSlug(name: string) {

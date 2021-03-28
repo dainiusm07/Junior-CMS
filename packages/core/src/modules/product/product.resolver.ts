@@ -1,12 +1,17 @@
-import { Injectable, UseFilters } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { Permission } from '../../common/permission.enum';
 import { Allow } from '../../decorators';
-import { InputValidationFilter, NotFoundFilter } from '../../filters';
-import { InputValidationPipe } from '../../middleware/input-validation.pipe';
+import { Ctx } from '../../decorators/ctx.decorator';
+import { InputValidationPipe } from '../../middleware';
+import { CmsContext } from '../../types/CmsContext';
+import { Translated } from '../../types/Translations';
+import { IListResponse } from '../shared/list-utils';
 import { NewProductInput, ProductListOptions, UpdateProductInput } from './dto';
 import { NewProductTranslationInput } from './dto/new-product-translation.input';
+import { ProductTranslation } from './product-translation.entity';
+import { Product } from './product.entity';
 import { ProductService } from './product.service';
 import {
   AddProductTranslationResponse,
@@ -16,9 +21,10 @@ import {
   UpdateProductResponse,
 } from './responses';
 
+type TranslatedProduct = Translated<Product>;
+
 @Resolver()
 @Injectable()
-@UseFilters(InputValidationFilter, NotFoundFilter)
 export class ProductResolver {
   constructor(private productService: ProductService) {}
 
@@ -26,26 +32,32 @@ export class ProductResolver {
   @Query(() => ProductResponse)
   async product(
     @Args('id', { type: () => Int }) id: number,
-  ): Promise<typeof ProductResponse> {
-    return this.productService.findOneOrFail({ id });
+    @Ctx() ctx: CmsContext,
+  ): Promise<TranslatedProduct> {
+    return this.productService.findOneOrFail({ id }, undefined, ctx);
   }
 
   @Allow(Permission.ReadProduct)
   @Query(() => ProductListResponse)
-  products(@Args() options: ProductListOptions): Promise<ProductListResponse> {
-    return this.productService.findList(options);
+  products(
+    @Args() options: ProductListOptions,
+    @Ctx() ctx: CmsContext,
+  ): Promise<IListResponse<TranslatedProduct>> {
+    return this.productService.findList(options, ctx);
   }
 
   @Allow(Permission.CreateProduct)
   @Mutation(() => CreateProductResponse)
   async createProduct(
     @Args('input', InputValidationPipe) input: NewProductInput,
-  ): Promise<typeof CreateProductResponse> {
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<TranslatedProduct> {
     const { categoryId, ...restInput } = input;
 
     return this.productService.insert({
       ...restInput,
       category: categoryId,
+      languageCode,
     });
   }
 
@@ -54,20 +66,24 @@ export class ProductResolver {
   updateProduct(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateProductInput,
-  ): Promise<typeof UpdateProductResponse> {
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<TranslatedProduct> {
     const { categoryId, ...restInput } = input;
 
-    return this.productService.updateOne(id, {
-      ...restInput,
-      category: categoryId,
-    });
+    return this.productService.updateOne(
+      { id, translations: { languageCode } },
+      {
+        ...restInput,
+        category: categoryId,
+      },
+    );
   }
 
   @Allow(Permission.UpdateProduct)
   @Mutation(() => AddProductTranslationResponse)
   addProductTranslation(
     @Args('input', InputValidationPipe) input: NewProductTranslationInput,
-  ): Promise<typeof AddProductTranslationResponse> {
+  ): Promise<ProductTranslation> {
     const { productId, ...restInput } = input;
 
     return this.productService.addTranslation({

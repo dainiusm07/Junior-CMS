@@ -1,7 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum LanguageCode {
-  EN = 'EN',
+  EN = 'en',
+  LT = 'lt',
 }
 
 registerEnumType(LanguageCode, { name: 'LanguageCode' });

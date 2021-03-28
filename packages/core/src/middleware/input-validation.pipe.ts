@@ -6,6 +6,7 @@ import {
   CmsValidationError,
   InputValidationError,
 } from '../common/errors/input-validation.error';
+import { I18nVariables } from '../modules/i18n/i18n.error';
 
 @Injectable()
 export class InputValidationPipe implements PipeTransform {
@@ -27,11 +28,20 @@ export class InputValidationPipe implements PipeTransform {
         const error: CmsValidationError = {
           path: err.property,
           messages: [],
+          variables: [],
         };
 
         if (err.constraints) {
-          const messages = Object.values(err.constraints);
-          error.messages = messages;
+          Object.entries(err.constraints).forEach(([key, value]) => {
+            let variables: I18nVariables = {};
+
+            if (err.contexts && err.contexts[key]) {
+              variables = err.contexts[key];
+            }
+
+            error.messages.push(value);
+            error.variables.push(variables);
+          });
         }
 
         errors.push(error);

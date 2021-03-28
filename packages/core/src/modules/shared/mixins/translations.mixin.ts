@@ -7,8 +7,8 @@ import {
   LoadStrategy,
 } from '@mikro-orm/core';
 
-import { DEFAULT_LANGUAGE_CODE } from '../../../common/environment';
-import { ResultError } from '../../../common/errors/result.error';
+import { ErrorResult } from '../../../common/errors/error-result.error';
+import { CmsContext } from '../../../types/CmsContext';
 import {
   MaybeTranslatable,
   Translatable,
@@ -37,6 +37,7 @@ export const translationsMixin = <
     async findOneOrFail(
       filter: FilterQuery<T>,
       options: FindOneOptions<T> = {},
+      ctx?: CmsContext,
     ): Promise<Translated<T>> {
       if (typeof options.populate === 'object') {
         Object.assign(options.populate, this.findOnePopulateOptions);
@@ -46,14 +47,17 @@ export const translationsMixin = <
 
       return super
         .findOneOrFail(filter, options)
-        .then((entity) => translateEntity(entity));
+        .then((entity) => translateEntity(entity, ctx?.languageCode));
     }
 
     async findList(
       options: IListOptions<T>,
+      ctx?: CmsContext,
     ): Promise<IListResponse<Translated<T>>> {
       return super.findList(options).then((result) => {
-        const items = result.items.map((item) => translateEntity(item));
+        const items = result.items.map((item) =>
+          translateEntity(item, ctx?.languageCode),
+        );
 
         return {
           ...result,
@@ -71,20 +75,15 @@ export const translationsMixin = <
 
       /**
        *  Already translated, because under the hood updateOne uses findOneOrFail
-       *  which is translating it already
+       *  which is translating it
        *  */
       return super.insert(entity) as Promise<Translated<T>>;
     }
 
     async updateOne(
-      filter: FilterQuery<T>,
+      filter: FilterQuery<T> & { translations: unknown },
       data: EntityData<T>,
-      languageCode = DEFAULT_LANGUAGE_CODE,
     ): Promise<Translated<T>> {
-      filter = this.transformFilter(filter);
-
-      Object.assign(filter, { translations: { languageCode } });
-
       const entity: MaybeTranslatable<T, P> = await this.findOneOrFail(filter);
 
       if (this._translationRepo && entity.translations) {
@@ -97,7 +96,7 @@ export const translationsMixin = <
 
       /**
        *  Already translated, because under the hood updateOne uses findOneOrFail
-       *  which is translating it already
+       *  which is translating it
        *  */
       return super.updateOne(entity as never, entity) as Promise<Translated<T>>;
     }
@@ -110,26 +109,12 @@ export const translationsMixin = <
       const translationExists = await this._translationRepo.count(translation);
 
       if (translationExists) {
-        return ResultError.alreadyExists('translation');
+        throw ErrorResult.alreadyExists('translation');
       }
 
       await this._translationRepo.persistAndFlush(translation);
 
       return translation;
-    }
-
-    /**
-     * Transforms FilterQuery to object
-     */
-    private transformFilter<K>(filter: FilterQuery<K>): FilterQuery<K> {
-      if (
-        typeof filter === 'number' ||
-        (typeof filter === 'string' && typeof filter !== 'object')
-      ) {
-        return { id: filter } as never;
-      }
-
-      return filter;
     }
   }
 

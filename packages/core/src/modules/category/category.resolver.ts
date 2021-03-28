@@ -1,4 +1,4 @@
-import { Injectable, UseFilters } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 
 import { Permission } from '../../common/permission.enum';
@@ -16,12 +16,11 @@ import {
   UpdateCategoryResponse,
   CategoryTreeResponse,
 } from './responses';
-import { InputValidationPipe } from '../../middleware/input-validation.pipe';
-import { InputValidationFilter, NotFoundFilter } from '../../filters';
+import { InputValidationPipe } from '../../middleware';
+import { Category } from './category.entity';
 
 @Resolver()
 @Injectable()
-@UseFilters(InputValidationFilter, NotFoundFilter)
 export class CategoryResolver {
   constructor(private categoryService: CategoryService) {}
 
@@ -35,9 +34,7 @@ export class CategoryResolver {
 
   @Allow(Permission.ReadCategory)
   @Query(() => CategoryResponse)
-  category(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<typeof CategoryResponse> {
+  category(@Args('id', { type: () => Int }) id: number): Promise<Category> {
     return this.categoryService.findOneOrFail({ id });
   }
 
@@ -65,7 +62,7 @@ export class CategoryResolver {
   @Mutation(() => CreateCategoryResponse)
   async createCategory(
     @Args('input', InputValidationPipe) input: NewCategoryInput,
-  ): Promise<typeof CreateCategoryResponse> {
+  ): Promise<Category> {
     const { parentId, ...category } = input;
 
     return this.categoryService.insert({
@@ -79,7 +76,7 @@ export class CategoryResolver {
   updateCategory(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateCategoryInput,
-  ): Promise<typeof UpdateCategoryResponse> {
+  ): Promise<Category> {
     const { parentId, ...restInput } = input;
 
     return this.categoryService.updateOne(id, {

@@ -5,14 +5,13 @@ import * as TranslateEntityHelper from '../helpers/translate-entity';
 
 jest.spyOn(TranslateEntityHelper, 'translateEntity').mockReturnValue(undefined);
 
-import { LanguageCode } from '../../../config/i18n/LanguageCode';
 import { mockEntity } from '../../../test-utils/mock-entities';
 import { mockRepository } from '../../../test-utils/mock-repository';
 import { BaseTranslation } from '../base-translation';
 import { BaseEntity } from '../base.entity';
 import { BaseService } from '../base.service';
 import { translationsMixin } from './translations.mixin';
-import { ResultError } from '../../../common/errors/result.error';
+import { ErrorResult } from '../../../common/errors/error-result.error';
 
 class MyEntity extends BaseEntity {
   translations: Collection<BaseTranslation>;
@@ -183,36 +182,6 @@ describe('translationsMixin', () => {
       baseUpdateOne = jest.spyOn(MockedBaseService.prototype, 'updateOne');
     });
 
-    it('should call findOneOrFail with condition translation = provided languageCode', async () => {
-      const languageCode = LanguageCode.EN;
-      const baseFindOneOrFail = jest.spyOn(
-        MockedBaseService.prototype,
-        'findOneOrFail',
-      );
-
-      await service.updateOne({}, {}, languageCode);
-
-      const { translations } = baseFindOneOrFail.mock.calls[0][0] as any;
-
-      expect(translations.languageCode).toBe(languageCode);
-    });
-
-    [1, '1', {}].forEach((value) => {
-      it(`should transform filter to object and add translation condition if filter input type is ${typeof value}`, async () => {
-        const baseFindOneOrFail = jest.spyOn(
-          MockedBaseService.prototype,
-          'findOneOrFail',
-        );
-
-        await service.updateOne(value, {});
-
-        const { translations } = baseFindOneOrFail.mock.calls[0][0] as any;
-
-        expect(translations).toBeDefined();
-        expect(typeof translations).toBe('object');
-      });
-    });
-
     it('should update entity translation', async () => {
       const translation = {
         name: 'Test name',
@@ -230,7 +199,10 @@ describe('translationsMixin', () => {
         .mockImplementation((data) => ({ name: data.name } as never));
       const newTranslation = { name: 'New name' };
 
-      await service.updateOne({}, { ...newTranslation, otherProp: 'any' });
+      await service.updateOne(
+        { translations: {} },
+        { ...newTranslation, otherProp: 'any' },
+      );
 
       const { translations } = baseUpdateOne.mock.calls[0][1];
       expect([...translations]).toStrictEqual([translation]);
@@ -250,12 +222,14 @@ describe('translationsMixin', () => {
       );
     });
 
-    it('should return ResultError if translation already exists', async () => {
+    it('should throw ErrorResult if translation already exists', async () => {
       jest.spyOn(translationRepo, 'count').mockReturnValue(Promise.resolve(1));
 
-      const result = await service.addTranslation(translation);
-
-      expect(result).toBeInstanceOf(ResultError);
+      try {
+        await service.addTranslation(translation);
+      } catch (error) {
+        expect(error).toBeInstanceOf(ErrorResult);
+      }
     });
   });
 });

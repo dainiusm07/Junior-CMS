@@ -1,36 +1,30 @@
-import { Type } from '@nestjs/common';
 import { createUnionType, ObjectType } from '@nestjs/graphql';
 
 import { InputValidationError } from '../../common/errors/input-validation.error';
-import { ResultError } from '../../common/errors/result.error';
-import { Translated } from '../../types/Translations';
+import { ErrorResult } from '../../common/errors/error-result.error';
 import { generateListResponse } from '../shared/list-utils';
 import { ProductTranslation } from './product-translation.entity';
 import { Product } from './product.entity';
 
-const TranslatedProduct = Product as Type<Translated<Product>>;
-
 export const ProductResponse = createUnionType({
   name: 'ProductResponse',
-  types: () => [TranslatedProduct, ResultError],
+  types: () => [Product, ErrorResult],
 });
 
 export const UpdateProductResponse = createUnionType({
   name: 'UpdateProductResponse',
-  types: () => [TranslatedProduct, InputValidationError, ResultError],
+  types: () => [Product, InputValidationError, ErrorResult],
 });
 
 export const CreateProductResponse = createUnionType({
   name: 'CreateProductResponse',
-  types: () => [TranslatedProduct, InputValidationError],
+  types: () => [Product, InputValidationError],
 });
 
 export const AddProductTranslationResponse = createUnionType({
   name: 'AddProductTranslationResponse',
-  types: () => [ProductTranslation, InputValidationError, ResultError],
+  types: () => [ProductTranslation, InputValidationError, ErrorResult],
 });
 
 @ObjectType()
-export class ProductListResponse extends generateListResponse(
-  TranslatedProduct,
-) {}
+export class ProductListResponse extends generateListResponse(Product) {}
