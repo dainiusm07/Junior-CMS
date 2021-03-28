@@ -3,5 +3,6 @@
 	"error": {
 		"does-not-exist": "error.does-not-exist",
 		"invalid-input": "error.invalid-input"
-	}
+	},
+	"attribute_value": "attribute_value"
 }

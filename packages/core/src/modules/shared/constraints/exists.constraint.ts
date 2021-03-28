@@ -20,7 +20,9 @@ export function Exists<T extends object>(
           // Using em.count to not pollute the context
           const result = await em?.count(entity, { [findBy]: value });
 
-          const shouldReceiveCount = Array.isArray(value) ? value.length : 1;
+          const shouldReceiveCount = Array.isArray(value)
+            ? new Set(value).size
+            : 1;
 
           return result === shouldReceiveCount;
         },
