@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql';
 
 import { Exists } from '../../shared/constraints/exists.constraint';
 import { Unique } from '../../shared/constraints/unique.constraint';
-import { LanguageCode } from '../../i18n/language-code.enum';
+import { LanguageCode } from '../../../i18n/language-code.enum';
 import { ProductTranslation } from '../product-translation.entity';
 import { Product } from '../product.entity';
 

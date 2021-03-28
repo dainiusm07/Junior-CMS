@@ -6,7 +6,7 @@ import {
   CmsValidationError,
   InputValidationError,
 } from '../common/errors/input-validation.error';
-import { I18nVariables } from '../modules/i18n/i18n.error';
+import { I18nVariables } from '../i18n/i18n.error';
 
 @Injectable()
 export class InputValidationPipe implements PipeTransform {

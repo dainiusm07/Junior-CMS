@@ -2,7 +2,7 @@ import { ArgumentsHost, Catch } from '@nestjs/common';
 import { GqlArgumentsHost } from '@nestjs/graphql';
 
 import { ErrorResult } from '../common/errors/error-result.error';
-import { I18nService } from '../modules/i18n/i18n.service';
+import { I18nService } from '../i18n/i18n.service';
 import { CmsContext } from '../types/CmsContext';
 
 @Catch(ErrorResult)

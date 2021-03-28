@@ -1,6 +1,6 @@
 import { Constructor } from '@mikro-orm/core';
 import { ObjectType } from '@nestjs/graphql';
-import { I18nError, I18nVariables } from '../../modules/i18n/i18n.error';
+import { I18nError, I18nVariables } from '../../i18n/i18n.error';
 import { formatEntityName } from '../../utils/format-entity-name';
 import { ErrorCode } from './error-code.enum';
 

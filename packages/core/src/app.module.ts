@@ -16,7 +16,7 @@ import { ProductVariantModule } from './modules/product-variant/product-variant.
 import { ProductModule } from './modules/product/product.module';
 import { RoleModule } from './modules/role/role.module';
 import { UserModule } from './modules/user/user.module';
-import { I18nModule } from './modules/i18n/i18n.module';
+import { I18nModule } from './i18n/i18n.module';
 import {
   ErrorResultFilter,
   InputValidationFilter,

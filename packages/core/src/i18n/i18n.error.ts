@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { ErrorCode } from '../../common/errors/error-code.enum';
+import { ErrorCode } from '../common/errors/error-code.enum';
 
 export type I18nVariables = {
   [key: string]: string | number;

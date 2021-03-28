@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as dotenv from 'dotenv';
-import { LanguageCode } from '../modules/i18n/language-code.enum';
+import { LanguageCode } from '../i18n/language-code.enum';
 dotenv.config();
 
 // Environment
