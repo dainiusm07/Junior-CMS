@@ -3,15 +3,26 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { Permission } from '../../common/permission.enum';
 import { Allow } from '../../decorators';
+import { Ctx } from '../../decorators/ctx.decorator';
 import { InputValidationPipe } from '../../middleware';
+import { CmsContext } from '../../types/CmsContext';
+import { Translated } from '../../types/Translations';
+import { AttributeTranslation } from './attribute-translation.entity';
 import { Attribute } from './attribute.entity';
 import { AttributeService } from './attribute.service';
-import { NewAttributeInput, UpdateAttributeInput } from './dto';
 import {
+  NewAttributeInput,
+  UpdateAttributeInput,
+  NewAttributeTranslationInput,
+} from './dto';
+import {
+  AddAttributeTranslationResponse,
   AttributeResponse,
   CreateAttributeResponse,
   UpdateAttributeResponse,
 } from './responses';
+
+type TranslatedAttribute = Translated<Attribute>;
 
 @Resolver()
 @Injectable()
@@ -20,22 +31,28 @@ export class AttributeResolver {
 
   @Allow(Permission.ReadAttribute)
   @Query(() => AttributeResponse)
-  attribute(@Args('id', { type: () => Int }) id: number): Promise<Attribute> {
-    return this.attributeService.findOneOrFail({ id });
+  attribute(
+    @Args('id', { type: () => Int }) id: number,
+    @Ctx() ctx: CmsContext,
+  ): Promise<TranslatedAttribute> {
+    return this.attributeService.findOneOrFail({ id }, undefined, ctx);
   }
 
   @Allow(Permission.ReadAttribute)
   @Query(() => [Attribute])
-  attributes(): Promise<Attribute[]> {
-    return this.attributeService.findAll();
+  attributes(
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<TranslatedAttribute[]> {
+    return this.attributeService.findAll(languageCode);
   }
 
   @Allow(Permission.CreateAttribute)
   @Mutation(() => CreateAttributeResponse)
   createAttribute(
     @Args('input', InputValidationPipe) input: NewAttributeInput,
-  ): Promise<Attribute> {
-    return this.attributeService.insert(input);
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<TranslatedAttribute> {
+    return this.attributeService.insert({ ...input, languageCode });
   }
 
   @Allow(Permission.UpdateAttribute)
@@ -43,7 +60,26 @@ export class AttributeResolver {
   updateAttribute(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateAttributeInput,
-  ): Promise<Attribute> {
-    return this.attributeService.updateOne(id, input);
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<TranslatedAttribute> {
+    return this.attributeService.updateOne(
+      { id, translations: { languageCode } },
+      input,
+    );
+  }
+
+  @Allow(Permission.UpdateAttribute)
+  @Mutation(() => AddAttributeTranslationResponse)
+  addAttributeTranslation(
+    @Args('input', InputValidationPipe) input: NewAttributeTranslationInput,
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<AttributeTranslation> {
+    const { attributeId, ...restInput } = input;
+
+    return this.attributeService.addTranslation({
+      ...restInput,
+      languageCode,
+      attribute: attributeId,
+    });
   }
 }

@@ -74,7 +74,7 @@ export const translationsMixin = <
       });
 
       /**
-       *  Already translated, because under the hood updateOne uses findOneOrFail
+       *  Already translated, because under the hood insert uses findOneOrFail
        *  which is translating it
        *  */
       return super.insert(entity) as Promise<Translated<T>>;

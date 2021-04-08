@@ -57,8 +57,16 @@ type User {
 
 type Attribute {
   id: Int!
-  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   values: [AttributeValue!]!
+  languageCode: LanguageCode!
+  name: String!
+}
+
+enum LanguageCode {
+  EN
+  LT
 }
 
 type AttributeValue {
@@ -106,11 +114,6 @@ type ProductTranslation {
   name: String!
   slug: String!
   description: String
-}
-
-enum LanguageCode {
-  EN
-  LT
 }
 
 type Product {
@@ -313,6 +316,7 @@ type Mutation {
   updateAttributeValue(input: UpdateAttributeValueInput!, id: Int!): UpdateAttributeValueResponse!
   createAttribute(input: NewAttributeInput!): CreateAttributeResponse!
   updateAttribute(input: UpdateAttributeInput!, id: Int!): UpdateAttributeResponse!
+  addAttributeTranslation(input: NewAttributeTranslationInput!): AddAttributeTranslationResponse!
   isCategorySlugAvailable(slug: String!): Boolean!
   getCategorySlug(name: String!): String!
   createCategory(input: NewCategoryInput!): CreateCategoryResponse!
@@ -360,6 +364,19 @@ union UpdateAttributeResponse = Attribute | InputValidationError | ErrorResult
 
 input UpdateAttributeInput {
   name: String
+}
+
+union AddAttributeTranslationResponse = AttributeTranslation | InputValidationError | ErrorResult
+
+type AttributeTranslation {
+  languageCode: LanguageCode!
+  updatedAt: DateTime!
+  name: String!
+}
+
+input NewAttributeTranslationInput {
+  name: String!
+  attributeId: Int!
 }
 
 union CreateCategoryResponse = Category | InputValidationError
@@ -417,11 +434,10 @@ input UpdateProductInput {
 union AddProductTranslationResponse = ProductTranslation | InputValidationError | ErrorResult
 
 input NewProductTranslationInput {
-  languageCode: LanguageCode!
   name: String!
   slug: String
   description: String
-  productId: Float!
+  productId: Int!
 }
 
 union CreateUserResponse = User | InputValidationError

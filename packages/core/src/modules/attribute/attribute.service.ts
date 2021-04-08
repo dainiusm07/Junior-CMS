@@ -4,22 +4,42 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 
 import { Attribute } from './attribute.entity';
 import { BaseService } from '../shared/base.service';
+import { translationsMixin } from '../shared/mixins/translations.mixin';
+import { AttributeTranslation } from './attribute-translation.entity';
+import { translateEntity } from '../shared/helpers/translate-entity';
+import { LanguageCode } from '../../i18n/language-code.enum';
+import { CmsContext } from '../../types/CmsContext';
 
 @Injectable()
-export class AttributeService extends BaseService<Attribute> {
+export class AttributeService extends translationsMixin<Attribute>(
+  BaseService,
+) {
   constructor(
     @InjectRepository(Attribute)
     protected _repo: EntityRepository<Attribute>,
+    @InjectRepository(AttributeTranslation)
+    protected _translationRepo: EntityRepository<AttributeTranslation>,
   ) {
     super();
   }
 
-  findOneOrFail(where: FilterQuery<Attribute>) {
-    return super.findOneOrFail(where, {
-      populate: { values: LoadStrategy.JOINED },
-    });
+  async findOneOrFail(
+    filter: FilterQuery<Attribute>,
+    options: undefined,
+    ctx: CmsContext,
+  ) {
+    return super.findOneOrFail(
+      filter,
+      { populate: { values: LoadStrategy.JOINED } },
+      ctx,
+    );
   }
-  findAll() {
-    return this._repo.findAll({ populate: { values: true } });
+
+  async findAll(languageCode: LanguageCode) {
+    return this._repo
+      .findAll()
+      .then((attributes) =>
+        attributes.map((attribute) => translateEntity(attribute, languageCode)),
+      );
   }
 }

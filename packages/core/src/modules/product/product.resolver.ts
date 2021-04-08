@@ -8,8 +8,12 @@ import { InputValidationPipe } from '../../middleware';
 import { CmsContext } from '../../types/CmsContext';
 import { Translated } from '../../types/Translations';
 import { IListResponse } from '../shared/list-utils';
-import { NewProductInput, ProductListOptions, UpdateProductInput } from './dto';
-import { NewProductTranslationInput } from './dto/new-product-translation.input';
+import {
+  NewProductInput,
+  ProductListOptions,
+  UpdateProductInput,
+  NewProductTranslationInput,
+} from './dto';
 import { ProductTranslation } from './product-translation.entity';
 import { Product } from './product.entity';
 import { ProductService } from './product.service';
@@ -83,11 +87,13 @@ export class ProductResolver {
   @Mutation(() => AddProductTranslationResponse)
   addProductTranslation(
     @Args('input', InputValidationPipe) input: NewProductTranslationInput,
+    @Ctx() { languageCode }: CmsContext,
   ): Promise<ProductTranslation> {
     const { productId, ...restInput } = input;
 
     return this.productService.addTranslation({
       ...restInput,
+      languageCode,
       product: productId,
     });
   }
