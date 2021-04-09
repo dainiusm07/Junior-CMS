@@ -2,10 +2,10 @@ import { EntityRepository } from '@mikro-orm/core';
 import { PopulateChildren } from '@mikro-orm/core/typings';
 import DataLoader from 'dataloader';
 
-const key = Symbol('population_loaders');
+import { CmsContext } from '../types/CmsContext';
 
 export const usePopulationLoader = <T>(
-  ctx: any,
+  ctx: CmsContext,
   repo: EntityRepository<T>,
   loaderName: string,
   populate:
@@ -15,21 +15,19 @@ export const usePopulationLoader = <T>(
     | keyof T
     | readonly (keyof T)[]
     | PopulateChildren<T>,
-) => {
+): DataLoader<T, T> => {
+  const populationLoaders = ctx['populationLoaders'];
+
   // Returning existing loader
-  if (ctx[key] && ctx[key][loaderName]) {
-    return ctx[key][loaderName] as DataLoader<T, T, T>;
+  if (populationLoaders[loaderName]) {
+    return <DataLoader<T, T>>populationLoaders[loaderName];
   }
 
   const batchFn = async (entities: T[]): Promise<T[]> => {
     return repo.populate(entities, populate);
   };
 
-  if (!ctx[key]) ctx[key] = {};
+  populationLoaders[loaderName] = new DataLoader(batchFn as never);
 
-  if (!ctx[key][loaderName]) {
-    ctx[key][loaderName] = new DataLoader(batchFn as never);
-  }
-
-  return ctx[key][loaderName] as DataLoader<T, T, T>;
+  return <DataLoader<T, T>>populationLoaders[loaderName];
 };

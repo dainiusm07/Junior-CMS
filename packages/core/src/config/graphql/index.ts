@@ -26,6 +26,7 @@ export class GraphqlService implements GqlOptionsFactory {
       context: ({ req }): CmsContext => ({
         req,
         languageCode: req.language,
+        populationLoaders: {},
       }),
     };
   }
