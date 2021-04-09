@@ -6,11 +6,18 @@ import { Permission } from '../../common/permission.enum';
 import { AttributeValueService } from './attribute-value.service';
 import { NewAttributeValueInput, UpdateAttributeValueInput } from './dto';
 import {
+  AddAttributeValueTranslationResponse,
   CreateAttributeValueResponse,
   UpdateAttributeValueResponse,
 } from './responses';
 import { InputValidationPipe } from '../../middleware';
 import { AttributeValue } from './attribute-value.entity';
+import { Ctx } from '../../decorators/ctx.decorator';
+import { CmsContext } from '../../types/CmsContext';
+import { Translated } from '../../types/Translations';
+import { NewAttributeValueTranslationInput } from './dto/new-attribute-value-translation.input';
+
+type TranslatedAttributeValue = Translated<AttributeValue>;
 
 @Resolver()
 @Injectable()
@@ -21,11 +28,13 @@ export class AttributeValueResolver {
   @Mutation(() => CreateAttributeValueResponse)
   createAttributeValue(
     @Args('input', InputValidationPipe) input: NewAttributeValueInput,
-  ): Promise<AttributeValue> {
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<TranslatedAttributeValue> {
     const { attributeId, ...restInput } = input;
 
     return this.attributeValueService.insert({
       ...restInput,
+      languageCode,
       attribute: attributeId,
     });
   }
@@ -35,7 +44,27 @@ export class AttributeValueResolver {
   updateAttributeValue(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateAttributeValueInput,
-  ): Promise<AttributeValue> {
-    return this.attributeValueService.updateOne(id, input);
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<TranslatedAttributeValue> {
+    return this.attributeValueService.updateOne(
+      { id, translations: { languageCode } },
+      input,
+    );
+  }
+
+  @Allow(Permission.UpdateAttribute)
+  @Mutation(() => AddAttributeValueTranslationResponse)
+  addAttributeValueTranslation(
+    @Args('input', InputValidationPipe)
+    input: NewAttributeValueTranslationInput,
+    @Ctx() { languageCode }: CmsContext,
+  ) {
+    const { attributeValueId, ...restInput } = input;
+
+    return this.attributeValueService.addTranslation({
+      ...restInput,
+      languageCode,
+      attributeValue: attributeValueId,
+    });
   }
 }

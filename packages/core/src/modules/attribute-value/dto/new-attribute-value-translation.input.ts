@@ -1,13 +1,13 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 
-import { Attribute } from '../../attribute/attribute.entity';
 import { Exists } from '../../shared/constraints/exists.constraint';
+import { AttributeValue } from '../attribute-value.entity';
 
 @InputType()
-export class NewAttributeValueInput {
-  @Exists(Attribute, 'id')
+export class NewAttributeValueTranslationInput {
+  @Exists(AttributeValue, 'id')
   @Field(() => Int)
-  attributeId: number;
+  attributeValueId: number;
 
   @Field()
   value: string;

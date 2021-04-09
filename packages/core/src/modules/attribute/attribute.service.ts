@@ -9,6 +9,7 @@ import { AttributeTranslation } from './attribute-translation.entity';
 import { translateEntity } from '../shared/helpers/translate-entity';
 import { LanguageCode } from '../../i18n/language-code.enum';
 import { CmsContext } from '../../types/CmsContext';
+import { AttributeValue } from '../attribute-value/attribute-value.entity';
 
 @Injectable()
 export class AttributeService extends translationsMixin<Attribute>(
@@ -41,5 +42,11 @@ export class AttributeService extends translationsMixin<Attribute>(
       .then((attributes) =>
         attributes.map((attribute) => translateEntity(attribute, languageCode)),
       );
+  }
+
+  translateAttributeValues(ctx: CmsContext, attributeValues: AttributeValue[]) {
+    return attributeValues.map((value) =>
+      translateEntity(value, ctx.languageCode),
+    );
   }
 }

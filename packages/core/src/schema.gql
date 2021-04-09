@@ -71,6 +71,9 @@ enum LanguageCode {
 
 type AttributeValue {
   id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  languageCode: LanguageCode!
   value: String!
 }
 
@@ -314,6 +317,7 @@ union RoleResponse = Role | ErrorResult
 type Mutation {
   createAttributeValue(input: NewAttributeValueInput!): CreateAttributeValueResponse!
   updateAttributeValue(input: UpdateAttributeValueInput!, id: Int!): UpdateAttributeValueResponse!
+  addAttributeValueTranslation(input: NewAttributeValueTranslationInput!): AddAttributeValueTranslationResponse!
   createAttribute(input: NewAttributeInput!): CreateAttributeResponse!
   updateAttribute(input: UpdateAttributeInput!, id: Int!): UpdateAttributeResponse!
   addAttributeTranslation(input: NewAttributeTranslationInput!): AddAttributeTranslationResponse!
@@ -352,6 +356,19 @@ union UpdateAttributeValueResponse = AttributeValue | InputValidationError | Err
 input UpdateAttributeValueInput {
   attributeId: Int
   value: String
+}
+
+union AddAttributeValueTranslationResponse = AttributeValueTranslation | InputValidationError | ErrorResult
+
+type AttributeValueTranslation {
+  languageCode: LanguageCode!
+  updatedAt: DateTime!
+  value: String!
+}
+
+input NewAttributeValueTranslationInput {
+  attributeValueId: Int!
+  value: String!
 }
 
 union CreateAttributeResponse = Attribute | InputValidationError
