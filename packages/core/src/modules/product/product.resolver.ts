@@ -70,12 +70,13 @@ export class ProductResolver {
   updateProduct(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateProductInput,
-    @Ctx() { languageCode }: CmsContext,
+    @Ctx() ctx: CmsContext,
   ): Promise<TranslatedProduct> {
     const { categoryId, ...restInput } = input;
 
     return this.productService.updateOne(
-      { id, translations: { languageCode } },
+      ctx,
+      { id },
       {
         ...restInput,
         category: categoryId,

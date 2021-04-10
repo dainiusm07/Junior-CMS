@@ -28,11 +28,14 @@ export class AttributeService {
     this.entityHelper = new TranslatableEntityHelper(_repo, _translationRepo);
   }
 
-  async findOneOrFail(ctx: CmsContext, filter: FilterQuery<Attribute>) {
+  async findOneOrFail(
+    { languageCode }: CmsContext,
+    filter: FilterQuery<Attribute>,
+  ) {
     return this.entityHelper.findOneOrFail(
       filter,
       { populate: { values: LoadStrategy.JOINED } },
-      ctx,
+      languageCode,
     );
   }
 
@@ -49,10 +52,11 @@ export class AttributeService {
   }
 
   async updateOne(
-    filter: FilterQuery<Attribute> & { translations: unknown },
+    { languageCode }: CmsContext,
+    filter: FilterQuery<Attribute>,
     data: EntityData<Attribute>,
   ) {
-    return this.entityHelper.updateOne(filter, data);
+    return this.entityHelper.updateOne(filter, data, languageCode);
   }
 
   async addTranslation(data: TranslatableEntityData<AttributeTranslation>) {

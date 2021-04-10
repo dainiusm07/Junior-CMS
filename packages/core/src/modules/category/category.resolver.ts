@@ -91,12 +91,13 @@ export class CategoryResolver {
   updateCategory(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateCategoryInput,
-    @Ctx() { languageCode }: CmsContext,
+    @Ctx() ctx: CmsContext,
   ): Promise<TranslatedCategory> {
     const { parentId, ...restInput } = input;
 
     return this.categoryService.updateOne(
-      { id, translations: { languageCode } },
+      ctx,
+      { id },
       {
         ...restInput,
         parent: parentId,

@@ -60,12 +60,9 @@ export class AttributeResolver {
   updateAttribute(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateAttributeInput,
-    @Ctx() { languageCode }: CmsContext,
+    @Ctx() ctx: CmsContext,
   ): Promise<TranslatedAttribute> {
-    return this.attributeService.updateOne(
-      { id, translations: { languageCode } },
-      input,
-    );
+    return this.attributeService.updateOne(ctx, { id }, input);
   }
 
   @Allow(Permission.UpdateAttribute)

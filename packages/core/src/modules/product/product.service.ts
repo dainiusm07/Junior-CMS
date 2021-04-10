@@ -26,14 +26,14 @@ export class ProductService {
   }
 
   async findOneOrFail(
-    ctx: CmsContext,
+    { languageCode }: CmsContext,
     where: FilterQuery<Product>,
   ): Promise<Translated<Product>> {
-    return this.entityHelper.findOneOrFail(where, undefined, ctx);
+    return this.entityHelper.findOneOrFail(where, undefined, languageCode);
   }
 
-  findList(ctx: CmsContext, options: IListOptions<Product>) {
-    return this.entityHelper.findList(options, ctx);
+  findList({ languageCode }: CmsContext, options: IListOptions<Product>) {
+    return this.entityHelper.findList(options, languageCode);
   }
 
   getAvailableSlug(name: string) {
@@ -55,10 +55,11 @@ export class ProductService {
   }
 
   updateOne(
-    filter: FilterQuery<Product> & { translations: unknown },
+    { languageCode }: CmsContext,
+    filter: FilterQuery<Product>,
     data: EntityData<Product>,
   ) {
-    return this.entityHelper.updateOne(filter, data);
+    return this.entityHelper.updateOne(filter, data, languageCode);
   }
 
   async addTranslation(data: TranslatableEntityData<ProductTranslation>) {

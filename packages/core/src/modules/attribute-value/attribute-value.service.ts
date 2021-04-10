@@ -6,6 +6,7 @@ import { AttributeValue } from './attribute-value.entity';
 import { AttributeValueTranslation } from './attribute-value-translation.entity';
 import { TranslatableEntityHelper } from '../shared/helpers';
 import { TranslatableEntityData } from '../../types/Translations';
+import { CmsContext } from '../../types/CmsContext';
 
 @Injectable()
 export class AttributeValueService {
@@ -25,10 +26,11 @@ export class AttributeValueService {
   }
 
   async updateOne(
-    filter: FilterQuery<AttributeValue> & { translations: unknown },
+    { languageCode }: CmsContext,
+    filter: FilterQuery<AttributeValue>,
     data: EntityData<AttributeValue>,
   ) {
-    return this.entityHelper.updateOne(filter, data);
+    return this.entityHelper.updateOne(filter, data, languageCode);
   }
 
   async addTranslation(

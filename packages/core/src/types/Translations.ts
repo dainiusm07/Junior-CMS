@@ -4,6 +4,7 @@ import { BaseTranslation } from '../modules/shared/base-translation.entity';
 
 export type MaybeTranslatable<T, P> = T & {
   translations?: Collection<P>;
+  languageCode?: LanguageCode;
 };
 
 export type Translatable<T = any> = {

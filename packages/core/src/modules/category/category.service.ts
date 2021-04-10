@@ -37,12 +37,12 @@ export class CategoryService {
     this.entityHelper = new TranslatableEntityHelper(_repo, _translationRepo);
   }
 
-  findOneOrFail(ctx: CmsContext, filter: FilterQuery<Category>) {
-    return this.entityHelper.findOneOrFail(filter, undefined, ctx);
+  findOneOrFail({ languageCode }: CmsContext, filter: FilterQuery<Category>) {
+    return this.entityHelper.findOneOrFail(filter, undefined, languageCode);
   }
 
-  findList(ctx: CmsContext, options: IListOptions<Category>) {
-    return this.entityHelper.findList(options, ctx);
+  findList({ languageCode }: CmsContext, options: IListOptions<Category>) {
+    return this.entityHelper.findList(options, languageCode);
   }
 
   async insert(data: TranslatableEntityData<Category>) {
@@ -54,10 +54,11 @@ export class CategoryService {
   }
 
   updateOne(
-    filter: FilterQuery<Category> & { translations: unknown },
+    { languageCode }: CmsContext,
+    filter: FilterQuery<Category>,
     data: EntityData<Category>,
   ) {
-    return this.entityHelper.updateOne(filter, data);
+    return this.entityHelper.updateOne(filter, data, languageCode);
   }
 
   async addTranslation(data: TranslatableEntityData<CategoryTranslation>) {

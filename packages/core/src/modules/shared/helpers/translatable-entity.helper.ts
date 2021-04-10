@@ -7,7 +7,6 @@ import {
 } from '@mikro-orm/core';
 
 import { ErrorResult } from '../../../common/errors/error-result.error';
-import { CmsContext } from '../../../types/CmsContext';
 import {
   MaybeTranslatable,
   Translatable,
@@ -18,6 +17,8 @@ import {
 import { EntityHelper } from './entity.helper';
 import { translateEntity } from './translate-entity';
 import { IListOptions, IListResponse } from '../list-utils';
+import { BaseTranslation } from '../base-translation.entity';
+import { LanguageCode } from '../../../i18n/language-code.enum';
 
 export class TranslatableEntityHelper<
   T extends Translatable,
@@ -32,10 +33,12 @@ export class TranslatableEntityHelper<
     super(_repo);
   }
 
+  /* Added languageCode parameter to method in derived class and made it required
+   * @ts-expect-error */
   async findOneOrFail(
     filter: FilterQuery<T>,
     options: FindOneOptions<T> = {},
-    ctx?: CmsContext,
+    languageCode: LanguageCode,
   ): Promise<Translated<T>> {
     if (typeof options.populate === 'object') {
       Object.assign(options.populate, this.findOnePopulateOptions);
@@ -45,16 +48,18 @@ export class TranslatableEntityHelper<
 
     return super
       .findOneOrFail(filter, options)
-      .then((entity) => translateEntity(entity, ctx?.languageCode));
+      .then((entity) => translateEntity(entity, languageCode));
   }
 
+  /* Added languageCode argument to method in derived class and made it required
+   * @ts-expect-error */
   async findList(
     options: IListOptions<T>,
-    ctx?: CmsContext,
+    languageCode: LanguageCode,
   ): Promise<IListResponse<Translated<T>>> {
     return super.findList(options).then((result) => {
       const items = result.items.map((item) =>
-        translateEntity(item, ctx?.languageCode),
+        translateEntity(item, languageCode),
       );
 
       return {
@@ -76,21 +81,35 @@ export class TranslatableEntityHelper<
       .then((entity) => translateEntity(entity, data.languageCode));
   }
 
+  /* Added languageCode argument to method in derived class and made it required
+   * @ts-expect-error */
   async updateOne(
-    filter: FilterQuery<T> & { translations: unknown },
+    filter: FilterQuery<T>,
     data: EntityData<T>,
+    languageCode: LanguageCode,
   ): Promise<Translated<T>> {
-    const entity: MaybeTranslatable<T, P> = await this.findOneOrFail(filter);
+    const entity: MaybeTranslatable<T, P> = await this.findOneOrFail(
+      filter,
+      undefined,
+      languageCode,
+    );
 
-    if (this._translationRepo && entity.translations) {
-      const [translation] = entity.translations;
+    if (entity.translations && entity.languageCode) {
+      const translation = entity.translations
+        .getItems()
+        .find(
+          (translation: BaseTranslation) =>
+            translation.languageCode === entity.languageCode,
+        );
 
       const newTranslationData = this._translationRepo.create(data);
 
       this._translationRepo.assign(translation, newTranslationData);
     }
 
-    return super.updateOne(entity as never, entity).then(translateEntity);
+    return super
+      .updateOne(entity as never, entity)
+      .then((result) => translateEntity(result, languageCode));
   }
 
   async addTranslation(data: TranslatableEntityData<P>) {

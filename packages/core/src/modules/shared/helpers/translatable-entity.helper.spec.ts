@@ -13,6 +13,7 @@ import { ErrorResult } from '../../../common/errors/error-result.error';
 import { TranslatableEntityHelper } from './translatable-entity.helper';
 import { DEFAULT_LANGUAGE_CODE } from '../../../common/environment';
 import { EntityHelper } from './entity.helper';
+import { Translated } from '../../../types/Translations';
 
 class MyEntity extends BaseEntity {
   translations: Collection<BaseTranslation>;
@@ -69,7 +70,11 @@ describe('TranslatableEntityHelper', () => {
     });
 
     it(`should load translations when some kind of populate options provided`, async () => {
-      await helper.findOneOrFail(1, { populate: { createdAt: true } });
+      await helper.findOneOrFail(
+        1,
+        { populate: { createdAt: true } },
+        DEFAULT_LANGUAGE_CODE,
+      );
 
       const { populate } = baseFindOneOrFail.mock.calls[0][1];
 
@@ -77,7 +82,7 @@ describe('TranslatableEntityHelper', () => {
     });
 
     it(`should load translations when no options are provided`, async () => {
-      await helper.findOneOrFail(1);
+      await helper.findOneOrFail(1, undefined, DEFAULT_LANGUAGE_CODE);
 
       const { populate } = baseFindOneOrFail.mock.calls[0][1];
 
@@ -85,7 +90,7 @@ describe('TranslatableEntityHelper', () => {
     });
 
     it('should try to translate entity after receiving it from database', async () => {
-      await helper.findOneOrFail(1);
+      await helper.findOneOrFail(1, undefined, DEFAULT_LANGUAGE_CODE);
 
       expect(mockedTranslateEntity).toBeCalled();
     });
@@ -110,7 +115,10 @@ describe('TranslatableEntityHelper', () => {
       baseFindList.mockReturnValue(Promise.resolve({ items: entities }));
       mockedTranslateEntity.mockReturnValue(translatedEntity);
 
-      const { items } = await helper.findList({} as never);
+      const { items } = await helper.findList(
+        {} as never,
+        DEFAULT_LANGUAGE_CODE,
+      );
 
       expect(mockedTranslateEntity).toBeCalledTimes(entities.length);
       expect(items).toStrictEqual(translatedEntities);
@@ -120,7 +128,7 @@ describe('TranslatableEntityHelper', () => {
       const findListReturn = { items: [], testProp: 'to-be-sure' };
       baseFindList.mockReturnValue(Promise.resolve(findListReturn));
 
-      const result = await helper.findList({} as never);
+      const result = await helper.findList({} as never, DEFAULT_LANGUAGE_CODE);
 
       expect(result).toMatchObject(findListReturn);
     });
@@ -176,31 +184,61 @@ describe('TranslatableEntityHelper', () => {
       baseUpdateOne = jest.spyOn(EntityHelper.prototype, 'updateOne');
     });
 
-    it('should update entity translation', async () => {
-      const translation = {
-        name: 'Test name',
-      };
+    [
+      {
+        description: 'should update entity and used translation',
+        translateEntityMock: true,
+        translationShouldBeUpdated: true,
+      },
+      {
+        description:
+          'should not update entity translation if entity is not translated',
+        translateEntityMock: false,
+        translationShouldBeUpdated: false,
+      },
+    ].forEach(
+      ({ description, translateEntityMock, translationShouldBeUpdated }) => {
+        it(description, async () => {
+          const originalTranslation = {
+            name: 'My translation',
+            languageCode: DEFAULT_LANGUAGE_CODE,
+          };
 
-      const entity = mockEntity(
-        { id: 1, translations: new Collection({}, [translation]) as never },
-        MyEntity,
-      );
-      jest
-        .spyOn(helper, 'findOneOrFail')
-        .mockResolvedValue(Promise.resolve(entity) as never);
-      jest
-        .spyOn(translationRepo, 'create')
-        .mockImplementation((data) => ({ name: data.name } as never));
-      const newTranslation = { name: 'New name' };
+          const mockedEntity = mockEntity(
+            {
+              id: 1,
+              translations: new Collection({}, [originalTranslation]) as never,
+              ...(translateEntityMock && originalTranslation),
+            },
+            MyEntity,
+          ) as Translated<MyEntity>;
 
-      await helper.updateOne(
-        { translations: {} },
-        { ...newTranslation, otherProp: 'any' },
-      );
+          jest
+            .spyOn(helper, 'findOneOrFail')
+            .mockResolvedValue(Promise.resolve(mockedEntity));
+          jest
+            .spyOn(translationRepo, 'create')
+            .mockImplementation(
+              ({ name, languageCode }) => ({ name, languageCode } as never),
+            );
 
-      const { translations } = baseUpdateOne.mock.calls[0][1];
-      expect([...translations]).toStrictEqual([translation]);
-    });
+          const newTranslation = {
+            name: 'New translation',
+            languageCode: DEFAULT_LANGUAGE_CODE,
+          };
+
+          await helper.updateOne(1, newTranslation, DEFAULT_LANGUAGE_CODE);
+
+          const { translations } = baseUpdateOne.mock.calls[0][1];
+
+          const expectedTranslation = translationShouldBeUpdated
+            ? newTranslation
+            : originalTranslation;
+
+          expect([...translations]).toStrictEqual([expectedTranslation]);
+        });
+      },
+    );
   });
 
   describe('addTranslation', () => {
