@@ -15,9 +15,18 @@ import {
   CategoryResponse,
   UpdateCategoryResponse,
   CategoryTreeResponse,
+  AddCategoryTranslationResponse,
 } from './responses';
 import { InputValidationPipe } from '../../middleware';
 import { Category } from './category.entity';
+import { Translated } from '../../types/Translations';
+import { IListResponse } from '../shared/list-utils';
+import { Ctx } from '../../decorators/ctx.decorator';
+import { CmsContext } from '../../types/CmsContext';
+import { NewCategoryTranslationInput } from './dto/new-category-translation.input';
+import { CategoryTranslation } from './category-translation.entity';
+
+type TranslatedCategory = Translated<Category>;
 
 @Resolver()
 @Injectable()
@@ -34,26 +43,30 @@ export class CategoryResolver {
 
   @Allow(Permission.ReadCategory)
   @Query(() => CategoryResponse)
-  category(@Args('id', { type: () => Int }) id: number): Promise<Category> {
-    return this.categoryService.findOneOrFail({ id });
+  category(
+    @Args('id', { type: () => Int }) id: number,
+    @Ctx() ctx: CmsContext,
+  ): Promise<Category> {
+    return this.categoryService.findOneOrFail({ id }, undefined, ctx);
   }
 
   @Allow(Permission.ReadCategory)
   @Query(() => CategoryListResponse)
   categories(
     @Args() options: CategoryListOptions,
-  ): Promise<CategoryListResponse> {
-    return this.categoryService.findList(options);
+    @Ctx() ctx: CmsContext,
+  ): Promise<IListResponse<TranslatedCategory>> {
+    return this.categoryService.findList(options, ctx);
   }
 
   @Allow(Permission.UpdateCategory)
-  @Mutation(() => Boolean)
+  @Query(() => Boolean)
   isCategorySlugAvailable(@Args('slug') slug: string): Promise<boolean> {
     return this.categoryService.checkSlugAvailability(slug);
   }
 
   @Allow(Permission.UpdateCategory)
-  @Mutation(() => String)
+  @Query(() => String)
   getCategorySlug(@Args('name') name: string): Promise<string> {
     return this.categoryService.getAvailableSlug(name);
   }
@@ -62,11 +75,13 @@ export class CategoryResolver {
   @Mutation(() => CreateCategoryResponse)
   async createCategory(
     @Args('input', InputValidationPipe) input: NewCategoryInput,
-  ): Promise<Category> {
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<TranslatedCategory> {
     const { parentId, ...category } = input;
 
     return this.categoryService.insert({
       ...category,
+      languageCode,
       parent: parentId,
     });
   }
@@ -76,12 +91,31 @@ export class CategoryResolver {
   updateCategory(
     @Args('id', { type: () => Int }) id: number,
     @Args('input', InputValidationPipe) input: UpdateCategoryInput,
-  ): Promise<Category> {
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<TranslatedCategory> {
     const { parentId, ...restInput } = input;
 
-    return this.categoryService.updateOne(id, {
+    return this.categoryService.updateOne(
+      { id, translations: { languageCode } },
+      {
+        ...restInput,
+        parent: parentId,
+      },
+    );
+  }
+
+  @Allow(Permission.UpdateCategory)
+  @Mutation(() => AddCategoryTranslationResponse)
+  addCategoryTranslation(
+    @Args('input', InputValidationPipe) input: NewCategoryTranslationInput,
+    @Ctx() { languageCode }: CmsContext,
+  ): Promise<CategoryTranslation> {
+    const { categoryId, ...restInput } = input;
+
+    return this.categoryService.addTranslation({
       ...restInput,
-      parent: parentId,
+      languageCode,
+      category: categoryId,
     });
   }
 }

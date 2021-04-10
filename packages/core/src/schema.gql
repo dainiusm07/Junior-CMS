@@ -87,10 +87,11 @@ type Category {
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
-  name: String!
-  slug: String!
   active: Boolean!
   parent: Category
+  languageCode: LanguageCode!
+  name: String!
+  slug: String!
 }
 
 type CategoryListResponse {
@@ -104,10 +105,11 @@ type CategoryTreeResponse {
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
-  name: String!
-  slug: String!
   active: Boolean!
   parent: Category
+  languageCode: LanguageCode!
+  name: String!
+  slug: String!
   children: [CategoryTreeResponse!]!
 }
 
@@ -166,6 +168,8 @@ type Query {
   categoriesTree(id: Int): [CategoryTreeResponse!]!
   category(id: Int!): CategoryResponse!
   categories(filter: ExtendedCategoryFilterOptions!, sort: CategorySortOptions!, page: Int!, limit: Int!): CategoryListResponse!
+  isCategorySlugAvailable(slug: String!): Boolean!
+  getCategorySlug(name: String!): String!
   product(id: Int!): ProductResponse!
   products(filter: ExtendedProductFilterOptions!, sort: ProductSortOptions!, page: Int!, limit: Int!): ProductListResponse!
   user(id: Int!): UserResponse!
@@ -321,10 +325,9 @@ type Mutation {
   createAttribute(input: NewAttributeInput!): CreateAttributeResponse!
   updateAttribute(input: UpdateAttributeInput!, id: Int!): UpdateAttributeResponse!
   addAttributeTranslation(input: NewAttributeTranslationInput!): AddAttributeTranslationResponse!
-  isCategorySlugAvailable(slug: String!): Boolean!
-  getCategorySlug(name: String!): String!
   createCategory(input: NewCategoryInput!): CreateCategoryResponse!
   updateCategory(input: UpdateCategoryInput!, id: Int!): UpdateCategoryResponse!
+  addCategoryTranslation(input: NewCategoryTranslationInput!): AddCategoryTranslationResponse!
   createProductVariant(input: NewProductVariantInput!): CreateProductVariantResponse!
   updateProductVariant(input: UpdateProductVariantInput!, id: Int!): UpdateProductVariantResponse!
   createProduct(input: NewProductInput!): CreateProductResponse!
@@ -400,6 +403,7 @@ union CreateCategoryResponse = Category | InputValidationError
 input NewCategoryInput {
   name: String!
   slug: String
+  active: Boolean!
   parentId: Int
 }
 
@@ -408,7 +412,23 @@ union UpdateCategoryResponse = Category | InputValidationError | ErrorResult
 input UpdateCategoryInput {
   name: String
   slug: String
+  active: Boolean
   parentId: Int
+}
+
+union AddCategoryTranslationResponse = CategoryTranslation | InputValidationError | ErrorResult
+
+type CategoryTranslation {
+  languageCode: LanguageCode!
+  updatedAt: DateTime!
+  name: String!
+  slug: String!
+}
+
+input NewCategoryTranslationInput {
+  name: String!
+  slug: String
+  categoryId: Int!
 }
 
 union CreateProductVariantResponse = ProductVariant | InputValidationError

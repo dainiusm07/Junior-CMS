@@ -2,12 +2,13 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 
 import { SlugHelper } from '../shared/slug-helper';
+import { CategoryTranslation } from './category-translation.entity';
 import { Category } from './category.entity';
 import { CategoryResolver } from './category.resolver';
 import { CategoryService } from './category.service';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Category])],
+  imports: [MikroOrmModule.forFeature([Category, CategoryTranslation])],
   providers: [CategoryService, CategoryResolver, SlugHelper],
   exports: [CategoryService],
 })
