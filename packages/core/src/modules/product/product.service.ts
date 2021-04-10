@@ -1,10 +1,10 @@
-import { EntityData, EntityRepository, FilterQuery } from '@mikro-orm/core';
+import { EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { PRODUCT_VARIANTS_LOADER } from '../../common/constants';
 import { CmsContext } from '../../types/CmsContext';
-import { Translated } from '../../types/Translations';
+import { Translated, TranslatableEntityData } from '../../types/Translations';
 import { usePopulationLoader } from '../../utils/use-population-loader';
 import { BaseService } from '../shared/base.service';
 import { translationsMixin } from '../shared/mixins/translations.mixin';
@@ -40,7 +40,9 @@ export class ProductService extends translationsMixin<Product>(BaseService) {
     return this.slugHelper.checkSlugAvailability(this._translationRepo, slug);
   }
 
-  async insert(data: EntityData<Product>): Promise<Translated<Product>> {
+  async insert(
+    data: TranslatableEntityData<Product>,
+  ): Promise<Translated<Product>> {
     if (!data.slug && data.name) {
       data.slug = await this.getAvailableSlug(data.name);
     }
@@ -48,7 +50,7 @@ export class ProductService extends translationsMixin<Product>(BaseService) {
     return super.insert(data);
   }
 
-  async addTranslation(data: EntityData<ProductTranslation>) {
+  async addTranslation(data: TranslatableEntityData<ProductTranslation>) {
     if (!data.slug && data.name) {
       data.slug = await this.getAvailableSlug(data.name);
     }

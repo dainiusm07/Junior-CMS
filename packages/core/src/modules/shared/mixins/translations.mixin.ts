@@ -12,6 +12,7 @@ import { CmsContext } from '../../../types/CmsContext';
 import {
   MaybeTranslatable,
   Translatable,
+  TranslatableEntityData,
   Translated,
   TranslationType,
 } from '../../../types/Translations';
@@ -66,7 +67,7 @@ export const translationsMixin = <
       });
     }
 
-    async insert(data: EntityData<T>): Promise<Translated<T>> {
+    async insert(data: TranslatableEntityData<T>): Promise<Translated<T>> {
       const entity = this._repo.create(data);
 
       this._repo.assign(entity, {
@@ -101,7 +102,7 @@ export const translationsMixin = <
       return super.updateOne(entity as never, entity) as Promise<Translated<T>>;
     }
 
-    async addTranslation(data: EntityData<P>) {
+    async addTranslation(data: TranslatableEntityData<P>) {
       this.deleteUndefinedProperties(data);
 
       const translation = this._translationRepo.create(data);

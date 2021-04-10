@@ -354,7 +354,6 @@ input NewAttributeValueInput {
 union UpdateAttributeValueResponse = AttributeValue | InputValidationError | ErrorResult
 
 input UpdateAttributeValueInput {
-  attributeId: Int
   value: String
 }
 
