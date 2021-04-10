@@ -5,12 +5,12 @@ import { Test } from '@nestjs/testing';
 import {
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
   MAX_RESULTS_PER_PAGE_LIMIT,
-} from '../../common/constants';
-import { mockEntities } from '../../test-utils/mock-entities';
-import { mockRepository } from '../../test-utils/mock-repository';
-import { BaseEntity } from './base.entity';
-import { BaseService } from './base.service';
-import { IListResponse, SortOrder } from './list-utils';
+} from '../../../common/constants';
+import { mockEntities } from '../../../test-utils/mock-entities';
+import { mockRepository } from '../../../test-utils/mock-repository';
+import { BaseEntity } from '../base.entity';
+import { EntityHelper } from './entity.helper';
+import { IListResponse, SortOrder } from '../list-utils';
 
 class MyBaseEntity extends BaseEntity {}
 
@@ -30,15 +30,9 @@ const entities = mockEntities(
   MyBaseEntity,
 );
 
-describe('BaseService', () => {
-  let service: MyBaseService;
+describe('EntityHelper', () => {
+  let helper: EntityHelper<BaseEntity>;
   let repo: EntityRepository<BaseEntity>;
-
-  class MyBaseService extends BaseService<BaseEntity> {
-    constructor(protected _repo: EntityRepository<BaseEntity>) {
-      super();
-    }
-  }
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -51,12 +45,12 @@ describe('BaseService', () => {
     }).compile();
 
     repo = moduleRef.get(getRepositoryToken(BaseEntity));
-    service = new MyBaseService(repo);
+    helper = new EntityHelper(repo);
   });
 
   describe('instance', () => {
     it('should be defined', () => {
-      expect(service).toBeDefined();
+      expect(helper).toBeDefined();
     });
   });
 
@@ -74,7 +68,7 @@ describe('BaseService', () => {
     });
 
     it('should return list results', async () => {
-      const result = await service.findList({
+      const result = await helper.findList({
         limit: entities.length,
         page: 1,
         filter: {},
@@ -106,7 +100,7 @@ describe('BaseService', () => {
       it(description, () => {
         const findAndCount = jest.spyOn(repo, 'findAndCount');
 
-        service.findList({ limit, page: 1, filter: {}, sort: {} });
+        helper.findList({ limit, page: 1, filter: {}, sort: {} });
 
         const { limit: calledWithLimit } = findAndCount.mock.calls[0][1] as any;
         expect(calledWithLimit).toBe(expectedValue);
@@ -114,7 +108,7 @@ describe('BaseService', () => {
     });
 
     it('should set page to 1 if requested page number is less than 1', async () => {
-      const result = await service.findList({
+      const result = await helper.findList({
         limit: 1,
         page: 0,
         filter: {},
@@ -125,7 +119,7 @@ describe('BaseService', () => {
     });
 
     it('should set page to 1 if requested page number is less than 1', async () => {
-      const result = await service.findList({
+      const result = await helper.findList({
         limit: 1,
         page: 0,
         filter: {},
@@ -143,7 +137,7 @@ describe('BaseService', () => {
         .spyOn(repo, 'findAndCount')
         .mockReturnValue(Promise.resolve([entities, totalItems]));
 
-      const result = await service.findList({
+      const result = await helper.findList({
         limit,
         page: 1,
         filter: {},
@@ -155,7 +149,7 @@ describe('BaseService', () => {
 
     it(`if page number is more than total pages should call self
         with same params and page=1`, async () => {
-      const findList = jest.spyOn(service, 'findList');
+      const findList = jest.spyOn(helper, 'findList');
       const listOptions = {
         limit: entities.length,
         page: 99,
@@ -163,7 +157,7 @@ describe('BaseService', () => {
         sort: {},
       };
 
-      await service.findList(listOptions);
+      await helper.findList(listOptions);
 
       expect(findList).toBeCalledTimes(2);
 
@@ -212,7 +206,7 @@ describe('BaseService', () => {
       it(description, async () => {
         const findAndCount = jest.spyOn(repo, 'findAndCount');
 
-        await service.findList({
+        await helper.findList({
           limit: 1,
           page: 1,
           sort,
@@ -231,7 +225,7 @@ describe('BaseService', () => {
         .spyOn(repo, 'findOneOrFail')
         .mockReturnValue(Promise.resolve(entities[0]));
 
-      const result = await service.findOneOrFail({});
+      const result = await helper.findOneOrFail({});
 
       expect(result).toBeInstanceOf(MyBaseEntity);
       expect(result).toBe(entities[0]);
@@ -243,7 +237,7 @@ describe('BaseService', () => {
       });
 
       try {
-        await service.findOneOrFail({});
+        await helper.findOneOrFail({});
       } catch (err) {
         expect(err).toBeInstanceOf(NotFoundError);
       }
@@ -255,20 +249,20 @@ describe('BaseService', () => {
 
     beforeEach(() => {
       jest
-        .spyOn(service, 'findOneOrFail')
+        .spyOn(helper, 'findOneOrFail')
         .mockReturnValue(Promise.resolve(entity));
     });
 
     it('should try to fetch entity', async () => {
-      await service.updateOne({}, {});
+      await helper.updateOne({}, {});
 
-      expect(service.findOneOrFail).toBeCalledTimes(1);
+      expect(helper.findOneOrFail).toBeCalledTimes(1);
     });
 
     it('should return updated entity', async () => {
       const update = { id: 999 };
 
-      const result = await service.updateOne({}, update);
+      const result = await helper.updateOne({}, update);
 
       expect(result).toBe(Object.assign(entity, update));
     });
@@ -276,17 +270,17 @@ describe('BaseService', () => {
 
   describe('insert', () => {
     it('should save entity to database', async () => {
-      await service.insert({});
+      await helper.insert({});
 
       expect(repo.persistAndFlush).toBeCalled();
     });
 
     it('should return entity', async () => {
       jest
-        .spyOn(service, 'findOneOrFail')
+        .spyOn(helper, 'findOneOrFail')
         .mockReturnValue(Promise.resolve(entities[0]));
 
-      const result = await service.insert(entities[0]);
+      const result = await helper.insert(entities[0]);
 
       expect(result).toBeInstanceOf(MyBaseEntity);
       expect(result).toEqual(entities[0]);

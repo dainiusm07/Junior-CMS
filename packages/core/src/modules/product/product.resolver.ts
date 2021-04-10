@@ -38,7 +38,7 @@ export class ProductResolver {
     @Args('id', { type: () => Int }) id: number,
     @Ctx() ctx: CmsContext,
   ): Promise<TranslatedProduct> {
-    return this.productService.findOneOrFail({ id }, undefined, ctx);
+    return this.productService.findOneOrFail(ctx, { id });
   }
 
   @Allow(Permission.ReadProduct)
@@ -47,7 +47,7 @@ export class ProductResolver {
     @Args() options: ProductListOptions,
     @Ctx() ctx: CmsContext,
   ): Promise<IListResponse<TranslatedProduct>> {
-    return this.productService.findList(options, ctx);
+    return this.productService.findList(ctx, options);
   }
 
   @Allow(Permission.CreateProduct)

@@ -1,35 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { EntityRepository, FilterQuery, LoadStrategy } from '@mikro-orm/core';
+import {
+  EntityData,
+  EntityRepository,
+  FilterQuery,
+  LoadStrategy,
+} from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 
 import { Attribute } from './attribute.entity';
-import { BaseService } from '../shared/base.service';
-import { translationsMixin } from '../shared/mixins/translations.mixin';
 import { AttributeTranslation } from './attribute-translation.entity';
-import { translateEntity } from '../shared/helpers/translate-entity';
+import { translateEntity, TranslatableEntityHelper } from '../shared/helpers';
 import { LanguageCode } from '../../i18n/language-code.enum';
 import { CmsContext } from '../../types/CmsContext';
 import { AttributeValue } from '../attribute-value/attribute-value.entity';
+import { TranslatableEntityData } from '../../types/Translations';
 
 @Injectable()
-export class AttributeService extends translationsMixin<Attribute>(
-  BaseService,
-) {
+export class AttributeService {
+  private entityHelper: TranslatableEntityHelper<Attribute>;
+
   constructor(
     @InjectRepository(Attribute)
     protected _repo: EntityRepository<Attribute>,
     @InjectRepository(AttributeTranslation)
     protected _translationRepo: EntityRepository<AttributeTranslation>,
   ) {
-    super();
+    this.entityHelper = new TranslatableEntityHelper(_repo, _translationRepo);
   }
 
-  async findOneOrFail(
-    filter: FilterQuery<Attribute>,
-    options: undefined,
-    ctx: CmsContext,
-  ) {
-    return super.findOneOrFail(
+  async findOneOrFail(ctx: CmsContext, filter: FilterQuery<Attribute>) {
+    return this.entityHelper.findOneOrFail(
       filter,
       { populate: { values: LoadStrategy.JOINED } },
       ctx,
@@ -42,6 +42,21 @@ export class AttributeService extends translationsMixin<Attribute>(
       .then((attributes) =>
         attributes.map((attribute) => translateEntity(attribute, languageCode)),
       );
+  }
+
+  async insert(data: TranslatableEntityData<Attribute>) {
+    return this.entityHelper.insert(data);
+  }
+
+  async updateOne(
+    filter: FilterQuery<Attribute> & { translations: unknown },
+    data: EntityData<Attribute>,
+  ) {
+    return this.entityHelper.updateOne(filter, data);
+  }
+
+  async addTranslation(data: TranslatableEntityData<AttributeTranslation>) {
+    return this.entityHelper.addTranslation(data);
   }
 
   translateAttributeValues(ctx: CmsContext, attributeValues: AttributeValue[]) {

@@ -1,6 +1,6 @@
 import { Collection, EntityData } from '@mikro-orm/core';
 import { LanguageCode } from '../i18n/language-code.enum';
-import { BaseTranslation } from '../modules/shared/base-translation';
+import { BaseTranslation } from '../modules/shared/base-translation.entity';
 
 export type MaybeTranslatable<T, P> = T & {
   translations?: Collection<P>;

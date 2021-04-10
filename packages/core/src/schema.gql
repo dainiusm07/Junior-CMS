@@ -89,6 +89,7 @@ type Category {
   deletedAt: DateTime
   active: Boolean!
   parent: Category
+  children: [Category!]!
   languageCode: LanguageCode!
   name: String!
   slug: String!
@@ -98,19 +99,6 @@ type CategoryListResponse {
   items: [Category!]!
   totalItems: Int!
   pagination: PaginationResult!
-}
-
-type CategoryTreeResponse {
-  id: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  deletedAt: DateTime
-  active: Boolean!
-  parent: Category
-  languageCode: LanguageCode!
-  name: String!
-  slug: String!
-  children: [CategoryTreeResponse!]!
 }
 
 type ProductTranslation {
@@ -165,7 +153,7 @@ type UserListResponse {
 type Query {
   attribute(id: Int!): AttributeResponse!
   attributes: [Attribute!]!
-  categoriesTree(id: Int): [CategoryTreeResponse!]!
+  categoriesTree(id: Int): [Category!]!
   category(id: Int!): CategoryResponse!
   categories(filter: ExtendedCategoryFilterOptions!, sort: CategorySortOptions!, page: Int!, limit: Int!): CategoryListResponse!
   isCategorySlugAvailable(slug: String!): Boolean!

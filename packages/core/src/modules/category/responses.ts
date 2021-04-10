@@ -1,5 +1,4 @@
-import { Collection } from '@mikro-orm/core';
-import { createUnionType, Field, ObjectType } from '@nestjs/graphql';
+import { createUnionType, ObjectType } from '@nestjs/graphql';
 
 import { InputValidationError } from '../../common/errors/input-validation.error';
 import { ErrorResult } from '../../common/errors/error-result.error';
@@ -29,9 +28,3 @@ export const AddCategoryTranslationResponse = createUnionType({
 
 @ObjectType()
 export class CategoryListResponse extends generateListResponse(Category) {}
-
-@ObjectType()
-export class CategoryTreeResponse extends Category {
-  @Field(() => [CategoryTreeResponse])
-  children: Collection<Category>;
-}

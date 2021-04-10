@@ -1,22 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityData, EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 
-import { BaseService } from '../shared/base.service';
 import { AttributeValue } from './attribute-value.entity';
-import { translationsMixin } from '../shared/mixins/translations.mixin';
 import { AttributeValueTranslation } from './attribute-value-translation.entity';
+import { TranslatableEntityHelper } from '../shared/helpers';
+import { TranslatableEntityData } from '../../types/Translations';
 
 @Injectable()
-export class AttributeValueService extends translationsMixin<AttributeValue>(
-  BaseService,
-) {
+export class AttributeValueService {
+  private entityHelper: TranslatableEntityHelper<AttributeValue>;
+
   constructor(
     @InjectRepository(AttributeValue)
     protected _repo: EntityRepository<AttributeValue>,
     @InjectRepository(AttributeValueTranslation)
     protected _translationRepo: EntityRepository<AttributeValueTranslation>,
   ) {
-    super();
+    this.entityHelper = new TranslatableEntityHelper(_repo, _translationRepo);
+  }
+
+  async insert(data: TranslatableEntityData<AttributeValue>) {
+    return this.entityHelper.insert(data);
+  }
+
+  async updateOne(
+    filter: FilterQuery<AttributeValue> & { translations: unknown },
+    data: EntityData<AttributeValue>,
+  ) {
+    return this.entityHelper.updateOne(filter, data);
+  }
+
+  async addTranslation(
+    data: TranslatableEntityData<AttributeValueTranslation>,
+  ) {
+    return this.entityHelper.addTranslation(data);
   }
 }

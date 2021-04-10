@@ -1,39 +1,25 @@
 import { Collection, EntityRepository } from '@mikro-orm/core';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { Test } from '@nestjs/testing';
-import * as TranslateEntityHelper from '../helpers/translate-entity';
+import * as TranslateEntityHelper from './translate-entity';
 
 jest.spyOn(TranslateEntityHelper, 'translateEntity').mockReturnValue(undefined);
 
 import { mockEntity } from '../../../test-utils/mock-entities';
 import { mockRepository } from '../../../test-utils/mock-repository';
-import { BaseTranslation } from '../base-translation';
+import { BaseTranslation } from '../base-translation.entity';
 import { BaseEntity } from '../base.entity';
-import { BaseService } from '../base.service';
-import { translationsMixin } from './translations.mixin';
 import { ErrorResult } from '../../../common/errors/error-result.error';
+import { TranslatableEntityHelper } from './translatable-entity.helper';
+import { DEFAULT_LANGUAGE_CODE } from '../../../common/environment';
+import { EntityHelper } from './entity.helper';
 
 class MyEntity extends BaseEntity {
   translations: Collection<BaseTranslation>;
 }
 
-class MockedBaseService extends BaseService<MyEntity> {
-  _repo = mockRepository(MyEntity) as any;
-}
-
-class ServiceWithTranslations extends translationsMixin<MyEntity>(
-  MockedBaseService as never,
-) {
-  constructor(
-    protected _repo: EntityRepository<MyEntity>,
-    protected _translationRepo: EntityRepository<BaseTranslation>,
-  ) {
-    super();
-  }
-}
-
-describe('translationsMixin', () => {
-  let service: ServiceWithTranslations;
+describe('TranslatableEntityHelper', () => {
+  let helper: TranslatableEntityHelper<MyEntity>;
   let repo: EntityRepository<MyEntity>;
   let translationRepo: EntityRepository<BaseTranslation>;
 
@@ -58,7 +44,7 @@ describe('translationsMixin', () => {
 
     repo = moduleRef.get(getRepositoryToken(MyEntity));
     translationRepo = moduleRef.get(getRepositoryToken(BaseTranslation));
-    service = new ServiceWithTranslations(repo, translationRepo);
+    helper = new TranslatableEntityHelper(repo, translationRepo);
   });
 
   afterEach(() => {
@@ -67,7 +53,7 @@ describe('translationsMixin', () => {
 
   describe('instance', () => {
     it('should be defined', () => {
-      expect(service).toBeDefined();
+      expect(helper).toBeDefined();
     });
   });
 
@@ -75,14 +61,15 @@ describe('translationsMixin', () => {
     let baseFindOneOrFail: jest.SpyInstance<Promise<MyEntity>>;
 
     beforeEach(() => {
-      baseFindOneOrFail = jest.spyOn(
-        MockedBaseService.prototype,
-        'findOneOrFail',
-      );
+      baseFindOneOrFail = jest.spyOn(EntityHelper.prototype, 'findOneOrFail');
+    });
+
+    afterEach(() => {
+      baseFindOneOrFail.mockClear();
     });
 
     it(`should load translations when some kind of populate options provided`, async () => {
-      await service.findOneOrFail(1, { populate: { createdAt: true } });
+      await helper.findOneOrFail(1, { populate: { createdAt: true } });
 
       const { populate } = baseFindOneOrFail.mock.calls[0][1];
 
@@ -90,7 +77,7 @@ describe('translationsMixin', () => {
     });
 
     it(`should load translations when no options are provided`, async () => {
-      await service.findOneOrFail(1);
+      await helper.findOneOrFail(1);
 
       const { populate } = baseFindOneOrFail.mock.calls[0][1];
 
@@ -98,7 +85,7 @@ describe('translationsMixin', () => {
     });
 
     it('should try to translate entity after receiving it from database', async () => {
-      await service.findOneOrFail(1);
+      await helper.findOneOrFail(1);
 
       expect(mockedTranslateEntity).toBeCalled();
     });
@@ -108,7 +95,7 @@ describe('translationsMixin', () => {
     let baseFindList: jest.SpyInstance;
 
     beforeEach(() => {
-      baseFindList = jest.spyOn(MockedBaseService.prototype, 'findList');
+      baseFindList = jest.spyOn(EntityHelper.prototype, 'findList');
     });
 
     it('should translate all entities', async () => {
@@ -123,7 +110,7 @@ describe('translationsMixin', () => {
       baseFindList.mockReturnValue(Promise.resolve({ items: entities }));
       mockedTranslateEntity.mockReturnValue(translatedEntity);
 
-      const { items } = await service.findList({} as never);
+      const { items } = await helper.findList({} as never);
 
       expect(mockedTranslateEntity).toBeCalledTimes(entities.length);
       expect(items).toStrictEqual(translatedEntities);
@@ -133,7 +120,7 @@ describe('translationsMixin', () => {
       const findListReturn = { items: [], testProp: 'to-be-sure' };
       baseFindList.mockReturnValue(Promise.resolve(findListReturn));
 
-      const result = await service.findList({} as never);
+      const result = await helper.findList({} as never);
 
       expect(result).toMatchObject(findListReturn);
     });
@@ -143,7 +130,7 @@ describe('translationsMixin', () => {
     let baseInsert: jest.SpyInstance;
 
     beforeEach(() => {
-      baseInsert = jest.spyOn(MockedBaseService.prototype, 'insert');
+      baseInsert = jest.spyOn(EntityHelper.prototype, 'insert');
     });
 
     it('should move translation properties to translations array before actual insert', async () => {
@@ -152,9 +139,14 @@ describe('translationsMixin', () => {
         .mockImplementation((data) => ({ name: data.name } as never));
 
       const translation = { name: 'John' };
-      const entityData = { ...translation, age: 20, height: 190 };
+      const entityData = {
+        ...translation,
+        age: 20,
+        height: 190,
+        languageCode: DEFAULT_LANGUAGE_CODE,
+      };
 
-      await service.insert(entityData);
+      await helper.insert(entityData);
 
       const { translations } = baseInsert.mock.calls[0][0];
 
@@ -168,7 +160,9 @@ describe('translationsMixin', () => {
       };
       mockedTranslateEntity.mockReturnValue(translatedEntityResult);
 
-      const result = await service.insert({});
+      const result = await helper.insert({
+        languageCode: DEFAULT_LANGUAGE_CODE,
+      });
 
       expect(mockedTranslateEntity).toBeCalled();
       expect(result).toBe(translatedEntityResult);
@@ -179,7 +173,7 @@ describe('translationsMixin', () => {
     let baseUpdateOne: jest.SpyInstance;
 
     beforeEach(() => {
-      baseUpdateOne = jest.spyOn(MockedBaseService.prototype, 'updateOne');
+      baseUpdateOne = jest.spyOn(EntityHelper.prototype, 'updateOne');
     });
 
     it('should update entity translation', async () => {
@@ -192,14 +186,14 @@ describe('translationsMixin', () => {
         MyEntity,
       );
       jest
-        .spyOn(service, 'findOneOrFail')
+        .spyOn(helper, 'findOneOrFail')
         .mockResolvedValue(Promise.resolve(entity) as never);
       jest
         .spyOn(translationRepo, 'create')
         .mockImplementation((data) => ({ name: data.name } as never));
       const newTranslation = { name: 'New name' };
 
-      await service.updateOne(
+      await helper.updateOne(
         { translations: {} },
         { ...newTranslation, otherProp: 'any' },
       );
@@ -210,9 +204,12 @@ describe('translationsMixin', () => {
   });
 
   describe('addTranslation', () => {
-    const translation = { description: 'This project will be awesome' };
+    const translation = {
+      description: 'This project will be awesome',
+      languageCode: DEFAULT_LANGUAGE_CODE,
+    };
     it('should add translation', async () => {
-      await service.addTranslation(translation);
+      await helper.addTranslation(translation);
 
       expect(translationRepo.create).toBeCalled();
       expect(translationRepo.create).toBeCalledWith(translation);
@@ -226,7 +223,7 @@ describe('translationsMixin', () => {
       jest.spyOn(translationRepo, 'count').mockReturnValue(Promise.resolve(1));
 
       try {
-        await service.addTranslation(translation);
+        await helper.addTranslation(translation);
       } catch (error) {
         expect(error).toBeInstanceOf(ErrorResult);
       }

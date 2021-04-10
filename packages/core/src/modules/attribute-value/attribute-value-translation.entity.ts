@@ -1,7 +1,7 @@
 import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { BaseTranslation } from '../shared/base-translation';
+import { BaseTranslation } from '../shared/base-translation.entity';
 import { AttributeValue } from './attribute-value.entity';
 
 @ObjectType()

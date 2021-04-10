@@ -1,7 +1,7 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
-import { SlugHelper } from '../shared/slug-helper';
 
+import { SlugHelper } from '../shared/helpers';
 import { ProductEntityResolver } from './product-entity.resolver';
 import { ProductTranslation } from './product-translation.entity';
 import { Product } from './product.entity';

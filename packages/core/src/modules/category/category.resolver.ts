@@ -14,7 +14,6 @@ import {
   CategoryListResponse,
   CategoryResponse,
   UpdateCategoryResponse,
-  CategoryTreeResponse,
   AddCategoryTranslationResponse,
 } from './responses';
 import { InputValidationPipe } from '../../middleware';
@@ -33,12 +32,13 @@ type TranslatedCategory = Translated<Category>;
 export class CategoryResolver {
   constructor(private categoryService: CategoryService) {}
 
-  @Query(() => [CategoryTreeResponse])
+  @Query(() => [Category])
   // NOTE: Needs to be cached and some point
   async categoriesTree(
-    @Args('id', { type: () => Int, nullable: true }) id?: number,
-  ): Promise<CategoryTreeResponse[]> {
-    return this.categoryService.getCategoriesTree(id);
+    @Args('id', { type: () => Int, nullable: true }) id: number | undefined,
+    @Ctx() ctx: CmsContext,
+  ): Promise<Category[]> {
+    return this.categoryService.getCategoriesTree(ctx, id);
   }
 
   @Allow(Permission.ReadCategory)
@@ -47,7 +47,7 @@ export class CategoryResolver {
     @Args('id', { type: () => Int }) id: number,
     @Ctx() ctx: CmsContext,
   ): Promise<Category> {
-    return this.categoryService.findOneOrFail({ id }, undefined, ctx);
+    return this.categoryService.findOneOrFail(ctx, { id });
   }
 
   @Allow(Permission.ReadCategory)
@@ -56,7 +56,7 @@ export class CategoryResolver {
     @Args() options: CategoryListOptions,
     @Ctx() ctx: CmsContext,
   ): Promise<IListResponse<TranslatedCategory>> {
-    return this.categoryService.findList(options, ctx);
+    return this.categoryService.findList(ctx, options);
   }
 
   @Allow(Permission.UpdateCategory)

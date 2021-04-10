@@ -35,6 +35,7 @@ export class Category
   })
   parent: Category;
 
+  @Field(() => [Category])
   @OneToMany(() => Category, 'parent', {
     strategy: LoadStrategy.SELECT_IN,
   })

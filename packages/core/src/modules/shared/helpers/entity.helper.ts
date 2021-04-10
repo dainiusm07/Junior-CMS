@@ -8,16 +8,16 @@ import {
 import {
   MAX_RESULTS_PER_PAGE_LIMIT,
   DEFAULT_RESULTS_PER_PAGE_LIMIT,
-} from '../../common/constants';
+} from '../../../common/constants';
 import {
   IListOptions,
   IListResponse,
   parseFilterInput,
   parseSortInput,
-} from './list-utils';
+} from '../list-utils';
 
-export abstract class BaseService<T extends object> {
-  protected abstract _repo: EntityRepository<T>;
+export class EntityHelper<T extends object> {
+  constructor(protected _repo: EntityRepository<T>) {}
 
   async findOneOrFail(where: FilterQuery<T>, options?: FindOneOptions<T>) {
     return this._repo.findOneOrFail(where, options);

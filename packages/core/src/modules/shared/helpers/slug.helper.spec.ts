@@ -1,4 +1,4 @@
-import { SlugHelper } from './slug-helper';
+import { SlugHelper } from './slug.helper';
 
 class SimpleRepo {
   findOne = jest.fn();

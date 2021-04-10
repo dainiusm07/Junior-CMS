@@ -1,4 +1,4 @@
-import { EntityRepository, FilterQuery } from '@mikro-orm/core';
+import { EntityData, EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
@@ -6,14 +6,15 @@ import { PRODUCT_VARIANTS_LOADER } from '../../common/constants';
 import { CmsContext } from '../../types/CmsContext';
 import { Translated, TranslatableEntityData } from '../../types/Translations';
 import { usePopulationLoader } from '../../utils/use-population-loader';
-import { BaseService } from '../shared/base.service';
-import { translationsMixin } from '../shared/mixins/translations.mixin';
-import { SlugHelper } from '../shared/slug-helper';
+import { SlugHelper, TranslatableEntityHelper } from '../shared/helpers';
 import { ProductTranslation } from './product-translation.entity';
 import { Product } from './product.entity';
+import { IListOptions } from '../shared/list-utils';
 
 @Injectable()
-export class ProductService extends translationsMixin<Product>(BaseService) {
+export class ProductService {
+  private entityHelper: TranslatableEntityHelper<Product>;
+
   constructor(
     @InjectRepository(Product)
     protected _repo: EntityRepository<Product>,
@@ -21,15 +22,18 @@ export class ProductService extends translationsMixin<Product>(BaseService) {
     protected _translationRepo: EntityRepository<ProductTranslation>,
     private slugHelper: SlugHelper,
   ) {
-    super();
+    this.entityHelper = new TranslatableEntityHelper(_repo, _translationRepo);
   }
 
   async findOneOrFail(
-    where: FilterQuery<Product>,
-    options: undefined,
     ctx: CmsContext,
+    where: FilterQuery<Product>,
   ): Promise<Translated<Product>> {
-    return super.findOneOrFail(where, options, ctx);
+    return this.entityHelper.findOneOrFail(where, undefined, ctx);
+  }
+
+  findList(ctx: CmsContext, options: IListOptions<Product>) {
+    return this.entityHelper.findList(options, ctx);
   }
 
   getAvailableSlug(name: string) {
@@ -47,7 +51,14 @@ export class ProductService extends translationsMixin<Product>(BaseService) {
       data.slug = await this.getAvailableSlug(data.name);
     }
 
-    return super.insert(data);
+    return this.entityHelper.insert(data);
+  }
+
+  updateOne(
+    filter: FilterQuery<Product> & { translations: unknown },
+    data: EntityData<Product>,
+  ) {
+    return this.entityHelper.updateOne(filter, data);
   }
 
   async addTranslation(data: TranslatableEntityData<ProductTranslation>) {
@@ -55,7 +66,7 @@ export class ProductService extends translationsMixin<Product>(BaseService) {
       data.slug = await this.getAvailableSlug(data.name);
     }
 
-    return super.addTranslation(data);
+    return this.entityHelper.addTranslation(data);
   }
 
   getVariants(ctx: any, product: Product) {

@@ -35,7 +35,7 @@ export class AttributeResolver {
     @Args('id', { type: () => Int }) id: number,
     @Ctx() ctx: CmsContext,
   ): Promise<TranslatedAttribute> {
-    return this.attributeService.findOneOrFail({ id }, undefined, ctx);
+    return this.attributeService.findOneOrFail(ctx, { id });
   }
 
   @Allow(Permission.ReadAttribute)
