@@ -13,3 +13,4 @@ export const CATEGORIES_TREE_DEPTH = 2;
 export const PRODUCT_VARIANTS_LOADER = 'product_variants_loader';
 export const PRODUCT_VARIANT_ATTRIBUTES_LOADER =
   'product_variant_attributes_loader';
+export const CATEGORY_PARENT_LOADER = 'category_parent_loader';

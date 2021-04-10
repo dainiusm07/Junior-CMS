@@ -33,7 +33,7 @@ export class Category
     nullable: true,
     unique: false,
   })
-  parent: Category;
+  parent: Category | null;
 
   @Field(() => [Category])
   @OneToMany(() => Category, 'parent', {

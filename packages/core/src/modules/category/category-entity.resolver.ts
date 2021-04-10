@@ -19,4 +19,9 @@ export class CategoryEntityResolver {
       languageCode,
     );
   }
+
+  @ResolveField(() => Category, { nullable: true })
+  parent(@Parent() category: Category, @Ctx() ctx: CmsContext) {
+    return this.categoryService.getParent(ctx, category);
+  }
 }

@@ -2,10 +2,14 @@ import { EntityData, EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { CATEGORIES_TREE_DEPTH } from '../../common/constants';
+import {
+  CATEGORIES_TREE_DEPTH,
+  CATEGORY_PARENT_LOADER,
+} from '../../common/constants';
 import { LanguageCode } from '../../i18n/language-code.enum';
 import { CmsContext } from '../../types/CmsContext';
 import { TranslatableEntityData, Translated } from '../../types/Translations';
+import { usePopulationLoader } from '../../utils/use-population-loader';
 import {
   SlugHelper,
   TranslatableEntityHelper,
@@ -70,6 +74,19 @@ export class CategoryService {
 
   checkSlugAvailability(slug: string) {
     return this.slugHelper.checkSlugAvailability(this._translationRepo, slug);
+  }
+
+  async getParent(
+    ctx: CmsContext,
+    category: Category,
+  ): Promise<Translated<Category> | null> {
+    return usePopulationLoader(ctx, this._repo, CATEGORY_PARENT_LOADER, {
+      parent: true,
+    })
+      .load(category)
+      .then(({ parent }) =>
+        parent !== null ? translateEntity(parent, ctx.languageCode) : null,
+      );
   }
 
   async getCategoriesTree(ctx: CmsContext, id?: number) {
