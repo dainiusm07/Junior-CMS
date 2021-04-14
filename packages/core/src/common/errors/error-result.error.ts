@@ -29,4 +29,16 @@ export class ErrorResult extends I18nError {
       name,
     });
   }
+
+  static incorrectLoginCredentials(name: EntityName) {
+    name = formatEntityName(name);
+
+    return new ErrorResult(
+      ErrorCode.NOT_FOUND,
+      'error.incorrect-email-or-password',
+      {
+        name,
+      },
+    );
+  }
 }

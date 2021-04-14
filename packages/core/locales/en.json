@@ -19,6 +19,7 @@
     "max-length-constraint": "{{name}} must be less than or equal to {{number}} characters",
     "invalid-input": "Invalid input",
     "no-white-space": "White-spaces are not allowed",
-    "password-constraint": "Password must contain one lowercase letter, one uppercase letter and one number or special character"
+    "password-constraint": "Password must contain one lowercase letter, one uppercase letter and one number or special character",
+    "incorrect-email-or-password": "Incorrect email or password"
   }
 }

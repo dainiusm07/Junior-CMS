@@ -12,6 +12,7 @@ export class GraphqlService implements GqlOptionsFactory {
       cors:
         NODE_ENV !== 'production'
           ? {
+              origin: 'http://localhost:3000',
               credentials: true,
             }
           : true,

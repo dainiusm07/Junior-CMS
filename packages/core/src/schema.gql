@@ -323,7 +323,7 @@ type Mutation {
   addProductTranslation(input: NewProductTranslationInput!): AddProductTranslationResponse!
   createUser(input: NewUserInput!): CreateUserResponse!
   updateUser(input: UpdateUserInput!, id: Int!): UpdateUserResponse!
-  userLogin(input: NativeAuthInput!): User
+  userLogin(input: NativeAuthInput!): UserLoginResponse!
   userLogout: Boolean!
   createRole(input: NewRoleInput!): CreateRoleResponse!
   updateRole(input: UpdateRoleInput!, id: Int!): UpdateRoleResponse!
@@ -483,6 +483,8 @@ input UpdateUserInput {
   password: String
   roleId: Int
 }
+
+union UserLoginResponse = User | ErrorResult
 
 input NativeAuthInput {
   email: String!

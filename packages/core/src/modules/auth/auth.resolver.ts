@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
+import { ErrorResult } from '../../common/errors/error-result.error';
 import { User } from '../user/user.entity';
 
 import { AuthService } from './auth.service';
 import { NativeAuthInput } from './dto';
+import { UserLoginResponse } from './responses';
 
 @Resolver()
 @Injectable()
@@ -15,15 +17,15 @@ export class AuthResolver {
     return this.authService.getCurrentUser(ctx);
   }
 
-  @Mutation(() => User, { nullable: true })
+  @Mutation(() => UserLoginResponse)
   async userLogin(
     @Context() ctx: any,
     @Args('input') input: NativeAuthInput,
-  ): Promise<User | null> {
+  ): Promise<User> {
     const user = await this.authService.validateUser(input);
 
     if (!user) {
-      return null;
+      throw ErrorResult.incorrectLoginCredentials(User);
     }
 
     this.authService.loginUser(ctx, user);

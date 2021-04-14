@@ -28,7 +28,9 @@ declare const module: any;
 
 async function bootstrap() {
   try {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, {
+      cors: { origin: 'http://localhost:3000', credentials: true },
+    });
 
     // NOTE: adapter for e2e testing
     app.getHttpAdapter();
