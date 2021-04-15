@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core';
+import { unstable_createMuiStrictModeTheme as createMuiTheme } from '@material-ui/core';
 
 const theme = createMuiTheme({
   palette: {
@@ -8,6 +8,11 @@ const theme = createMuiTheme({
   },
   shape: { borderRadius: 15 },
   overrides: {
+    MuiButton: {
+      text: {
+        padding: '6px 14px',
+      },
+    },
     MuiOutlinedInput: {
       input: {
         padding: '16.5px 14px',

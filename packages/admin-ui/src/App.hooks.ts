@@ -11,8 +11,6 @@ export const useUserProfileQuery = (
 ) =>
   useQuery<UserProfileQuery>(USER_PROFILE_QUERY, {
     onCompleted: ({ userProfile }) => {
-      if (userProfile) {
-        dispatch(userProfileFetched(userProfile));
-      }
+      dispatch(userProfileFetched(userProfile));
     },
   });

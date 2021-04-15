@@ -1,22 +1,22 @@
-import { AppBar, Button, Toolbar } from '@material-ui/core';
+import { AppBar, Toolbar, useMediaQuery, useTheme } from '@material-ui/core';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
-import { logoutUser } from '../../redux/data/User/User.actions';
+import ProfileMenu from '../../containers/ProfileMenu/ProfileMenu';
+import CmsBranding from '../CmsBranding/CmsBranding';
 import useStyles from './AppHeader.styles';
 
 const AppHeader: React.FC = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-
-  const handleLogout = () => {
-    dispatch(logoutUser());
-  };
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down('xs'));
 
   return (
     <AppBar position="static" className={classes.appBar}>
-      <Toolbar>
-        <Button onClick={handleLogout}>LOGOUT</Button>
+      <Toolbar className={classes.toolbar}>
+        {!isXs && <CmsBranding />}
+        <div className={classes.content}>
+          <ProfileMenu />
+        </div>
       </Toolbar>
     </AppBar>
   );

@@ -15,14 +15,15 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(true);
 
-  useUserProfileQuery(dispatch);
+  const { data } = useUserProfileQuery(dispatch);
   const user = useSelector(currentUserSelector);
 
+  // Prevents  LoginForm blinking on initial load
   useEffect(() => {
-    if (user) {
+    if (user === data?.userProfile) {
       setShowLoadingIndicator(false);
     }
-  }, [user]);
+  }, [user, data]);
 
   const getContent = () => {
     if (showLoadingIndicator) {
