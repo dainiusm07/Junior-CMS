@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
-import { CoreUserFieldsFragment } from '../../../generated/gql-types';
-import { SimpleAction } from '../../types';
+import { CoreUserFieldsFragment } from '../../generated/gql-types';
+import { SimpleAction } from '../types';
 
 export type UserState = CoreUserFieldsFragment | null;
 

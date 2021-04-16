@@ -8,22 +8,22 @@ import Center from './components/Center/Center';
 import LoginForm from './containers/LoginForm/LoginForm';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import { Dashboard } from './pages/Dashboard/Dashboard';
-import { currentUserSelector } from './redux/data/User/User.selectors';
+import { currentUserSelector } from './redux/User/User.selectors';
 
 const App: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(true);
 
-  const { data } = useUserProfileQuery(dispatch);
+  const { data, error } = useUserProfileQuery(dispatch);
   const user = useSelector(currentUserSelector);
 
   // Prevents  LoginForm blinking on initial load
   useEffect(() => {
-    if (user === data?.userProfile) {
+    if (user === data?.userProfile || error) {
       setShowLoadingIndicator(false);
     }
-  }, [user, data]);
+  }, [user, data, error]);
 
   const getContent = () => {
     if (showLoadingIndicator) {

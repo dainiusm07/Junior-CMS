@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SideBar component should match snapshot when in desktop view and SideBar is closed 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDrawer-root MuiDrawer-docked makeStyles-drawer-4"
+  >
+    <div
+      class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-5 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body1"
+      >
+        SideBar
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`SideBar component should match snapshot when in desktop view and SideBar is opened 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDrawer-root MuiDrawer-docked makeStyles-drawer-1"
+  >
+    <div
+      class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-2 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body1"
+      >
+        SideBar
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`SideBar component should match snapshot when in mobile view and SideBar is closed 1`] = `
+<DocumentFragment>
+  <div
+    aria-hidden="true"
+    class="MuiDrawer-root MuiDrawer-modal makeStyles-drawer-10"
+    role="presentation"
+    style="position: fixed; z-index: 1300; right: 0px; bottom: 0px; top: 0px; left: 0px; visibility: hidden;"
+  >
+    <div
+      aria-hidden="true"
+      class="MuiBackdrop-root makeStyles-backdrop-12"
+      style="opacity: 0; visibility: hidden;"
+    />
+    <div
+      data-test="sentinelStart"
+      tabindex="0"
+    />
+    <div
+      class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-11 MuiDrawer-paperAnchorLeft MuiPaper-elevation3"
+      style="visibility: hidden; webkit-transform: translateX(-0px); transform: translateX(-0px);"
+      tabindex="-1"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body1"
+      >
+        SideBar
+      </p>
+    </div>
+    <div
+      data-test="sentinelEnd"
+      tabindex="0"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`SideBar component should match snapshot when in mobile view and SideBar is opened 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDrawer-root MuiDrawer-modal makeStyles-drawer-7"
+    role="presentation"
+    style="position: fixed; z-index: 1300; right: 0px; bottom: 0px; top: 0px; left: 0px;"
+  >
+    <div
+      aria-hidden="true"
+      class="MuiBackdrop-root makeStyles-backdrop-9"
+      style="opacity: 1; webkit-transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
+    />
+    <div
+      data-test="sentinelStart"
+      tabindex="0"
+    />
+    <div
+      class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-8 MuiDrawer-paperAnchorLeft MuiPaper-elevation3"
+      tabindex="-1"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body1"
+      >
+        SideBar
+      </p>
+    </div>
+    <div
+      data-test="sentinelEnd"
+      tabindex="0"
+    />
+  </div>
+</DocumentFragment>
+`;

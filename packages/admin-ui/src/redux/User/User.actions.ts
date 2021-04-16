@@ -1,4 +1,4 @@
-import { CoreUserFieldsFragment } from '../../../generated/gql-types';
+import { CoreUserFieldsFragment } from '../../generated/gql-types';
 import {
   UserActionType,
   UserLoginAction,

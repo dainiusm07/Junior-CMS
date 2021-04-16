@@ -1,7 +1,4 @@
-import {
-  CoreUserFieldsFragment,
-  Permission,
-} from '../../../generated/gql-types';
+import { CoreUserFieldsFragment, Permission } from '../../generated/gql-types';
 
 export const mockUser = ({
   permissions = [],

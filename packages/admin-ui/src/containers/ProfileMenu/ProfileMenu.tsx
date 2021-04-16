@@ -10,7 +10,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import React, { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { currentUserSelector } from '../../redux/data/User/User.selectors';
+import { currentUserSelector } from '../../redux/User/User.selectors';
 import useStyles from './ProfileMenu.styles';
 import ProfileMenuContent from './ProfileMenuContent/ProfileMenuContent';
 

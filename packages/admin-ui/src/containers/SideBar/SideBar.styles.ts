@@ -4,14 +4,20 @@ const drawerWidth = 240;
 
 export default makeStyles((theme) => ({
   drawer: {
-    zIndex: theme.zIndex.drawer,
+    zIndex: `${theme.zIndex.appBar - 1} !important` as never,
     width: drawerWidth,
     flexShrink: 0,
-    boxShadow: theme.shadows[3],
+    [theme.breakpoints.down('xs')]: {
+      position: 'absolute !important',
+    },
   },
   drawerPaper: {
     padding: theme.spacing(2),
     width: drawerWidth,
     position: 'relative',
+  },
+  backdrop: {
+    position: 'absolute !important' as 'absolute',
+    minWidth: '100vw',
   },
 }));

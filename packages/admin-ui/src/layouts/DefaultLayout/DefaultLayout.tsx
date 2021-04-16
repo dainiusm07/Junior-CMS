@@ -1,7 +1,7 @@
 import React from 'react';
 
 import AppHeader from '../../components/AppHeader/AppHeader';
-import SideBar from '../../components/SideBar/SideBar';
+import SideBar from '../../containers/SideBar/SideBar';
 import useStyles from './DefaultLayout.styles';
 
 const DefaultLayout: React.FC = ({ children }) => {

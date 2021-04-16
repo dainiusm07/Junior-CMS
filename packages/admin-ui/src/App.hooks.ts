@@ -3,8 +3,8 @@ import { Dispatch } from 'redux';
 
 import { UserProfileQuery } from './generated/gql-types';
 import { USER_PROFILE_QUERY } from './graphql/User.graphql';
-import { userProfileFetched } from './redux/data/User/User.actions';
-import { UserProfileFetchedAction } from './redux/data/User/User.types';
+import { userProfileFetched } from './redux/User/User.actions';
+import { UserProfileFetchedAction } from './redux/User/User.types';
 
 export const useUserProfileQuery = (
   dispatch: Dispatch<UserProfileFetchedAction>,

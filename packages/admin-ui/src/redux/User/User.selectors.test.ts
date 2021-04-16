@@ -1,5 +1,5 @@
-import { Permission } from '../../../generated/gql-types';
-import { getMockedGlobalState } from '../../store-data';
+import { Permission } from '../../generated/gql-types';
+import { getMockedGlobalState } from '../store-data';
 import {
   currentUserSelector,
   userHasPermissionSelector,

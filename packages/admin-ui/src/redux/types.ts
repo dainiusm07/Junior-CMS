@@ -1,9 +1,9 @@
-import { UserState } from './data/User/User.types';
+import { UiState } from './Ui/Ui.types';
+import { UserState } from './User/User.types';
 
 export interface GlobalState {
-  data: {
-    user: UserState;
-  };
+  user: UserState;
+  ui: UiState;
 }
 
 export type SimpleAction<T extends string> = {

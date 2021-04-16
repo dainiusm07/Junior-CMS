@@ -9,6 +9,7 @@ export default makeStyles((theme) => ({
   body: {
     flexGrow: 1,
     display: 'flex',
+    position: 'relative',
   },
   content: {
     flexGrow: 1,

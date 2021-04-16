@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 
-import UserReducer from './data/User/User.reducers';
 import { GlobalState } from './types';
+import UiReducer from './Ui/Ui.reducers';
+import UserReducer from './User/User.reducers';
 
 const reducers = combineReducers<GlobalState>({
-  data: combineReducers<GlobalState['data']>({
-    user: UserReducer,
-  }),
+  user: UserReducer,
+  ui: UiReducer,
 });
 
 export default reducers;
