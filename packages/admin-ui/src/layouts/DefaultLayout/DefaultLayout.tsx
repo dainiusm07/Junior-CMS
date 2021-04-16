@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AppHeader from '../../components/AppHeader/AppHeader';
+import AppHeader from '../../containers/AppHeader/AppHeader';
 import SideBar from '../../containers/SideBar/SideBar';
 import useStyles from './DefaultLayout.styles';
 
