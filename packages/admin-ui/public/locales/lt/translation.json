@@ -1,0 +1,15 @@
+{
+  "dashboard": "Pagrindinis",
+  "products": "Produktai",
+  "reports": "Ataskaitos",
+  "categories": "Kategorijos",
+  "attributes": "Atributai",
+  "general": "Bendra",
+  "catalog": "Katalogas",
+  "profile": "Profilis",
+  "email": "El. paštas",
+  "password": "Slaptažodis",
+  "log-in": "Prisijungimas",
+  "login": "Prisijungti",
+  "logout": "Atsijungti"
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { closeSideBar } from '../../../redux/Ui/Ui.actions';
@@ -12,6 +13,7 @@ const sideBarContentData = parseSideBarContentData(rawSideBarContentData);
 
 const SideBarContent: React.FC = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const handleLinkClick = () => {
     dispatch(closeSideBar());
@@ -21,7 +23,7 @@ const SideBarContent: React.FC = () => {
     items.map(({ component: SideBarItem, name, ...props }) => (
       <SideBarItem
         key={name}
-        name={name}
+        name={t(name)}
         {...props}
         onClick={handleLinkClick}
       />
@@ -32,7 +34,7 @@ const SideBarContent: React.FC = () => {
       {sideBarContentData.map(
         ({ component: SideBarItemGroup, name, items }) => {
           return (
-            <SideBarItemGroup key={name} name={name}>
+            <SideBarItemGroup key={name} name={t(name)}>
               {renderSideBarItems(items)}
             </SideBarItemGroup>
           );

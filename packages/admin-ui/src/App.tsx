@@ -1,5 +1,5 @@
 import { CircularProgress } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -31,15 +31,19 @@ const App: React.FC = () => {
     }
   }, [user, data, error]);
 
+  const loadingScreen = (
+    <Center>
+      <CircularProgress size={65} />
+    </Center>
+  );
+
   const getContent = () => {
     if (showLoadingIndicator || !user) {
-      return (
+      return showLoadingIndicator ? (
+        loadingScreen
+      ) : (
         <Center>
-          {showLoadingIndicator ? (
-            <CircularProgress size={65} />
-          ) : (
-            <LoginForm />
-          )}
+          <LoginForm />
         </Center>
       );
     }
@@ -58,7 +62,9 @@ const App: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <Router>{getContent()}</Router>
+      <Suspense fallback={loadingScreen}>
+        <Router>{getContent()}</Router>
+      </Suspense>
     </div>
   );
 };

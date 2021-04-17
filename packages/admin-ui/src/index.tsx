@@ -1,3 +1,5 @@
+import './i18n';
+
 import { ApolloProvider } from '@apollo/client';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import React from 'react';

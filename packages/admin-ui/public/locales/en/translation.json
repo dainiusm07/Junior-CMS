@@ -1,0 +1,15 @@
+{
+  "dashboard": "Dashboard",
+  "products": "Products",
+  "reports": "Reports",
+  "categories": "Categories",
+  "attributes": "Attributes",
+  "general": "General",
+  "catalog": "Catalog",
+  "profile": "Profile",
+  "email": "Email",
+  "password": "Password",
+  "log-in": "Log in",
+  "login": "Login",
+  "logout": "Logout"
+}

@@ -1,5 +1,6 @@
 import { MenuItem } from '@material-ui/core';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { useUserLogoutMutation } from './ProfileMenuContent.hooks';
@@ -10,6 +11,7 @@ const ProfileMenuContent: React.FC<ProfileMenuContentProps> = ({
 }) => {
   const dispatch = useDispatch();
   const [logout] = useUserLogoutMutation(dispatch);
+  const { t } = useTranslation();
 
   const handleLogoutClick = async () => {
     await logout();
@@ -18,8 +20,8 @@ const ProfileMenuContent: React.FC<ProfileMenuContentProps> = ({
 
   return (
     <>
-      <MenuItem onClick={closeProfileMenu}>Profile</MenuItem>
-      <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+      <MenuItem onClick={closeProfileMenu}>{t('profile')}</MenuItem>
+      <MenuItem onClick={handleLogoutClick}>{t('logout')}</MenuItem>
     </>
   );
 };

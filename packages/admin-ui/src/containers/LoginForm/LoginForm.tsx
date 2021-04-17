@@ -1,6 +1,7 @@
 import { Card } from '@material-ui/core';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import FormError from '../../components/FormError/FormError';
@@ -15,6 +16,7 @@ import useStyles from './LoginForm.styles';
 const LoginForm: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [login, { loading }] = useUserLoginMutation(dispatch);
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -33,7 +35,7 @@ const LoginForm: React.FC = () => {
     <div className={classes.wrapper}>
       <Card className={classes.root}>
         <div>
-          <FormTitle title="Log in" />
+          <FormTitle title={t('log-in')} />
 
           <Formik
             initialValues={{ email: '', password: '' }}
@@ -43,7 +45,7 @@ const LoginForm: React.FC = () => {
               <form onSubmit={handleSubmit}>
                 <div>
                   <FormTextField
-                    label="Email"
+                    label={t('email')}
                     id="email"
                     type="email"
                     name="email"
@@ -53,7 +55,7 @@ const LoginForm: React.FC = () => {
                     fullWidth
                   />
                   <FormTextField
-                    label="Password"
+                    label={t('password')}
                     id="password"
                     type="password"
                     name="password"
@@ -76,7 +78,7 @@ const LoginForm: React.FC = () => {
                   size="large"
                   loading={loading}
                 >
-                  Login
+                  {t('login')}
                 </FormSubmitButton>
               </form>
             )}

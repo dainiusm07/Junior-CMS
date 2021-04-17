@@ -1,3 +1,5 @@
+import '../../test-utils/mock-i18n';
+
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 
@@ -29,7 +31,7 @@ const mockLoginResponse = (
 });
 
 describe('LoginForm', () => {
-  it.each([['Email'], ['Password']])(
+  it.each([['email'], ['password']])(
     'should update %s form field input',
     async (label) => {
       const { getByLabelText } = render(
