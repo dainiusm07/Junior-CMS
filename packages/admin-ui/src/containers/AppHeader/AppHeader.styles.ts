@@ -15,5 +15,8 @@ export default makeStyles((theme) => ({
     marginLeft: 'auto',
     display: 'flex',
     alignItems: 'center',
+    '& > *': {
+      margin: theme.spacing(0, 1),
+    },
   },
 }));

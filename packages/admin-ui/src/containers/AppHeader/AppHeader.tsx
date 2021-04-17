@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CmsBranding from '../../components/CmsBranding/CmsBranding';
 import { closeSideBar, openSideBar } from '../../redux/Ui/Ui.actions';
 import { sideBarOpenedSelector } from '../../redux/Ui/Ui.selectors';
+import LanguagePicker from '../LanguagePicker/LanguagePicker';
 import ProfileMenu from '../ProfileMenu/ProfileMenu';
 import useStyles from './AppHeader.styles';
 
@@ -42,6 +43,7 @@ const AppHeader: React.FC = () => {
           <CmsBranding />
         )}
         <div className={classes.content}>
+          <LanguagePicker />
           <ProfileMenu />
         </div>
       </Toolbar>
