@@ -1,7 +1,7 @@
 import { AllActions, UiActionTypes, UiState } from './Ui.types';
 
 export const initialState: UiState = {
-  sideBarOpen: true,
+  sideBarOpen: false,
 };
 
 const reducer = (state = initialState, action: AllActions): UiState => {

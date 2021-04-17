@@ -1,14 +1,20 @@
 import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom';
 
 import { useUserProfileQuery } from './App.hooks';
 import useStyles from './App.styles';
 import Center from './components/Center/Center';
 import LoginForm from './containers/LoginForm/LoginForm';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
-import { Dashboard } from './pages/Dashboard/Dashboard';
 import { currentUserSelector } from './redux/User/User.selectors';
+import routes from './routes';
 
 const App: React.FC = () => {
   const classes = useStyles();
@@ -26,30 +32,35 @@ const App: React.FC = () => {
   }, [user, data, error]);
 
   const getContent = () => {
-    if (showLoadingIndicator) {
+    if (showLoadingIndicator || !user) {
       return (
         <Center>
-          <CircularProgress size={65} />
+          {showLoadingIndicator ? (
+            <CircularProgress size={65} />
+          ) : (
+            <LoginForm />
+          )}
         </Center>
       );
     }
 
-    if (user) {
-      return (
-        <DefaultLayout>
-          <Dashboard />
-        </DefaultLayout>
-      );
-    } else {
-      return (
-        <Center>
-          <LoginForm />
-        </Center>
-      );
-    }
+    return (
+      <DefaultLayout>
+        <Switch>
+          {routes.map(({ path, ...route }) => (
+            <Route exact {...route} key={path} path={path} />
+          ))}
+          <Redirect to="/" />
+        </Switch>
+      </DefaultLayout>
+    );
   };
 
-  return <div className={classes.root}>{getContent()}</div>;
+  return (
+    <div className={classes.root}>
+      <Router>{getContent()}</Router>
+    </div>
+  );
 };
 
 export default App;

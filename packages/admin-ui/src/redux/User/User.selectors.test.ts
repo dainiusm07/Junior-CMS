@@ -2,6 +2,7 @@ import { Permission } from '../../generated/gql-types';
 import { getMockedGlobalState } from '../store-data';
 import {
   currentUserSelector,
+  userHasAnyPermissionSelector,
   userHasPermissionSelector,
 } from './User.selectors';
 import { mockUser } from './User.test-utils';
@@ -32,5 +33,28 @@ describe('User selectors', () => {
     const state = wrap(user);
 
     expect(currentUserSelector(state)).toStrictEqual(user);
+  });
+
+  [
+    {
+      userPermissions: [Permission.ReadProduct],
+      neededPermissions: [Permission.CreateCategory],
+      expected: false,
+    },
+    {
+      userPermissions: [Permission.ReadProduct],
+      neededPermissions: [Permission.CreateCategory, Permission.ReadProduct],
+      expected: true,
+    },
+  ].forEach(({ userPermissions, neededPermissions, expected }) => {
+    it(`should return ${expected} when user ${
+      expected ? 'has' : 'does not have'
+    } at least one of needed permissions`, () => {
+      const state = wrap(mockUser({ permissions: userPermissions }));
+
+      const selector = userHasAnyPermissionSelector(neededPermissions);
+
+      expect(selector(state)).toBe(expected);
+    });
   });
 });

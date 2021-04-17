@@ -12,7 +12,7 @@ export default makeStyles((theme) => ({
     },
   },
   drawerPaper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(0, 2, 2),
     width: drawerWidth,
     position: 'relative',
   },

@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import { mockedUseSelector } from '../../redux/redux-mock-helpers';
 import {
@@ -45,9 +46,13 @@ describe('SideBar component', () => {
     it(`${description}`, () => {
       mockMatchMedia(width);
       mockedUseSelector.mockReturnValueOnce(isOpened);
-      const { asFragment } = render(<SideBar />, {});
+      const { container } = render(
+        <Router>
+          <SideBar />
+        </Router>,
+      );
 
-      expect(asFragment()).toMatchSnapshot();
+      expect(container.firstChild).toMatchSnapshot();
     });
   });
 });

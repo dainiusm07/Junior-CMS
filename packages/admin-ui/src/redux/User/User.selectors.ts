@@ -6,6 +6,12 @@ export const userHasPermissionSelector = (permission: Permission) => (
   state: GlobalState,
 ) => state.user?.role.permissions.some((perm) => perm === permission) || false;
 
+export const userHasAnyPermissionSelector = (permissions: Permission[]) => (
+  state: GlobalState,
+) =>
+  state.user?.role.permissions.some((perm) => permissions.includes(perm)) ||
+  false;
+
 /**
  * Removed null type because it can be null only in Login page
  */
