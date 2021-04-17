@@ -1,3 +1,5 @@
+import './register-language-code-enum';
+
 import { Module } from '@nestjs/common';
 import { I18nService } from './i18n.service';
 

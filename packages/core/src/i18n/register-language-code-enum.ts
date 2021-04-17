@@ -1,8 +1,4 @@
+import { LanguageCode } from '@junior-cms/common';
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum LanguageCode {
-  EN = 'en',
-  LT = 'lt',
-}
 
 registerEnumType(LanguageCode, { name: 'LanguageCode' });

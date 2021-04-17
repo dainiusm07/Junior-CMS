@@ -1,7 +1,7 @@
+import { LanguageCode } from '@junior-cms/common';
 import { Collection, Entity, OneToMany, PrimaryKey } from '@mikro-orm/core';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
-import { LanguageCode } from '../../i18n/language-code.enum';
 import { Translation } from '../../types/Translations';
 import { AttributeValue } from '../attribute-value/attribute-value.entity';
 import { BaseEntity } from '../shared/base.entity';

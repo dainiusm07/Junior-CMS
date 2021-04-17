@@ -10,13 +10,12 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import Redis from 'ioredis';
 import i18n from 'i18n';
-import { API_END_POINT } from '@junior-cms/common';
+import { API_END_POINT, DEFAULT_LANGUAGE_CODE } from '@junior-cms/common';
 
 import { AppModule } from './app.module';
 import {
   API_DOMAIN,
   API_PORT,
-  DEFAULT_LANGUAGE_CODE,
   NODE_ENV,
   RATE_LIMIT_MAX,
   SESSION_SECRET,

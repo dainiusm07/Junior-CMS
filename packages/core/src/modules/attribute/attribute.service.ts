@@ -1,3 +1,4 @@
+import { LanguageCode } from '@junior-cms/common';
 import { Injectable } from '@nestjs/common';
 import {
   EntityData,
@@ -10,7 +11,6 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { Attribute } from './attribute.entity';
 import { AttributeTranslation } from './attribute-translation.entity';
 import { translateEntity, TranslatableEntityHelper } from '../shared/helpers';
-import { LanguageCode } from '../../i18n/language-code.enum';
 import { CmsContext } from '../../types/CmsContext';
 import { AttributeValue } from '../attribute-value/attribute-value.entity';
 import { TranslatableEntityData } from '../../types/Translations';

@@ -5,6 +5,7 @@ import {
   FindOneOptions,
   LoadStrategy,
 } from '@mikro-orm/core';
+import { LanguageCode } from '@junior-cms/common';
 
 import { ErrorResult } from '../../../common/errors/error-result.error';
 import {
@@ -18,7 +19,6 @@ import { EntityHelper } from './entity.helper';
 import { translateEntity } from './translate-entity';
 import { IListOptions, IListResponse } from '../list-utils';
 import { BaseTranslation } from '../base-translation.entity';
-import { LanguageCode } from '../../../i18n/language-code.enum';
 
 export class TranslatableEntityHelper<
   T extends Translatable,

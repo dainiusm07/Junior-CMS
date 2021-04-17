@@ -1,3 +1,4 @@
+import { LanguageCode } from '@junior-cms/common';
 import {
   Collection,
   Entity,
@@ -6,9 +7,8 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { LanguageCode } from '../../i18n/language-code.enum';
-import { Translation } from '../../types/Translations';
 
+import { Translation } from '../../types/Translations';
 import { Category } from '../category/category.entity';
 import { ProductVariant } from '../product-variant/product-variant.entity';
 import { BaseEntity } from '../shared/base.entity';

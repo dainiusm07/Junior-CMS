@@ -10,8 +10,7 @@ jest.mock('@mikro-orm/core', () => ({
   },
 }));
 
-import { DEFAULT_LANGUAGE_CODE } from '../../../common/environment';
-import { LanguageCode } from '../../../i18n/language-code.enum';
+import { DEFAULT_LANGUAGE_CODE, LanguageCode } from '@junior-cms/common';
 import { translateEntity } from './translate-entity';
 
 type TestTranslation = {

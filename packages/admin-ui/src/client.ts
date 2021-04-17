@@ -1,6 +1,6 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { API_END_POINT } from '@junior-cms/common';
+import { API_END_POINT, DEFAULT_LANGUAGE_CODE } from '@junior-cms/common';
 
 import { LOCAL_STORAGE_LANG } from './common/constants';
 import { isDev } from './common/environment';
@@ -18,7 +18,7 @@ const langContext = setContext(async (_, { headers }) => {
   return {
     headers: {
       ...headers,
-      'Accept-language': lang,
+      'Accept-language': lang || DEFAULT_LANGUAGE_CODE,
     },
   };
 });

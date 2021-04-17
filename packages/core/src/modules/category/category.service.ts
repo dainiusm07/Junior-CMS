@@ -1,3 +1,4 @@
+import { LanguageCode } from '@junior-cms/common';
 import { EntityData, EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
@@ -6,7 +7,6 @@ import {
   CATEGORIES_TREE_DEPTH,
   CATEGORY_PARENT_LOADER,
 } from '../../common/constants';
-import { LanguageCode } from '../../i18n/language-code.enum';
 import { CmsContext } from '../../types/CmsContext';
 import { TranslatableEntityData, Translated } from '../../types/Translations';
 import { usePopulationLoader } from '../../utils/use-population-loader';

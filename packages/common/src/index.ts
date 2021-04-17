@@ -1,2 +1,2 @@
 export * from "./shared-constants";
-export * from "./graphql-types";
+export * from "./language-code";

@@ -1,7 +1,6 @@
+import { LanguageCode } from '@junior-cms/common';
 import { ExpressContext } from 'apollo-server-express';
 import DataLoader from 'dataloader';
-
-import { LanguageCode } from '../i18n/language-code.enum';
 
 type DataLoaders = Partial<Record<string, DataLoader<any, any>>>;
 

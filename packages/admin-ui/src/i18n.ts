@@ -1,3 +1,4 @@
+import { DEFAULT_LANGUAGE_CODE, LanguageCode } from '@junior-cms/common';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
@@ -11,8 +12,8 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'en',
-    supportedLngs: ['en', 'lt'],
+    fallbackLng: DEFAULT_LANGUAGE_CODE,
+    supportedLngs: Object.values(LanguageCode),
     debug: isDev,
     interpolation: {
       escapeValue: false,

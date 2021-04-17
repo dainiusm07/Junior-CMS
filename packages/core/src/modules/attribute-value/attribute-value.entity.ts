@@ -1,3 +1,4 @@
+import { LanguageCode } from '@junior-cms/common';
 import {
   Collection,
   Entity,
@@ -6,7 +7,7 @@ import {
   PrimaryKey,
 } from '@mikro-orm/core';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { LanguageCode } from '../../i18n/language-code.enum';
+
 import { Translation } from '../../types/Translations';
 
 import { Attribute } from '../attribute/attribute.entity';

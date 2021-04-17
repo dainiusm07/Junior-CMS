@@ -1,6 +1,6 @@
+import { LanguageCode } from '@junior-cms/common';
 import { Entity, Property } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { LanguageCode } from '../../i18n/language-code.enum';
 
 @Entity({ abstract: true })
 @ObjectType({ isAbstract: true })

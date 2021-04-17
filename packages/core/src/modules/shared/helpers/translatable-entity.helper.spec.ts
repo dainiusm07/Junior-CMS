@@ -1,3 +1,4 @@
+import { DEFAULT_LANGUAGE_CODE } from '@junior-cms/common';
 import { Collection, EntityRepository } from '@mikro-orm/core';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { Test } from '@nestjs/testing';
@@ -11,7 +12,6 @@ import { BaseTranslation } from '../base-translation.entity';
 import { BaseEntity } from '../base.entity';
 import { ErrorResult } from '../../../common/errors/error-result.error';
 import { TranslatableEntityHelper } from './translatable-entity.helper';
-import { DEFAULT_LANGUAGE_CODE } from '../../../common/environment';
 import { EntityHelper } from './entity.helper';
 import { Translated } from '../../../types/Translations';
 
