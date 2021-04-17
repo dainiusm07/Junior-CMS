@@ -3,9 +3,9 @@ import { fireEvent, render, waitFor } from '@testing-library/react';
 
 import { ErrorResult, UserLoginMutation } from '../../generated/gql-types';
 import { USER_LOGIN_MUTATION } from '../../graphql/User.graphql';
-import { mockedDispatch } from '../../redux/redux-mock-helpers';
 import { mockUser } from '../../redux/User/User.test-utils';
 import { UserActionType } from '../../redux/User/User.types';
+import { mockedDispatch } from '../../test-utils/redux-mock-helpers';
 import LoginForm from './LoginForm';
 
 const mockErrorResult = (message = 'We got can error!'): ErrorResult => ({

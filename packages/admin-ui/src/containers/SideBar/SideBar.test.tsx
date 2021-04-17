@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { mockedUseSelector } from '../../redux/redux-mock-helpers';
 import {
   mockMatchMedia,
   resetMatchMedia,
 } from '../../test-utils/mock-match-media';
+import { mockedUseSelector } from '../../test-utils/redux-mock-helpers';
 import theme from '../../theme';
 import SideBar from './SideBar';
 

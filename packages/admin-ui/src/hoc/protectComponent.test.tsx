@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { Permission } from '../generated/gql-types';
-import { mockedUseSelector } from '../redux/redux-mock-helpers';
+import { mockedUseSelector } from '../test-utils/redux-mock-helpers';
 import { protectComponent, protectRouteComponent } from './protectComponent';
 
 const testComponentText = 'Test component';
