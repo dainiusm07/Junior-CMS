@@ -29,6 +29,7 @@ export type Role = {
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   name: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
   permissions: Array<Permission>;
 };
 
@@ -713,7 +714,12 @@ export type UpdateRoleInput = {
 export type CoreUserFieldsFragment = { __typename: 'User' } & Pick<
   User,
   'id' | 'firstname' | 'lastname' | 'email' | 'createdAt'
-> & { role: { __typename: 'Role' } & Pick<Role, 'name' | 'permissions'> };
+> & {
+    role: { __typename: 'Role' } & Pick<
+      Role,
+      'name' | 'isAdmin' | 'permissions'
+    >;
+  };
 
 export type UserLoginMutationVariables = Exact<{
   email: Scalars['String'];

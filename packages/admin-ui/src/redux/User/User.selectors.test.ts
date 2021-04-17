@@ -11,20 +11,33 @@ import { UserState } from './User.types';
 const wrap = (dataUser: UserState) => getMockedGlobalState({ dataUser });
 
 describe('User selectors', () => {
-  it('should return true when user has needed permissions', () => {
-    const state = wrap(mockUser({ permissions: [Permission.ReadUser] }));
+  [
+    {
+      description: 'should return true when user has needed permission',
+      user: mockUser({ permissions: [Permission.ReadUser] }),
+      neededPermission: Permission.ReadUser,
+      expected: true,
+    },
+    {
+      description: `should false when user doesn't have needed permission`,
+      user: mockUser({ permissions: [Permission.ReadUser] }),
+      neededPermission: Permission.UpdateUser,
+      expected: false,
+    },
+    {
+      description: `should return true when user doesn't have needed permission but has admin role`,
+      user: mockUser({ permissions: [], isAdmin: true }),
+      neededPermission: Permission.UpdateUser,
+      expected: true,
+    },
+  ].forEach(({ description, user, neededPermission, expected }) => {
+    it(description, () => {
+      const state = wrap(user);
 
-    const selector = userHasPermissionSelector(Permission.ReadUser);
+      const selector = userHasPermissionSelector(neededPermission);
 
-    expect(selector(state)).toBe(true);
-  });
-
-  it(`should false when user doesn't have needed permissions`, () => {
-    const state = wrap(mockUser({ permissions: [Permission.ReadUser] }));
-
-    const selector = userHasPermissionSelector(Permission.UpdateUser);
-
-    expect(selector(state)).toBe(false);
+      expect(selector(state)).toBe(expected);
+    });
   });
 
   it('should return currently set user', () => {
@@ -37,20 +50,27 @@ describe('User selectors', () => {
 
   [
     {
-      userPermissions: [Permission.ReadProduct],
+      description: `should return false when user does not have at least one of needed permissions`,
+      user: mockUser({ permissions: [Permission.ReadProduct] }),
       neededPermissions: [Permission.CreateCategory],
       expected: false,
     },
     {
-      userPermissions: [Permission.ReadProduct],
+      description: `should return true when user has at least one of needed permissions`,
+      user: mockUser({ permissions: [Permission.ReadProduct] }),
       neededPermissions: [Permission.CreateCategory, Permission.ReadProduct],
       expected: true,
     },
-  ].forEach(({ userPermissions, neededPermissions, expected }) => {
-    it(`should return ${expected} when user ${
-      expected ? 'has' : 'does not have'
-    } at least one of needed permissions`, () => {
-      const state = wrap(mockUser({ permissions: userPermissions }));
+    {
+      description: `should return true when user does not have at least one of needed permissions
+      but has admin role`,
+      user: mockUser({ permissions: [], isAdmin: true }),
+      neededPermissions: [Permission.CreateCategory],
+      expected: true,
+    },
+  ].forEach(({ description, user, neededPermissions, expected }) => {
+    it(description, () => {
+      const state = wrap(user);
 
       const selector = userHasAnyPermissionSelector(neededPermissions);
 

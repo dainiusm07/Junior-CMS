@@ -25,6 +25,7 @@ module.exports = {
     project: './tsconfig.json',
   },
   rules: {
+    'jest/valid-title': 'off',
     'simple-import-sort/imports': 'error',
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',

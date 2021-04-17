@@ -12,6 +12,7 @@ type Role {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  isAdmin: Boolean!
   permissions: [Permission!]!
 }
 

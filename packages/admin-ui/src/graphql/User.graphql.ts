@@ -8,6 +8,7 @@ export const CORE_USER_FIELDS = gql`
     email
     role {
       name
+      isAdmin
       permissions
     }
     createdAt

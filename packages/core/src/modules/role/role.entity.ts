@@ -11,6 +11,7 @@ export class Role extends BaseEntity {
   @Property()
   name: string;
 
+  @Field()
   @Property({ default: false })
   isAdmin: boolean;
 
