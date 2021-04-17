@@ -1,6 +1,8 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { API_END_POINT } from '@junior-cms/common';
 
+import { LOCAL_STORAGE_LANG } from './common/constants';
 import { isDev } from './common/environment';
 
 const link = new HttpLink({
@@ -10,8 +12,19 @@ const link = new HttpLink({
 
 const cache = new InMemoryCache();
 
+const langContext = setContext(async (_, { headers }) => {
+  const lang = localStorage.getItem(LOCAL_STORAGE_LANG);
+
+  return {
+    headers: {
+      ...headers,
+      'Accept-language': lang,
+    },
+  };
+});
+
 const client = new ApolloClient({
-  link,
+  link: langContext.concat(link),
   cache,
 });
 

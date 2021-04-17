@@ -3,6 +3,9 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
+import { LOCAL_STORAGE_LANG } from './common/constants';
+import { isDev } from './common/environment';
+
 i18n
   .use(Backend)
   .use(LanguageDetector)
@@ -10,13 +13,13 @@ i18n
   .init({
     fallbackLng: 'en',
     supportedLngs: ['en', 'lt'],
-    debug: true,
+    debug: isDev,
     interpolation: {
       escapeValue: false,
     },
     detection: {
       order: ['localStorage', 'query'],
-      lookupLocalStorage: 'lang',
+      lookupLocalStorage: LOCAL_STORAGE_LANG,
     },
   });
 
