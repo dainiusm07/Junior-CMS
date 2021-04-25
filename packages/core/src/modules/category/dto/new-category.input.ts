@@ -2,8 +2,7 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 
 import { PartialEntity } from '../../../types';
 import { Translated } from '../../../types/Translations';
-import { Exists } from '../../shared/constraints/exists.constraint';
-import { Unique } from '../../shared/constraints/unique.constraint';
+import { Exists, Unique } from '../../shared/constraints';
 import { CategoryTranslation } from '../category-translation.entity';
 import { Category } from '../category.entity';
 

@@ -1,8 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 
 import { Category } from '../../category/category.entity';
-import { Exists } from '../../shared/constraints/exists.constraint';
-import { Unique } from '../../shared/constraints/unique.constraint';
+import { Exists, Unique } from '../../shared/constraints';
 import { ProductTranslation } from '../product-translation.entity';
 import { Product } from '../product.entity';
 

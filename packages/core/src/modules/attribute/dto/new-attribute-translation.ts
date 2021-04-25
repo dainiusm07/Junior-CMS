@@ -1,6 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 
-import { Exists } from '../../shared/constraints/exists.constraint';
+import { Exists } from '../../shared/constraints';
 import { Attribute } from '../attribute.entity';
 
 @InputType()

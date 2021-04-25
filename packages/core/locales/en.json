@@ -9,6 +9,8 @@
   "role": "Role",
   "slug": "Slug",
   "password": "Password",
+  "firstname": "Firstname",
+  "lastname": "Lastname",
   "error": {
     "invalid-email": "Email is invalid",
     "not-found": "{{name}} not found",
