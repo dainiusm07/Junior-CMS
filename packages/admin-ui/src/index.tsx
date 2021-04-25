@@ -1,4 +1,5 @@
 import './i18n';
+import './index.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';

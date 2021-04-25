@@ -11,5 +11,18 @@
   "password": "Password",
   "log-in": "Log in",
   "login": "Login",
-  "logout": "Logout"
+  "logout": "Logout",
+  "update": "Update",
+  "firstname": "Firstname",
+  "lastname": "Lastname",
+  "id": "ID",
+  "role": "Role",
+  "created-at": "Created at",
+  "updated-at": "Updated at",
+  "new-password": "New password",
+  "confirm-password": "Confirm password",
+  "current-password": "Current password",
+  "error": {
+    "password-does-not-match": "Password doesn't match"
+  }
 }

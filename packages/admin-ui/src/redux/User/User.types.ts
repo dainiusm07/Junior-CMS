@@ -9,6 +9,7 @@ export enum UserActionType {
   login = 'user/LOGIN',
   logout = 'user/LOGOUT',
   profileFetched = 'user/PROFILE_FETCHED',
+  update = 'user/UPDATE',
 }
 
 export type UserProfileFetchedAction = Action<
@@ -20,9 +21,14 @@ export type UserLoginAction = Action<
   CoreUserFieldsFragment
 >;
 
+export type UserUpdateAction = Action<
+  UserActionType.update,
+  CoreUserFieldsFragment
+>;
 export type UserLogoutAction = SimpleAction<UserActionType.logout>;
 
 export type AllActions =
   | UserProfileFetchedAction
   | UserLoginAction
-  | UserLogoutAction;
+  | UserLogoutAction
+  | UserUpdateAction;

@@ -10,7 +10,12 @@ module.exports = {
         withHooks: false,
         withHOC: false,
         withComponent: false,
-        avoidOptionals: true,
+        avoidOptionals: {
+          field: true,
+          inputValue: false,
+          object: true,
+          defaultValue: true,
+        },
         nonOptionalTypename: true,
         skipTypeNameForRoot: true,
       },

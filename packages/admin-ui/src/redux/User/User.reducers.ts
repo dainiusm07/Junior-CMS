@@ -7,6 +7,7 @@ const reducer = (
   action: AllActions,
 ): UserState => {
   switch (action.type) {
+    case UserActionType.update:
     case UserActionType.login:
       return action.payload;
 

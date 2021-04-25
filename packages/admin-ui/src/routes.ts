@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Profile from './containers/Profile/Profile';
 import { Permission } from './generated/gql-types';
 import { protectRouteComponent as protectComponent } from './hoc/protectComponent';
 import Attributes from './pages/Attributes/Attributes';
@@ -34,6 +35,11 @@ const routes: Route[] = [
     path: '/reports',
     name: 'reports',
     component: Reports,
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: Profile,
   },
   {
     path: '/',

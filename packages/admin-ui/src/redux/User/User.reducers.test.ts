@@ -5,6 +5,7 @@ import {
   UserLoginAction,
   UserLogoutAction,
   UserProfileFetchedAction,
+  UserUpdateAction,
 } from './User.types';
 
 const user = mockUser({});
@@ -26,6 +27,15 @@ describe('User reducer', () => {
   it(`should set user on ${UserActionType.login} action`, () => {
     const action: UserLoginAction = {
       type: UserActionType.login,
+      payload: user,
+    };
+
+    expect(reducer(undefined, action)).toBe(user);
+  });
+
+  it(`should set user on ${UserActionType.update} action`, () => {
+    const action: UserUpdateAction = {
+      type: UserActionType.update,
       payload: user,
     };
 

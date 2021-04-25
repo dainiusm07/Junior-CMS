@@ -264,43 +264,43 @@ export type ErrorResult = {
 export type CategoryResponse = Category | ErrorResult;
 
 export type ExtendedCategoryFilterOptions = {
-  id: Maybe<NumberOperators>;
-  updatedAt: Maybe<DateOperators>;
-  createdAt: Maybe<DateOperators>;
-  name: Maybe<StringOperators>;
-  _and: Maybe<Array<CategoryFilterOptions>>;
-  _or: Maybe<Array<CategoryFilterOptions>>;
+  id?: Maybe<NumberOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  createdAt?: Maybe<DateOperators>;
+  name?: Maybe<StringOperators>;
+  _and?: Maybe<Array<CategoryFilterOptions>>;
+  _or?: Maybe<Array<CategoryFilterOptions>>;
 };
 
 export type NumberOperators = {
-  _gt: Maybe<Scalars['Float']>;
-  _lt: Maybe<Scalars['Float']>;
-  _eq: Maybe<Scalars['Float']>;
-  _in: Maybe<Array<Scalars['Float']>>;
-  _nin: Maybe<Array<Scalars['Float']>>;
+  _gt?: Maybe<Scalars['Float']>;
+  _lt?: Maybe<Scalars['Float']>;
+  _eq?: Maybe<Scalars['Float']>;
+  _in?: Maybe<Array<Scalars['Float']>>;
+  _nin?: Maybe<Array<Scalars['Float']>>;
 };
 
 export type DateOperators = {
-  _gte: Maybe<Scalars['DateTime']>;
-  _lte: Maybe<Scalars['DateTime']>;
+  _gte?: Maybe<Scalars['DateTime']>;
+  _lte?: Maybe<Scalars['DateTime']>;
 };
 
 export type StringOperators = {
-  _ilike: Maybe<Scalars['String']>;
-  _eq: Maybe<Scalars['String']>;
+  _ilike?: Maybe<Scalars['String']>;
+  _eq?: Maybe<Scalars['String']>;
 };
 
 export type CategoryFilterOptions = {
-  id: Maybe<NumberOperators>;
-  updatedAt: Maybe<DateOperators>;
-  createdAt: Maybe<DateOperators>;
-  name: Maybe<StringOperators>;
+  id?: Maybe<NumberOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  createdAt?: Maybe<DateOperators>;
+  name?: Maybe<StringOperators>;
 };
 
 export type CategorySortOptions = {
-  id: Maybe<SortOrder>;
-  updatedAt: Maybe<SortOrder>;
-  createdAt: Maybe<SortOrder>;
+  id?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
 };
 
 export enum SortOrder {
@@ -311,84 +311,84 @@ export enum SortOrder {
 export type ProductResponse = Product | ErrorResult;
 
 export type ExtendedProductFilterOptions = {
-  id: Maybe<NumberOperators>;
-  updatedAt: Maybe<DateOperators>;
-  createdAt: Maybe<DateOperators>;
-  name: Maybe<StringOperators>;
-  description: Maybe<StringOperators>;
-  price: Maybe<NumberOperators>;
-  deletedAt: Maybe<DateOperators>;
-  _and: Maybe<Array<ProductFilterOptions>>;
-  _or: Maybe<Array<ProductFilterOptions>>;
+  id?: Maybe<NumberOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  createdAt?: Maybe<DateOperators>;
+  name?: Maybe<StringOperators>;
+  description?: Maybe<StringOperators>;
+  price?: Maybe<NumberOperators>;
+  deletedAt?: Maybe<DateOperators>;
+  _and?: Maybe<Array<ProductFilterOptions>>;
+  _or?: Maybe<Array<ProductFilterOptions>>;
 };
 
 export type ProductFilterOptions = {
-  id: Maybe<NumberOperators>;
-  updatedAt: Maybe<DateOperators>;
-  createdAt: Maybe<DateOperators>;
-  name: Maybe<StringOperators>;
-  description: Maybe<StringOperators>;
-  price: Maybe<NumberOperators>;
-  deletedAt: Maybe<DateOperators>;
+  id?: Maybe<NumberOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  createdAt?: Maybe<DateOperators>;
+  name?: Maybe<StringOperators>;
+  description?: Maybe<StringOperators>;
+  price?: Maybe<NumberOperators>;
+  deletedAt?: Maybe<DateOperators>;
 };
 
 export type ProductSortOptions = {
-  id: Maybe<SortOrder>;
-  updatedAt: Maybe<SortOrder>;
-  createdAt: Maybe<SortOrder>;
+  id?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
 };
 
 export type UserResponse = User | ErrorResult;
 
 export type ExtendedUserFilterOptions = {
-  id: Maybe<NumberOperators>;
-  updatedAt: Maybe<DateOperators>;
-  createdAt: Maybe<DateOperators>;
-  email: Maybe<StringOperators>;
-  firstname: Maybe<StringOperators>;
-  lastname: Maybe<StringOperators>;
-  deletedAt: Maybe<DateOperators>;
-  _and: Maybe<Array<UserFilterOptions>>;
-  _or: Maybe<Array<UserFilterOptions>>;
+  id?: Maybe<NumberOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  createdAt?: Maybe<DateOperators>;
+  email?: Maybe<StringOperators>;
+  firstname?: Maybe<StringOperators>;
+  lastname?: Maybe<StringOperators>;
+  deletedAt?: Maybe<DateOperators>;
+  _and?: Maybe<Array<UserFilterOptions>>;
+  _or?: Maybe<Array<UserFilterOptions>>;
 };
 
 export type UserFilterOptions = {
-  id: Maybe<NumberOperators>;
-  updatedAt: Maybe<DateOperators>;
-  createdAt: Maybe<DateOperators>;
-  email: Maybe<StringOperators>;
-  firstname: Maybe<StringOperators>;
-  lastname: Maybe<StringOperators>;
-  deletedAt: Maybe<DateOperators>;
+  id?: Maybe<NumberOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  createdAt?: Maybe<DateOperators>;
+  email?: Maybe<StringOperators>;
+  firstname?: Maybe<StringOperators>;
+  lastname?: Maybe<StringOperators>;
+  deletedAt?: Maybe<DateOperators>;
 };
 
 export type UserSortOptions = {
-  id: Maybe<SortOrder>;
-  updatedAt: Maybe<SortOrder>;
-  createdAt: Maybe<SortOrder>;
-  email: Maybe<SortOrder>;
+  id?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  email?: Maybe<SortOrder>;
 };
 
 export type ExtendedRoleFilterOptions = {
-  id: Maybe<NumberOperators>;
-  updatedAt: Maybe<DateOperators>;
-  createdAt: Maybe<DateOperators>;
-  name: Maybe<StringOperators>;
-  _and: Maybe<Array<RoleFilterOptions>>;
-  _or: Maybe<Array<RoleFilterOptions>>;
+  id?: Maybe<NumberOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  createdAt?: Maybe<DateOperators>;
+  name?: Maybe<StringOperators>;
+  _and?: Maybe<Array<RoleFilterOptions>>;
+  _or?: Maybe<Array<RoleFilterOptions>>;
 };
 
 export type RoleFilterOptions = {
-  id: Maybe<NumberOperators>;
-  updatedAt: Maybe<DateOperators>;
-  createdAt: Maybe<DateOperators>;
-  name: Maybe<StringOperators>;
+  id?: Maybe<NumberOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  createdAt?: Maybe<DateOperators>;
+  name?: Maybe<StringOperators>;
 };
 
 export type RoleSortOptions = {
-  id: Maybe<SortOrder>;
-  updatedAt: Maybe<SortOrder>;
-  createdAt: Maybe<SortOrder>;
+  id?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
 };
 
 export type RoleResponse = Role | ErrorResult;
@@ -410,6 +410,7 @@ export type Mutation = {
   updateProduct: UpdateProductResponse;
   addProductTranslation: AddProductTranslationResponse;
   createUser: CreateUserResponse;
+  updateUserProfile: UpdateUserProfileResponse;
   updateUser: UpdateUserResponse;
   userLogin: UserLoginResponse;
   userLogout: Scalars['Boolean'];
@@ -482,6 +483,10 @@ export type MutationCreateUserArgs = {
   input: NewUserInput;
 };
 
+export type MutationUpdateUserProfileArgs = {
+  input: UpdateUserProfileInput;
+};
+
 export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
   id: Scalars['Int'];
@@ -522,7 +527,7 @@ export type UpdateAttributeValueResponse =
   | ErrorResult;
 
 export type UpdateAttributeValueInput = {
-  value: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
 export type AddAttributeValueTranslationResponse =
@@ -554,7 +559,7 @@ export type UpdateAttributeResponse =
   | ErrorResult;
 
 export type UpdateAttributeInput = {
-  name: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type AddAttributeTranslationResponse =
@@ -578,9 +583,9 @@ export type CreateCategoryResponse = Category | InputValidationError;
 
 export type NewCategoryInput = {
   name: Scalars['String'];
-  slug: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
   active: Scalars['Boolean'];
-  parentId: Maybe<Scalars['Int']>;
+  parentId?: Maybe<Scalars['Int']>;
 };
 
 export type UpdateCategoryResponse =
@@ -589,10 +594,10 @@ export type UpdateCategoryResponse =
   | ErrorResult;
 
 export type UpdateCategoryInput = {
-  name: Maybe<Scalars['String']>;
-  slug: Maybe<Scalars['String']>;
-  active: Maybe<Scalars['Boolean']>;
-  parentId: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  active?: Maybe<Scalars['Boolean']>;
+  parentId?: Maybe<Scalars['Int']>;
 };
 
 export type AddCategoryTranslationResponse =
@@ -610,7 +615,7 @@ export type CategoryTranslation = {
 
 export type NewCategoryTranslationInput = {
   name: Scalars['String'];
-  slug: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
   categoryId: Scalars['Int'];
 };
 
@@ -631,18 +636,18 @@ export type UpdateProductVariantResponse =
   | ErrorResult;
 
 export type UpdateProductVariantInput = {
-  productId: Maybe<Scalars['Int']>;
-  price: Maybe<Scalars['Int']>;
-  sku: Maybe<Scalars['String']>;
-  attributesValuesIds: Maybe<Array<Scalars['Int']>>;
+  productId?: Maybe<Scalars['Int']>;
+  price?: Maybe<Scalars['Int']>;
+  sku?: Maybe<Scalars['String']>;
+  attributesValuesIds?: Maybe<Array<Scalars['Int']>>;
 };
 
 export type CreateProductResponse = Product | InputValidationError;
 
 export type NewProductInput = {
   name: Scalars['String'];
-  slug: Maybe<Scalars['String']>;
-  description: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
   categoryId: Scalars['Int'];
 };
 
@@ -652,10 +657,10 @@ export type UpdateProductResponse =
   | ErrorResult;
 
 export type UpdateProductInput = {
-  name: Maybe<Scalars['String']>;
-  slug: Maybe<Scalars['String']>;
-  description: Maybe<Scalars['String']>;
-  categoryId: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  categoryId?: Maybe<Scalars['Int']>;
 };
 
 export type AddProductTranslationResponse =
@@ -665,8 +670,8 @@ export type AddProductTranslationResponse =
 
 export type NewProductTranslationInput = {
   name: Scalars['String'];
-  slug: Maybe<Scalars['String']>;
-  description: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
   productId: Scalars['Int'];
 };
 
@@ -680,14 +685,24 @@ export type NewUserInput = {
   roleId: Scalars['Int'];
 };
 
+export type UpdateUserProfileResponse = User | InputValidationError;
+
+export type UpdateUserProfileInput = {
+  firstname?: Maybe<Scalars['String']>;
+  lastname?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  currentPassword: Scalars['String'];
+};
+
 export type UpdateUserResponse = User | InputValidationError | ErrorResult;
 
 export type UpdateUserInput = {
-  firstname: Maybe<Scalars['String']>;
-  lastname: Maybe<Scalars['String']>;
-  email: Maybe<Scalars['String']>;
-  password: Maybe<Scalars['String']>;
-  roleId: Maybe<Scalars['Int']>;
+  firstname?: Maybe<Scalars['String']>;
+  lastname?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  roleId?: Maybe<Scalars['Int']>;
 };
 
 export type UserLoginResponse = User | ErrorResult;
@@ -707,13 +722,29 @@ export type NewRoleInput = {
 export type UpdateRoleResponse = Role | InputValidationError | ErrorResult;
 
 export type UpdateRoleInput = {
-  name: Maybe<Scalars['String']>;
-  permissions: Maybe<Array<Permission>>;
+  name?: Maybe<Scalars['String']>;
+  permissions?: Maybe<Array<Permission>>;
 };
+
+export type InputValidationErrorFieldsFragment = {
+  __typename: 'InputValidationError';
+} & {
+  errors: Array<
+    { __typename: 'ValidationError' } & Pick<
+      ValidationError,
+      'messages' | 'path'
+    >
+  >;
+};
+
+export type ErrorResultFieldsFragment = { __typename: 'ErrorResult' } & Pick<
+  ErrorResult,
+  'message' | 'errorCode'
+>;
 
 export type CoreUserFieldsFragment = { __typename: 'User' } & Pick<
   User,
-  'id' | 'firstname' | 'lastname' | 'email' | 'createdAt'
+  'id' | 'firstname' | 'lastname' | 'email' | 'createdAt' | 'updatedAt'
 > & {
     role: { __typename: 'Role' } & Pick<
       Role,
@@ -729,10 +760,7 @@ export type UserLoginMutationVariables = Exact<{
 export type UserLoginMutation = {
   userLogin:
     | ({ __typename: 'User' } & CoreUserFieldsFragment)
-    | ({ __typename: 'ErrorResult' } & Pick<
-        ErrorResult,
-        'message' | 'errorCode'
-      >);
+    | ({ __typename: 'ErrorResult' } & ErrorResultFieldsFragment);
 };
 
 export type UserLogoutMutationVariables = Exact<{ [key: string]: never }>;
@@ -743,4 +771,16 @@ export type UserProfileQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UserProfileQuery = {
   userProfile: Maybe<{ __typename: 'User' } & CoreUserFieldsFragment>;
+};
+
+export type UpdateUserProfileMutationVariables = Exact<{
+  input: UpdateUserProfileInput;
+}>;
+
+export type UpdateUserProfileMutation = {
+  updateUserProfile:
+    | ({ __typename: 'User' } & CoreUserFieldsFragment)
+    | ({
+        __typename: 'InputValidationError';
+      } & InputValidationErrorFieldsFragment);
 };

@@ -4,6 +4,7 @@ import {
   UserLoginAction,
   UserLogoutAction,
   UserProfileFetchedAction,
+  UserUpdateAction,
 } from './User.types';
 
 export const userProfileFetched = (
@@ -12,6 +13,10 @@ export const userProfileFetched = (
   type: UserActionType.profileFetched,
   payload,
 });
+
+export const updateUser = (
+  payload: CoreUserFieldsFragment,
+): UserUpdateAction => ({ type: UserActionType.update, payload });
 
 export const loginUser = (
   payload: CoreUserFieldsFragment,
