@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user.entity';
 import { NativeAuthInput } from './dto/native-auth.input';
+import { CmsContext } from '../../types/CmsContext';
 
 type SessionData = {
   userId: User['id'] | null;
@@ -13,21 +14,25 @@ type SessionData = {
 export class AuthService {
   constructor(private userService: UserService) {}
 
-  private getSessionFromCtx(ctx: any) {
-    return ctx.req.session as SessionData;
+  static async validatePassword(password: string, encryptedPassword: string) {
+    return await compare(password, encryptedPassword);
   }
 
-  private assignToSession(ctx: any, data: unknown) {
+  private getSessionFromCtx(ctx: CmsContext) {
+    return (ctx.req.session as unknown) as SessionData;
+  }
+
+  private assignToSession(ctx: CmsContext, data: unknown) {
     const session = this.getSessionFromCtx(ctx);
     Object.assign(session, data);
   }
 
-  private getUserId(ctx: any) {
+  private getUserId(ctx: CmsContext) {
     // On new session initialization this value will be undefined
     return this.getSessionFromCtx(ctx).userId || null;
   }
 
-  private setUserId(ctx: any, userId: User['id'] | null) {
+  private setUserId(ctx: CmsContext, userId: User['id'] | null) {
     this.assignToSession(ctx, { userId });
   }
 
@@ -41,7 +46,10 @@ export class AuthService {
       return null;
     }
 
-    const passwordIsValid = await compare(password, entity.password);
+    const passwordIsValid = await AuthService.validatePassword(
+      password,
+      entity.password,
+    );
 
     if (!passwordIsValid) {
       return null;
@@ -57,7 +65,7 @@ export class AuthService {
     );
   }
 
-  async getCurrentUser(ctx: any): Promise<User | null> {
+  async getCurrentUser(ctx: CmsContext): Promise<User | null> {
     const userId = this.getUserId(ctx);
 
     if (userId) return this.userService.findOne(userId);
@@ -65,11 +73,11 @@ export class AuthService {
     return null;
   }
 
-  loginUser(ctx: any, user: User) {
+  loginUser(ctx: CmsContext, user: User) {
     this.setUserId(ctx, user.id);
   }
 
-  logoutUser(ctx: any) {
+  logoutUser(ctx: CmsContext) {
     this.setUserId(ctx, null);
   }
 }

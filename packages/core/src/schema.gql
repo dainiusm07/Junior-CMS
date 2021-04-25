@@ -323,6 +323,7 @@ type Mutation {
   updateProduct(input: UpdateProductInput!, id: Int!): UpdateProductResponse!
   addProductTranslation(input: NewProductTranslationInput!): AddProductTranslationResponse!
   createUser(input: NewUserInput!): CreateUserResponse!
+  updateUserProfile(input: UpdateUserProfileInput!): UpdateUserProfileResponse!
   updateUser(input: UpdateUserInput!, id: Int!): UpdateUserResponse!
   userLogin(input: NativeAuthInput!): UserLoginResponse!
   userLogout: Boolean!
@@ -473,6 +474,16 @@ input NewUserInput {
   email: String!
   password: String!
   roleId: Int!
+}
+
+union UpdateUserProfileResponse = User | InputValidationError
+
+input UpdateUserProfileInput {
+  firstname: String
+  lastname: String
+  email: String
+  password: String
+  currentPassword: String!
 }
 
 union UpdateUserResponse = User | InputValidationError | ErrorResult

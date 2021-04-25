@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
 import { ErrorResult } from '../../common/errors/error-result.error';
+import { CmsContext } from '../../types/CmsContext';
 import { User } from '../user/user.entity';
 
 import { AuthService } from './auth.service';
@@ -13,13 +14,13 @@ export class AuthResolver {
   constructor(private authService: AuthService) {}
 
   @Query(() => User, { nullable: true })
-  userProfile(@Context() ctx: any): Promise<User | null> {
+  userProfile(@Context() ctx: CmsContext): Promise<User | null> {
     return this.authService.getCurrentUser(ctx);
   }
 
   @Mutation(() => UserLoginResponse)
   async userLogin(
-    @Context() ctx: any,
+    @Context() ctx: CmsContext,
     @Args('input') input: NativeAuthInput,
   ): Promise<User> {
     const user = await this.authService.validateUser(input);
@@ -33,7 +34,7 @@ export class AuthResolver {
   }
 
   @Mutation(() => Boolean)
-  async userLogout(@Context() ctx: any) {
+  async userLogout(@Context() ctx: CmsContext) {
     this.authService.logoutUser(ctx);
     return true;
   }

@@ -4,7 +4,7 @@ import { I18nError, I18nVariables } from '../../i18n/i18n.error';
 import { formatEntityName } from '../../utils/format-entity-name';
 import { ErrorCode } from './error-code.enum';
 
-type EntityName = string | Constructor<any>;
+export type CmsEntityName = string | Constructor<any>;
 
 @ObjectType()
 export class ErrorResult extends I18nError {
@@ -16,13 +16,13 @@ export class ErrorResult extends I18nError {
     super();
   }
 
-  static notFound(name: EntityName) {
+  static notFound(name: CmsEntityName) {
     name = formatEntityName(name);
 
     return new ErrorResult(ErrorCode.NOT_FOUND, 'error.not-found', { name });
   }
 
-  static alreadyExists(name: EntityName) {
+  static alreadyExists(name: CmsEntityName) {
     name = formatEntityName(name);
 
     return new ErrorResult(ErrorCode.ALREADY_EXISTS, 'error.already-exists', {
@@ -30,11 +30,11 @@ export class ErrorResult extends I18nError {
     });
   }
 
-  static incorrectLoginCredentials(name: EntityName) {
+  static incorrectLoginCredentials(name: CmsEntityName) {
     name = formatEntityName(name);
 
     return new ErrorResult(
-      ErrorCode.NOT_FOUND,
+      ErrorCode.INVALID_CREDENTIALS,
       'error.incorrect-email-or-password',
       {
         name,

@@ -32,9 +32,12 @@ export class InputValidationError extends I18nError {
       const messages = error.messages.map((message, i) => {
         const variables: Record<string, string> = {};
 
-        Object.entries(error.variables[i]).forEach(([key, value]) => {
-          variables[key] = typeof value === 'string' ? t(value) : String(value);
-        });
+        if (error.variables[i]) {
+          Object.entries(error.variables[i]).forEach(([key, value]) => {
+            variables[key] =
+              typeof value === 'string' ? t(value) : String(value);
+          });
+        }
 
         return t(message, variables);
       });
@@ -44,5 +47,15 @@ export class InputValidationError extends I18nError {
         messages,
       };
     });
+  }
+
+  static incorrectCurrentPassword() {
+    return new InputValidationError([
+      {
+        messages: ['error.incorrect-password'],
+        path: 'currentPassword',
+        variables: [],
+      },
+    ]);
   }
 }

@@ -15,6 +15,11 @@ export const UpdateUserResponse = createUnionType({
   types: () => [User, InputValidationError, ErrorResult],
 });
 
+export const UpdateUserProfileResponse = createUnionType({
+  name: 'UpdateUserProfileResponse',
+  types: () => [User, InputValidationError],
+});
+
 export const CreateUserResponse = createUnionType({
   name: 'CreateUserResponse',
   types: () => [User, InputValidationError],

@@ -28,6 +28,7 @@ export class GraphqlService implements GqlOptionsFactory {
         req,
         languageCode: req.language,
         populationLoaders: {},
+        user: null,
       }),
     };
   }
