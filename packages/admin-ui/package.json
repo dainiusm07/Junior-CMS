@@ -41,11 +41,18 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:cov": "CI=true npm test -- --env=jsdom --coverage",
+    "test:staged": "cross-env CI=true yarn -s test --env=jsdom --findRelatedTests",
+    "test:cov": "cross-env CI=true test -- --env=jsdom --coverage",
     "eject": "react-scripts eject",
     "lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
     "lint:fix": "yarn lint --fix",
-    "generate": "graphql-codegen --config codegen.js"
+    "generate": "graphql-codegen --config codegen.js",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "yarn -s test:staged"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -75,11 +82,13 @@
     "@types/redux-mock-store": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
+    "cross-env": "^7.0.3",
     "css-mediaquery": "^0.1.2",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-jest": "^24.3.5",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "lint-staged": "^10.5.4",
     "prettier": "^2.2.1"
   }
 }
