@@ -47,14 +47,17 @@ describe('SideBar component', () => {
   ].forEach(({ description, width, isOpened }) => {
     it(`${description}`, () => {
       mockMatchMedia(width);
-      mockedUseSelector.mockReturnValueOnce(isOpened);
+      mockedUseSelector.mockReturnValueOnce(false);
       const { container } = render(
         <Router>
-          <SideBar />
+          <SideBar open={isOpened} handleClose={jest.fn()} />
         </Router>,
       );
 
-      expect(container.firstChild).toMatchSnapshot();
+      const element =
+        width === mobileWidth ? container.parentElement : container.firstChild;
+
+      expect(element).toMatchSnapshot();
     });
   });
 });

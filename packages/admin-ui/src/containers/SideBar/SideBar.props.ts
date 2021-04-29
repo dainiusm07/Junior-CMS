@@ -1,1 +1,4 @@
-export type SideBarProps = {};
+export type SideBarProps = {
+  open: boolean;
+  handleClose: () => void;
+};

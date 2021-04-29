@@ -2,14 +2,16 @@
 
 exports[`SideBar component should match snapshot when in desktop view and SideBar is closed 1`] = `
 <div
-  class="MuiDrawer-root MuiDrawer-docked makeStyles-drawer-10"
+  class="MuiDrawer-root MuiDrawer-docked makeStyles-drawer-11"
 >
   <div
-    class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-11 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0"
+    class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-13 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0"
   >
-    <div>
+    <div
+      class="makeStyles-root-14"
+    >
       <div
-        class="makeStyles-root-13"
+        class="makeStyles-root-15"
       >
         <div
           class="MuiTypography-root MuiTypography-button"
@@ -17,15 +19,15 @@ exports[`SideBar component should match snapshot when in desktop view and SideBa
           general
         </div>
         <div
-          class="makeStyles-content-14"
+          class="makeStyles-content-16"
         >
           <a
             aria-current="page"
-            class="makeStyles-link-16 makeStyles-active-17"
+            class="makeStyles-link-18 makeStyles-active-19"
             href="/"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-15 MuiButton-fullWidth"
+              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-17 MuiButton-fullWidth"
               tabindex="0"
               type="button"
             >
@@ -37,7 +39,7 @@ exports[`SideBar component should match snapshot when in desktop view and SideBa
                 >
                   <svg
                     aria-hidden="true"
-                    class="MuiSvgIcon-root makeStyles-iconRoot-18"
+                    class="MuiSvgIcon-root makeStyles-iconRoot-20"
                     focusable="false"
                     viewBox="0 0 24 24"
                   >
@@ -54,11 +56,11 @@ exports[`SideBar component should match snapshot when in desktop view and SideBa
             </button>
           </a>
           <a
-            class="makeStyles-link-16"
+            class="makeStyles-link-18"
             href="/reports"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-15 MuiButton-fullWidth"
+              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-17 MuiButton-fullWidth"
               tabindex="0"
               type="button"
             >
@@ -70,7 +72,7 @@ exports[`SideBar component should match snapshot when in desktop view and SideBa
                 >
                   <svg
                     aria-hidden="true"
-                    class="MuiSvgIcon-root makeStyles-iconRoot-18"
+                    class="MuiSvgIcon-root makeStyles-iconRoot-20"
                     focusable="false"
                     viewBox="0 0 24 24"
                   >
@@ -98,11 +100,13 @@ exports[`SideBar component should match snapshot when in desktop view and SideBa
   class="MuiDrawer-root MuiDrawer-docked makeStyles-drawer-1"
 >
   <div
-    class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-2 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0"
+    class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-3 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0"
   >
-    <div>
+    <div
+      class="makeStyles-root-4"
+    >
       <div
-        class="makeStyles-root-4"
+        class="makeStyles-root-5"
       >
         <div
           class="MuiTypography-root MuiTypography-button"
@@ -110,15 +114,15 @@ exports[`SideBar component should match snapshot when in desktop view and SideBa
           general
         </div>
         <div
-          class="makeStyles-content-5"
+          class="makeStyles-content-6"
         >
           <a
             aria-current="page"
-            class="makeStyles-link-7 makeStyles-active-8"
+            class="makeStyles-link-8 makeStyles-active-9"
             href="/"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-6 MuiButton-fullWidth"
+              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-7 MuiButton-fullWidth"
               tabindex="0"
               type="button"
             >
@@ -130,7 +134,7 @@ exports[`SideBar component should match snapshot when in desktop view and SideBa
                 >
                   <svg
                     aria-hidden="true"
-                    class="MuiSvgIcon-root makeStyles-iconRoot-9"
+                    class="MuiSvgIcon-root makeStyles-iconRoot-10"
                     focusable="false"
                     viewBox="0 0 24 24"
                   >
@@ -147,11 +151,11 @@ exports[`SideBar component should match snapshot when in desktop view and SideBa
             </button>
           </a>
           <a
-            class="makeStyles-link-7"
+            class="makeStyles-link-8"
             href="/reports"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-6 MuiButton-fullWidth"
+              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-7 MuiButton-fullWidth"
               tabindex="0"
               type="button"
             >
@@ -163,7 +167,7 @@ exports[`SideBar component should match snapshot when in desktop view and SideBa
                 >
                   <svg
                     aria-hidden="true"
-                    class="MuiSvgIcon-root makeStyles-iconRoot-9"
+                    class="MuiSvgIcon-root makeStyles-iconRoot-10"
                     focusable="false"
                     viewBox="0 0 24 24"
                   >
@@ -187,221 +191,291 @@ exports[`SideBar component should match snapshot when in desktop view and SideBa
 `;
 
 exports[`SideBar component should match snapshot when in mobile view and SideBar is closed 1`] = `
-<div
-  aria-hidden="true"
-  class="MuiDrawer-root MuiDrawer-modal makeStyles-drawer-28"
-  role="presentation"
-  style="position: fixed; z-index: 1300; right: 0px; bottom: 0px; top: 0px; left: 0px; visibility: hidden;"
+<body
+  style=""
 >
+  <div />
   <div
     aria-hidden="true"
-    class="MuiBackdrop-root makeStyles-backdrop-30"
-    style="opacity: 0; visibility: hidden;"
-  />
-  <div
-    data-test="sentinelStart"
-    tabindex="0"
-  />
-  <div
-    class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-29 MuiDrawer-paperAnchorLeft MuiPaper-elevation2"
-    style="visibility: hidden; webkit-transform: translateX(-0px); transform: translateX(-0px);"
-    tabindex="-1"
+    class="MuiDrawer-root MuiDrawer-modal makeStyles-drawer-31"
+    role="presentation"
+    style="position: fixed; z-index: 1300; right: 0px; bottom: 0px; top: 0px; left: 0px; visibility: hidden;"
   >
-    <div>
+    <div
+      aria-hidden="true"
+      class="MuiBackdrop-root"
+      style="opacity: 0; visibility: hidden;"
+    />
+    <div
+      data-test="sentinelStart"
+      tabindex="0"
+    />
+    <div
+      class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-33 MuiDrawer-paperAnchorLeft MuiPaper-elevation2"
+      style="visibility: hidden; webkit-transform: translateX(-0px); transform: translateX(-0px);"
+      tabindex="-1"
+    >
       <div
-        class="makeStyles-root-31"
+        class="makeStyles-drawerHeader-32"
+      >
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiIconButton-label"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"
+              />
+            </svg>
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <div
+        class="makeStyles-root-34"
       >
         <div
-          class="MuiTypography-root MuiTypography-button"
+          class="makeStyles-root-35"
         >
-          general
-        </div>
-        <div
-          class="makeStyles-content-32"
-        >
-          <a
-            aria-current="page"
-            class="makeStyles-link-34 makeStyles-active-35"
-            href="/"
+          <div
+            class="MuiTypography-root MuiTypography-button"
           >
-            <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-33 MuiButton-fullWidth"
-              tabindex="0"
-              type="button"
+            general
+          </div>
+          <div
+            class="makeStyles-content-36"
+          >
+            <a
+              aria-current="page"
+              class="makeStyles-link-38 makeStyles-active-39"
+              href="/"
             >
-              <span
-                class="MuiButton-label"
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-37 MuiButton-fullWidth"
+                tabindex="0"
+                type="button"
               >
                 <span
-                  class="MuiButton-startIcon MuiButton-iconSizeMedium"
+                  class="MuiButton-label"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="MuiSvgIcon-root makeStyles-iconRoot-36"
-                    focusable="false"
-                    viewBox="0 0 24 24"
+                  <span
+                    class="MuiButton-startIcon MuiButton-iconSizeMedium"
                   >
-                    <path
-                      d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"
-                    />
-                  </svg>
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root makeStyles-iconRoot-40"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"
+                      />
+                    </svg>
+                  </span>
+                  dashboard
                 </span>
-                dashboard
-              </span>
-              <span
-                class="MuiTouchRipple-root"
-              />
-            </button>
-          </a>
-          <a
-            class="makeStyles-link-34"
-            href="/reports"
-          >
-            <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-33 MuiButton-fullWidth"
-              tabindex="0"
-              type="button"
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </a>
+            <a
+              class="makeStyles-link-38"
+              href="/reports"
             >
-              <span
-                class="MuiButton-label"
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-37 MuiButton-fullWidth"
+                tabindex="0"
+                type="button"
               >
                 <span
-                  class="MuiButton-startIcon MuiButton-iconSizeMedium"
+                  class="MuiButton-label"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="MuiSvgIcon-root makeStyles-iconRoot-36"
-                    focusable="false"
-                    viewBox="0 0 24 24"
+                  <span
+                    class="MuiButton-startIcon MuiButton-iconSizeMedium"
                   >
-                    <path
-                      d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
-                    />
-                  </svg>
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root makeStyles-iconRoot-40"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+                      />
+                    </svg>
+                  </span>
+                  reports
                 </span>
-                reports
-              </span>
-              <span
-                class="MuiTouchRipple-root"
-              />
-            </button>
-          </a>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </a>
+          </div>
         </div>
       </div>
     </div>
+    <div
+      data-test="sentinelEnd"
+      tabindex="0"
+    />
   </div>
-  <div
-    data-test="sentinelEnd"
-    tabindex="0"
-  />
-</div>
+</body>
 `;
 
 exports[`SideBar component should match snapshot when in mobile view and SideBar is opened 1`] = `
-<div
-  class="MuiDrawer-root MuiDrawer-modal makeStyles-drawer-19"
-  role="presentation"
-  style="position: fixed; z-index: 1300; right: 0px; bottom: 0px; top: 0px; left: 0px;"
+<body
+  style="padding-right: 0px; overflow: hidden;"
 >
   <div
     aria-hidden="true"
-    class="MuiBackdrop-root makeStyles-backdrop-21"
-    style="opacity: 1; webkit-transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
   />
   <div
-    data-test="sentinelStart"
-    tabindex="0"
-  />
-  <div
-    class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-20 MuiDrawer-paperAnchorLeft MuiPaper-elevation2"
-    tabindex="-1"
+    class="MuiDrawer-root MuiDrawer-modal makeStyles-drawer-21"
+    role="presentation"
+    style="position: fixed; z-index: 1300; right: 0px; bottom: 0px; top: 0px; left: 0px;"
   >
-    <div>
+    <div
+      aria-hidden="true"
+      class="MuiBackdrop-root"
+      style="opacity: 1; webkit-transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
+    />
+    <div
+      data-test="sentinelStart"
+      tabindex="0"
+    />
+    <div
+      class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-23 MuiDrawer-paperAnchorLeft MuiPaper-elevation2"
+      tabindex="-1"
+    >
       <div
-        class="makeStyles-root-22"
+        class="makeStyles-drawerHeader-22"
+      >
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiIconButton-label"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"
+              />
+            </svg>
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <div
+        class="makeStyles-root-24"
       >
         <div
-          class="MuiTypography-root MuiTypography-button"
+          class="makeStyles-root-25"
         >
-          general
-        </div>
-        <div
-          class="makeStyles-content-23"
-        >
-          <a
-            aria-current="page"
-            class="makeStyles-link-25 makeStyles-active-26"
-            href="/"
+          <div
+            class="MuiTypography-root MuiTypography-button"
           >
-            <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-24 MuiButton-fullWidth"
-              tabindex="0"
-              type="button"
+            general
+          </div>
+          <div
+            class="makeStyles-content-26"
+          >
+            <a
+              aria-current="page"
+              class="makeStyles-link-28 makeStyles-active-29"
+              href="/"
             >
-              <span
-                class="MuiButton-label"
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-27 MuiButton-fullWidth"
+                tabindex="0"
+                type="button"
               >
                 <span
-                  class="MuiButton-startIcon MuiButton-iconSizeMedium"
+                  class="MuiButton-label"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="MuiSvgIcon-root makeStyles-iconRoot-27"
-                    focusable="false"
-                    viewBox="0 0 24 24"
+                  <span
+                    class="MuiButton-startIcon MuiButton-iconSizeMedium"
                   >
-                    <path
-                      d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"
-                    />
-                  </svg>
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root makeStyles-iconRoot-30"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"
+                      />
+                    </svg>
+                  </span>
+                  dashboard
                 </span>
-                dashboard
-              </span>
-              <span
-                class="MuiTouchRipple-root"
-              />
-            </button>
-          </a>
-          <a
-            class="makeStyles-link-25"
-            href="/reports"
-          >
-            <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-24 MuiButton-fullWidth"
-              tabindex="0"
-              type="button"
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </a>
+            <a
+              class="makeStyles-link-28"
+              href="/reports"
             >
-              <span
-                class="MuiButton-label"
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-button-27 MuiButton-fullWidth"
+                tabindex="0"
+                type="button"
               >
                 <span
-                  class="MuiButton-startIcon MuiButton-iconSizeMedium"
+                  class="MuiButton-label"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="MuiSvgIcon-root makeStyles-iconRoot-27"
-                    focusable="false"
-                    viewBox="0 0 24 24"
+                  <span
+                    class="MuiButton-startIcon MuiButton-iconSizeMedium"
                   >
-                    <path
-                      d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
-                    />
-                  </svg>
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root makeStyles-iconRoot-30"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+                      />
+                    </svg>
+                  </span>
+                  reports
                 </span>
-                reports
-              </span>
-              <span
-                class="MuiTouchRipple-root"
-              />
-            </button>
-          </a>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </a>
+          </div>
         </div>
       </div>
     </div>
+    <div
+      data-test="sentinelEnd"
+      tabindex="0"
+    />
   </div>
-  <div
-    data-test="sentinelEnd"
-    tabindex="0"
-  />
-</div>
+</body>
 `;

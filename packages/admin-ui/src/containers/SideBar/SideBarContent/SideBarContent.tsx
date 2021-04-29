@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 
-import { closeSideBar } from '../../../redux/Ui/Ui.actions';
 import rawSideBarContentData from './SideBarContent.data';
+import { SideBarContentProps } from './SideBarContent.props';
+import useStyles from './SideBarContent.styles';
 import {
   ParsedSideBarItem,
   parseSideBarContentData,
@@ -11,26 +11,17 @@ import {
 
 const sideBarContentData = parseSideBarContentData(rawSideBarContentData);
 
-const SideBarContent: React.FC = () => {
-  const dispatch = useDispatch();
+const SideBarContent: React.FC<SideBarContentProps> = ({ onItemClick }) => {
+  const classes = useStyles();
   const { t } = useTranslation();
-
-  const handleLinkClick = () => {
-    dispatch(closeSideBar());
-  };
 
   const renderSideBarItems = (items: ParsedSideBarItem[]) =>
     items.map(({ component: SideBarItem, name, ...props }) => (
-      <SideBarItem
-        key={name}
-        name={t(name)}
-        {...props}
-        onClick={handleLinkClick}
-      />
+      <SideBarItem key={name} name={t(name)} {...props} onClick={onItemClick} />
     ));
 
   return (
-    <div>
+    <div className={classes.root}>
       {sideBarContentData.map(
         ({ component: SideBarItemGroup, name, items }) => {
           return (
