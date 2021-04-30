@@ -5,6 +5,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react';
 
 import { ErrorResult, UserLoginMutation } from '../../generated/gql-types';
 import { USER_LOGIN_MUTATION } from '../../graphql/User.graphql';
+import { SnackbarActionType } from '../../redux/Snackbar/Snackbar.types';
 import { mockUser } from '../../redux/User/User.test-utils';
 import { UserActionType } from '../../redux/User/User.types';
 import { mockedDispatch } from '../../test-utils/redux-mock-helpers';
@@ -62,7 +63,7 @@ describe('LoginForm', () => {
   ].forEach(({ type, shouldDispatch, response }) => {
     it(`should ${shouldDispatch ? '' : 'not '}dispatch ${
       UserActionType.login
-    } action
+    } and ${SnackbarActionType.SET} actions
       if ${type} is returned`, async () => {
       const mock = mockLoginResponse(response);
 
@@ -76,7 +77,7 @@ describe('LoginForm', () => {
       fireEvent.click(loginButton);
 
       await waitFor(() => getByRole('progressbar'));
-      expect(mockedDispatch).toBeCalledTimes(shouldDispatch ? 1 : 0);
+      expect(mockedDispatch).toBeCalledTimes(shouldDispatch ? 2 : 0);
     });
   });
 

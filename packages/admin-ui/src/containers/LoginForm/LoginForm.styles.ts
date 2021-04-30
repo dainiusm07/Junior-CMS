@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 
 export default makeStyles((theme) => ({
   wrapper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
   },
   root: {
     flexShrink: 1,

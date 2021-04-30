@@ -6,6 +6,12 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
     height: '100vh',
   },
+  snackbar: {
+    top: theme.spacing(9.5),
+    [theme.breakpoints.down('xs')]: {
+      top: theme.spacing(8),
+    },
+  },
   body: {
     flexGrow: 1,
     display: 'flex',
@@ -14,5 +20,8 @@ export default makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(1),
+    },
   },
 }));

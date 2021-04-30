@@ -42,7 +42,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:staged": "cross-env CI=true yarn -s test --env=jsdom --findRelatedTests",
-    "test:cov": "cross-env CI=true test -- --env=jsdom --coverage",
+    "test:cov": "cross-env CI=true yarn test --env=jsdom --coverage",
     "eject": "react-scripts eject",
     "lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
     "lint:fix": "yarn lint --fix",

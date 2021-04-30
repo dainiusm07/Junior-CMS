@@ -22,6 +22,8 @@
   "new-password": "New password",
   "confirm-password": "Confirm password",
   "current-password": "Current password",
+  "successfully-logged-in": "Successfully logged in",
+  "successfully-updated": "{{name}} successfully updated",
   "error": {
     "password-does-not-match": "Password doesn't match"
   }
