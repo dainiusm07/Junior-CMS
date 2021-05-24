@@ -11,6 +11,7 @@ import {
 import { useUserProfileQuery } from './App.hooks';
 import useStyles from './App.styles';
 import Center from './components/Center/Center';
+import CmsBreadcrumbs from './containers/CmsBreadcrumbs/CmsBreadcrumbs';
 import LoginForm from './containers/LoginForm/LoginForm';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import { currentUserSelector } from './redux/User/User.selectors';
@@ -51,8 +52,21 @@ const App: React.FC = () => {
     return (
       <DefaultLayout>
         <Switch>
-          {routes.map(({ path, ...route }) => (
-            <Route exact {...route} key={path} path={path} />
+          {routes.map(({ path, component: Component, ...route }) => (
+            <Route
+              exact
+              {...route}
+              key={path}
+              path={path}
+              render={(props) => {
+                return (
+                  <>
+                    <CmsBreadcrumbs {...props} />
+                    <Component />
+                  </>
+                );
+              }}
+            />
           ))}
           <Redirect to="/" />
         </Switch>

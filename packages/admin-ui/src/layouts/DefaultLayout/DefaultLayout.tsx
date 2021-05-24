@@ -2,6 +2,7 @@ import { Toolbar, useMediaQuery, useTheme } from '@material-ui/core';
 import React, { useState } from 'react';
 
 import AppHeader from '../../containers/AppHeader/AppHeader';
+import CmsBreadcrumbs from '../../containers/CmsBreadcrumbs/CmsBreadcrumbs';
 import CmsSnackBar from '../../containers/CmsSnackBar/CmsSnackBar';
 import SideBar from '../../containers/SideBar/SideBar';
 import useStyles from './DefaultLayout.styles';
